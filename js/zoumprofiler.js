@@ -66,38 +66,61 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
             { id: 'golem_cuir', levels: 1, cost: 150, name: "Golémologie de cuir", type: "Artisanat" },
             { id: 'golem_metal', levels: 1, cost: 150, name: "Golémologie de métal", type: "Artisanat" },
             { id: 'golem_mithril', levels: 1, cost: 150, name: "Golémologie de mithril", type: "Artisanat" },
-            { id: 'golem_papier', levels: 1, cost: 150, name: "Golémologie de papier", type: "Artisanat" }
+            { id: 'golem_papier', levels: 1, cost: 150, name: "Golémologie de papier", type: "Artisanat" },
+
+            { id: 'am', levels: 1, cost: 0, name: 'Accélération du Métabolisme', reservedFor: $scope.races[2], type: "Utile" },
+            { id: 'bs', levels: 1, cost: 0, name: 'Botte Secrète', reservedFor: $scope.races[4], type: "Attaque" },
+            { id: 'balayage', levels: 1, cost: 0, name: 'Balayage', reservedFor: $scope.races[0], type: "Combat" },
+            { id: 'camou', levels: 1, cost: 0, name: 'Camouflage', reservedFor: $scope.races[5], type: "Utile" },
+            { id: 'ra', levels: 1, cost: 0, name: 'Régénération Accrue', reservedFor: $scope.races[1], type: "Utile" }
         ];
 
-        $scope.compsMap = {};
-        $scope.compsByType = {};
+        $scope.sorts = [
+            { id: 'vampi', name: 'Vampirisme', reservedFor: $scope.races[2] },
+            { id: 'rp', name: 'Rafale Psychique', reservedFor: $scope.races[1] },
+            { id: 'projo', name: 'Projectile Magique', reservedFor: $scope.races[5] },
+            { id: 'hypno', name: 'Hypnotisme', reservedFor: $scope.races[4] },
+            { id: 'siphon', name: 'Siphon des âmes', reservedFor: $scope.races[0] },
+        ];
+
+        $scope.compsMap = {}; // { "cdb1" : { ... } }
+        $scope.compsByType = {}; // { "Combat" : [{cdb1}, {cdb2}] }
         angular.forEach($scope.comps, function(comp) {
             for (var i=1; i<=comp.levels; i++) {
-                var newComp = {
-                    id: comp.id + i,
-                    cost: comp.cost * i,
-                    name: comp.name,
-                    type: comp.type
-                };
-                if (comp.levels > 1) {
-                    newComp.name += " - niveau " + i;
-                }
-                if (i>1) {
-                    newComp.requires = comp.id + (i-1);
-                }
-                if (i<comp.levels) {
-                    newComp.requiredFor = comp.id + (i+1);
-                }
-                $scope.compsMap[newComp.id] = newComp;
+                if (!comp.reservedFor) {
+                    var newComp = {
+                        id: comp.id + i,
+                        cost: comp.cost * i,
+                        name: comp.name,
+                        type: comp.type
+                    };
+                    if (comp.levels > 1) {
+                        newComp.name += " - niveau " + i;
+                    }
+                    if (i > 1) {
+                        newComp.requires = comp.id + (i - 1);
+                    }
+                    if (i < comp.levels) {
+                        newComp.requiredFor = comp.id + (i + 1);
+                    }
+                    $scope.compsMap[newComp.id] = newComp;
 
-                if (angular.isUndefined($scope.compsByType[comp.type])) {
-                    $scope.compsByType[comp.type] = [];
+                    if (angular.isUndefined($scope.compsByType[comp.type])) {
+                        $scope.compsByType[comp.type] = [];
+                    }
+                    $scope.compsByType[comp.type].push(newComp);
                 }
-                $scope.compsByType[comp.type].push(newComp);
             }
         });
 
         $scope.compTypes = Object.keys($scope.compsByType);
+
+        $scope.combatCompsSortsMap = {
+            // comps
+            ca: true, ap: true, charger: true, cdb: true, rotobaffe: true, frene: true, bs: true,
+            // sorts
+            vampi: true, rp: true, projo: true, siphon: true
+        };
 
         $scope.levels = {};
         var count = 0;
@@ -187,6 +210,38 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
                 newComputed.invested[carac.id] = $scope.invested($scope.profile, carac);
                 newComputed.piCaracts += newComputed.invested[carac.id];
                 newComputed.nextCosts[carac.id] = $scope.nextCost($scope.profile, carac);
+            });
+
+            newComputed.combat = [];
+
+            angular.forEach($scope.sorts, function(sort) {
+                if ($scope.combatCompsSortsMap[sort.id]) {
+                    if (sort.reservedFor) {
+                        if (sort.reservedFor === $scope.profile.race) {
+                            newComputed.combat.push(sort);
+                        }
+                    } else {
+                        // TODO AThimel 25/10/2014 Include users owned sorts
+                    }
+                }
+            });
+
+            angular.forEach($scope.comps, function(comp) {
+                if ($scope.combatCompsSortsMap[comp.id]) {
+                    if (comp.reservedFor) {
+                        if (comp.reservedFor === $scope.profile.race) {
+                            newComputed.combat.push(comp);
+                        }
+                    } else {
+                        for (var lvl = comp.levels; lvl >= 1; lvl--) {
+                            var compId = comp.id + lvl;
+                            if ($scope.profile.comps[compId] === true) {
+                                newComputed.combat.push($scope.compsMap[compId]);
+                                break;
+                            }
+                        }
+                    }
+                }
             });
 
             if ($scope.profile.comps) {
