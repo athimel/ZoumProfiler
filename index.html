@@ -24,9 +24,7 @@
     <!-- Custom styles for this template -->
     <link href="css/style.css" rel="stylesheet">
     <script src="js/ui-bootstrap.js"></script>
-    <script src="js/dateparser.js"></script>
-    <script src="js/position.js"></script>
-    <script src="js/profiles.js"></script>
+    <script src="js/zoumprofiler.js"></script>
 
     <title>ZoumProfiler</title>
 </head>
@@ -163,8 +161,8 @@
                     </div>
 
                     <label class="col-sm-4 control-label">
-                        Niveau {{computed.level}}
-                        (<span ng-class="{true:'error', false:''}[computed.totalPi > config.maxPi]">{{computed.totalPi}} PI - reste {{config.maxPi - computed.totalPi}} PI</span>)
+                        <span ng-class="{true:'error', false:''}[computed.totalPi > config.maxPi]">{{computed.totalPi}} PI</span>
+                        (Niveau >= {{computed.level}}) - reste {{config.maxPi - computed.totalPi}} PI
                     </label>
                 </div>
 
