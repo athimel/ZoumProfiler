@@ -80,7 +80,7 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
             { id: 'rp', name: 'Rafale Psychique', reservedFor: $scope.races[1] },
             { id: 'projo', name: 'Projectile Magique', reservedFor: $scope.races[5] },
             { id: 'hypno', name: 'Hypnotisme', reservedFor: $scope.races[4] },
-            { id: 'siphon', name: 'Siphon des âmes', reservedFor: $scope.races[0] },
+            { id: 'siphon', name: 'Siphon des âmes', reservedFor: $scope.races[0] }
         ];
 
         $scope.compsMap = {}; // { "cdb1" : { ... } }
