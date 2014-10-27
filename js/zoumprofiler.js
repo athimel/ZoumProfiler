@@ -260,9 +260,6 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
                     result.ATT = d6AttVampi * 3.5 + $scope.profile.bm['ATT'];
                     break;
 
-                case 'rotobaffe':
-                    result.ATT = 'N/C';
-                    break;
                 default:
                     result.ATT = $scope.profile.caracs['ATT'] * 3.5 + $scope.profile.bp['ATT'] + $scope.profile.bm['ATT'];
             }
@@ -302,9 +299,6 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
                     result.DEG += "/" + $scope.degCritique($scope.profile, $scope.profile.caracs['REG']);
                     break;
 
-                case 'rotobaffe':
-                    result.DEG = 'N/C';
-                    break;
                 default:
                     result.DEG = $scope.profile.caracs['DEG'] * 2 + $scope.profile.bp['DEG'] + $scope.profile.bm['DEG'];
                     result.DEG += "/" + $scope.degCritique($scope.profile, $scope.profile.caracs['DEG']);
