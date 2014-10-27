@@ -1,0 +1,110 @@
+<!doctype html>
+<html ng-app="zoumProfilerApp" lang="fr">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+        <script src="libs/jquery.min.js"></script>
+
+        <script src="libs/angular.min.js"></script>
+        <script src="libs/angular-sanitize.min.js"></script>
+
+        <script src="libs/bootstrap.min.js"></script>
+        <script src="libs/ui-bootstrap.min.js"></script>
+
+        <link href="styles/zoumProfiler.css" rel="stylesheet">
+        <script src="scripts/zoumProfiler.js"></script>
+
+        <title>ZoumProfiler</title>
+    </head>
+
+
+    <body>
+        <div class="banner">
+            <a href="#">En développement</a>
+        </div>
+
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">ZoumProfiler</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" ng-controller="ZoumProfilerController">
+            <div class="row">
+                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                    <div class="alert alert-success" ng-if="successMessage" ng-bind-html="successMessage"></div>
+                    <div ng-repeat="errorMessage in errorMessages" class="alert alert-danger">{{errorMessage}}</div>
+                    <div class="alert alert-warning">Attention, les profils que vous allez créer ne seront sauvegardés que quand
+                        vous cliquerez sur "Enregistrer le profil". D'autre part, ils sont stockés (pour l'instant) dans votre
+                        navigateur uniquement, ce qui signifie que vous ne les retrouverez pas si vous utilisez un autre navigateur.
+                    </div>
+
+                    <div class="col-sm-3 col-md-2 sidebar">
+                        <ul class="nav nav-sidebar">
+                            <li ng-repeat="p in profiles | orderBy:['name','profile']"
+                                ng-class="{true:'active', false:''}[profile == p]">
+
+                                <input type="checkbox" value="" ng-model="compare.map[p.id]"/>
+
+                                <a href="#" ng-click="selectProfile(p)">
+                                    {{p.name}} <span ng-if="p.profile" class="profile">({{p.profile}})</span>
+                                </a>
+
+                                <div class="buttons">
+                                    <button type="button" class="btn btn-xs btn-primary" ng-click="copyProfile(p)"
+                                            title="Dupliquer">
+                                        <span class="glyphicon glyphicon-share"></span>
+                                    </button>
+
+                                    <button type="button" class="btn btn-xs btn-danger" ng-click="deleteProfile(p)"
+                                            title="Supprimer">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </div>
+
+                            </li>
+                        </ul>
+
+                        <button type="button" class="btn btn-sm btn-primary" ng-disabled="getCompareIds().length < 2"
+                                ng-click="compareProfiles()">
+                            <span class="glyphicon glyphicon-stats"></span> Comparer les profils
+                        </button>
+
+                        <br/>
+
+                        <button type="button" class="btn btn-sm btn-primary" ng-click="addProfile()">
+                            <span class="glyphicon glyphicon-plus"></span> Ajouter un profil
+                        </button>
+
+                        <button type="button" class="btn btn-sm btn-primary" ng-click="startImport()">
+                            <span class="glyphicon glyphicon-import"></span> Importer un profil
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                    <pehiksage></pehiksage>
+                    <comparaisage></comparaisage>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+</html>
