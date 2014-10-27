@@ -389,7 +389,7 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.degCritique = function(profile, nbD3Deg) {
             var critique = (nbD3Deg + Math.floor(nbD3Deg / 2) ) * 2;
-            critique += profile.bp['DEG'] + profile.bm['DEG']
+            critique += profile.bp['DEG'] + profile.bm['DEG'];
             return critique;
         };
 
