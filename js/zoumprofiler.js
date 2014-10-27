@@ -403,9 +403,11 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
                     comp1 = $scope.compsMap[comp1.requires];
                 }
             } else if ($scope.profile.comps[comp.id] === false) {
+                delete $scope.profile.comps[comp.id];
                 var comp2 = $scope.compsMap[comp.id];
                 while (comp2.requiredFor) {
                     $scope.profile.comps[comp2.requiredFor] = false;
+                    delete $scope.profile.comps[comp2.requiredFor];
                     comp2 = $scope.compsMap[comp2.requiredFor];
                 }
             }
