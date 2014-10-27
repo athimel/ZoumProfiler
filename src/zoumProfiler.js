@@ -302,7 +302,6 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.refreshCombat = function(computed) {
             computed.combat = [];
-
             angular.forEach($scope.sorts, function(sort) {
                 if ($scope.combatCompsSortsMap[sort.id]) {
                     if (sort.reservedFor) {
@@ -311,29 +310,40 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                             computed.combat.push(sortComputed);
                         }
                     } else {
-                        // TODO AThimel 25/10/2014 Include users owned sorts
+// TODO AThimel 25/10/2014 Include users owned sorts
                     }
                 }
             });
-
             angular.forEach($scope.comps, function(comp) {
                 if ($scope.combatCompsSortsMap[comp.id]) {
                     if (comp.reservedFor) {
                         if (comp.reservedFor === $scope.profile.race) {
-                            newComputed.combat.push(comp);
+                            var reservedCompComputed = $scope.computeCombat(comp, comp);
+                            computed.combat.push(reservedCompComputed);
                         }
                     } else {
-                        for(var lvl = comp.levels; lvl >= 1; lvl--) {
+                        for (var lvl = comp.levels; lvl >= 1; lvl--) {
                             var compId = comp.id + lvl;
                             if ($scope.profile.comps[compId] === true) {
-                                newComputed.combat.push($scope.compsMap[compId]);
+                                var compComputed = $scope.computeCombat($scope.compsMap[compId], comp);
+                                computed.combat.push(compComputed);
                                 break;
                             }
                         }
                     }
                 }
             });
+        };
 
+        $scope.refreshComputed = function() {
+            var newComputed = $scope.newComputed();
+            angular.forEach($scope.caracs, function(carac) {
+                newComputed.amelioCount[carac.id] = $scope.amelioCount($scope.profile, carac);
+                newComputed.invested[carac.id] = $scope.invested($scope.profile, carac);
+                newComputed.piCaracts += newComputed.invested[carac.id];
+                newComputed.nextCosts[carac.id] = $scope.nextCost($scope.profile, carac);
+            });
+            $scope.refreshCombat(newComputed);
             if ($scope.profile.comps) {
                 angular.forEach(Object.keys($scope.profile.comps), function (compId) {
                     if ($scope.profile.comps[compId] === true) {
@@ -341,35 +351,43 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                     }
                 });
             }
-
             newComputed.totalPi = newComputed.piCaracts + newComputed.piComps;
-
-            if(newComputed.totalPi >= $scope.config.maxPi) {
+            if (newComputed.totalPi >= $scope.config.maxPi) {
                 newComputed.level = 60;
-            } else if(newComputed.totalPi < 20) {
+            } else if (newComputed.totalPi < 20) {
                 newComputed.level = 1;
             } else {
-                for(i = 2; i < 60; i++) {
-                    if(newComputed.totalPi >= $scope.levels['n' + i]) {
+                for (i = 2; i < 60; i++) {
+                    if (newComputed.totalPi >= $scope.levels['n' + i]) {
                         newComputed.level = i;
                     } else {
                         break;
                     }
                 }
             }
-
             angular.forEach($scope.caracs, function(carac) {
                 newComputed.percentInvested[carac.id] = 100 * newComputed.invested[carac.id] / newComputed.piCaracts;
             });
             newComputed.percentCaracts = 100 * newComputed.piCaracts / newComputed.totalPi;
             newComputed.percentComps = 100 * newComputed.piComps / newComputed.totalPi;
-
             $scope.computed = newComputed;
         };
 
         $scope.raceChanged = function() {
             $scope.checkMin($scope.profile);
             $scope.refreshComputed();
+        };
+
+        $scope.caracChanged = function() {
+            $scope.refreshComputed();
+        };
+        $scope.bonusChanged = function(caracId) {
+            if (($scope.profile.race == $scope.races[5] && caracId == 'VUE')
+                || caracId == 'ATT'
+                || caracId == 'DEG'
+                || ($scope.profile.race == $scope.races[0] && caracId == 'REG')) {
+                $scope.refreshCombat($scope.computed);
+            }
         };
 
         $scope.selectProfile = function (profile) {
