@@ -4,7 +4,9 @@ ZoumProfiler
 Outil de profiling pour MountyHall
 
 
-Construction via Gulp (npm install gulp) :
+Construction via Gulp
+npm install gulp gulp-bower gulp-autoprefixer gulp-minify-css gulp-jshint gulp-concat gulp-uglify gulp-imagemin gulp-notify gulp-rename gulp-livereload gulp-cache gulp-clean --save-dev
+
 $ gulp clean pour nettoyer les artifacts
 $ gulp deps pour télécharger les dépendances JS
 $ gulp pour compiler
