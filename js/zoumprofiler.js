@@ -149,6 +149,23 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
         /* **                 Methods                 ** */
         /* ********************************************* */
 
+        $scope.checkBonus = function() {
+            angular.forEach($scope.caracs, function (carac) {
+                if (!$scope.profile.bp) {
+                    $scope.profile.bp = {};
+                }
+                if (!$scope.profile.bm) {
+                    $scope.profile.bm = {};
+                }
+                if (!$scope.profile.bp[carac.id]) {
+                    $scope.profile.bp[carac.id] = 0;
+                }
+                if (!$scope.profile.bm[carac.id]) {
+                    $scope.profile.bm[carac.id] = 0;
+                }
+            });
+        };
+
         $scope.loadFromStorage = function() {
             var lsProfiles = localStorage.getItem("profiles");
             if (angular.isDefined(lsProfiles) && lsProfiles != null) {
@@ -286,6 +303,7 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
             $scope.reset();
             $scope.checkMin(profile);
             $scope.profile = profile;
+            $scope.checkBonus();
             $scope.refreshComputed();
         };
 
@@ -371,6 +389,7 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.degCritique = function(profile, nbD3Deg) {
             var critique = (nbD3Deg + Math.floor(nbD3Deg / 2) ) * 2;
+            critique += profile.bp['DEG'] + profile.bm['DEG']
             return critique;
         };
 
