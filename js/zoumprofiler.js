@@ -92,7 +92,8 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
                         id: comp.id + i,
                         cost: comp.cost * i,
                         name: comp.name,
-                        type: comp.type
+                        type: comp.type,
+                        level: i
                     };
                     if (comp.levels > 1) {
                         newComp.name += " - niveau " + i;
@@ -216,26 +217,105 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
                 percentCaracts:0,
                 percentComps:0,
                 percentInvested:{},
-                level: 1
+                level: 1,
+                combat: []
             };
         };
 
-        $scope.refreshComputed = function() {
-            var newComputed = $scope.newComputed();
-            angular.forEach($scope.caracs, function(carac) {
-                newComputed.amelioCount[carac.id] = $scope.amelioCount($scope.profile, carac);
-                newComputed.invested[carac.id] = $scope.invested($scope.profile, carac);
-                newComputed.piCaracts += newComputed.invested[carac.id];
-                newComputed.nextCosts[carac.id] = $scope.nextCost($scope.profile, carac);
-            });
+        /**
+         * Take a sort or comp and computes its combat values (ATT, DEG, ...)
+         */
+        $scope.computeCombat = function(compOrSort, compOrSortDeBase) {
+            var result = { name: compOrSort.name };
 
-            newComputed.combat = [];
+            // Compute ATT
+            switch (compOrSortDeBase.id) {
+                case 'ca':
+                    var d6AttCa = Math.floor($scope.profile.caracs['ATT'] / 2);
+                    result.ATT = d6AttCa * 3.5 + Math.floor(($scope.profile.bp['ATT'] + $scope.profile.bm['ATT']) / 2);
+                    break;
+                case 'projo':
+                    result.ATT = $scope.profile.caracs['VUE'] * 3.5 + $scope.profile.bm['ATT'];
+                    break;
+                case 'ap':
+                    var d6AttAp = $scope.profile.caracs['ATT'];
+                    var bonusD6AttAp = Math.min(compOrSort.level * 3, Math.floor($scope.profile.caracs['ATT'] / 2));
+                    result.ATT = (d6AttAp + bonusD6AttAp) * 3.5 + $scope.profile.bp['ATT'] + $scope.profile.bm['ATT'];
+                    break;
+                case 'bs':
+                    var d6AttBS = Math.floor($scope.profile.caracs['ATT'] / 3) * 2;
+                    if ($scope.profile.caracs['ATT'] % 3 == 2) {
+                        d6AttBS++;
+                    }
+                    result.ATT = d6AttBS * 3.5 + Math.floor(($scope.profile.bp['ATT'] + $scope.profile.bm['ATT']) / 2);
+                    break;
+                case 'rp':
+                    result.ATT = '-';
+                    break;
+                case 'vampi':
+                    var d6AttVampi = Math.floor($scope.profile.caracs['DEG'] / 3) * 2;
+                    if ($scope.profile.caracs['DEG'] % 3 == 2) {
+                        d6AttVampi++;
+                    }
+                    result.ATT = d6AttVampi * 3.5 + $scope.profile.bm['ATT'];
+                    break;
+
+                default:
+                    result.ATT = $scope.profile.caracs['ATT'] * 3.5 + $scope.profile.bp['ATT'] + $scope.profile.bm['ATT'];
+            }
+
+            // Compute DEG
+            switch (compOrSortDeBase.id) {
+                case 'projo':
+                    var d3DegProjo = Math.floor($scope.profile.caracs['VUE'] / 2);
+                    result.DEG = d3DegProjo * 2 + $scope.profile.bm['DEG'];
+                    result.DEG += "/" + ($scope.degCritique($scope.profile, d3DegProjo) - $scope.profile.bp['DEG']);
+                    break;
+                case 'cdb':
+                    var d3DegCdb = $scope.profile.caracs['DEG'];
+                    var bonusD3DegCdb = Math.min(compOrSort.level * 3, Math.floor($scope.profile.caracs['DEG'] / 2));
+                    result.DEG = (d3DegCdb + bonusD3DegCdb) * 2 + $scope.profile.bp['DEG'] + $scope.profile.bm['DEG'];
+                    result.DEG += "/" + ($scope.degCritique($scope.profile, d3DegCdb) + bonusD3DegCdb * 2);
+                    break;
+                case 'bs':
+                    var d3DegBs = Math.floor($scope.profile.caracs['ATT'] / 2);
+                    var bmDegBs = Math.floor(($scope.profile.bp['DEG'] + $scope.profile.bm['DEG']) / 2);
+                    result.DEG = d3DegBs * 2 + bmDegBs;
+                    result.DEG += "/" + ($scope.degCritique($scope.profile, d3DegBs) - $scope.profile.bp['DEG'] - $scope.profile.bm['DEG'] + bmDegBs);
+                    break;
+                case 'rp':
+                    result.DEG = $scope.profile.caracs['DEG'] * 2 + $scope.profile.bm['DEG'];
+                    break;
+                case 'vampi':
+                    result.DEG = $scope.profile.caracs['DEG'] * 2 + $scope.profile.bm['DEG'];
+                    result.DEG += "/" + ($scope.degCritique($scope.profile, $scope.profile.caracs['DEG']) - $scope.profile.bp['DEG']);
+                    break;
+                case 'frene':
+                    result.DEG = ($scope.profile.caracs['DEG'] * 2 + $scope.profile.bp['DEG'] + $scope.profile.bm['DEG']) * 2;
+                    result.DEG += "/" + ($scope.degCritique($scope.profile, $scope.profile.caracs['DEG']) * 2);
+                    break;
+                case 'siphon':
+                    result.DEG = $scope.profile.caracs['REG'] * 2 + $scope.profile.bp['DEG'] + $scope.profile.bm['DEG'];
+                    result.DEG += "/" + $scope.degCritique($scope.profile, $scope.profile.caracs['REG']);
+                    break;
+
+                default:
+                    result.DEG = $scope.profile.caracs['DEG'] * 2 + $scope.profile.bp['DEG'] + $scope.profile.bm['DEG'];
+                    result.DEG += "/" + $scope.degCritique($scope.profile, $scope.profile.caracs['DEG']);
+            }
+
+            return result;
+        };
+
+        $scope.refreshCombat = function(computed) {
+            computed.combat = [];
 
             angular.forEach($scope.sorts, function(sort) {
                 if ($scope.combatCompsSortsMap[sort.id]) {
                     if (sort.reservedFor) {
                         if (sort.reservedFor === $scope.profile.race) {
-                            newComputed.combat.push(sort);
+                            var sortComputed = $scope.computeCombat(sort, sort);
+                            computed.combat.push(sortComputed);
                         }
                     } else {
                         // TODO AThimel 25/10/2014 Include users owned sorts
@@ -247,19 +327,34 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
                 if ($scope.combatCompsSortsMap[comp.id]) {
                     if (comp.reservedFor) {
                         if (comp.reservedFor === $scope.profile.race) {
-                            newComputed.combat.push(comp);
+                            var reservedCompComputed = $scope.computeCombat(comp, comp);
+                            computed.combat.push(reservedCompComputed);
                         }
                     } else {
                         for (var lvl = comp.levels; lvl >= 1; lvl--) {
                             var compId = comp.id + lvl;
                             if ($scope.profile.comps[compId] === true) {
-                                newComputed.combat.push($scope.compsMap[compId]);
+                                var compComputed = $scope.computeCombat($scope.compsMap[compId], comp);
+                                computed.combat.push(compComputed);
                                 break;
                             }
                         }
                     }
                 }
             });
+
+        };
+
+        $scope.refreshComputed = function() {
+            var newComputed = $scope.newComputed();
+            angular.forEach($scope.caracs, function(carac) {
+                newComputed.amelioCount[carac.id] = $scope.amelioCount($scope.profile, carac);
+                newComputed.invested[carac.id] = $scope.invested($scope.profile, carac);
+                newComputed.piCaracts += newComputed.invested[carac.id];
+                newComputed.nextCosts[carac.id] = $scope.nextCost($scope.profile, carac);
+            });
+
+            $scope.refreshCombat(newComputed);
 
             if ($scope.profile.comps) {
                 angular.forEach(Object.keys($scope.profile.comps), function (compId) {
@@ -297,6 +392,19 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
         $scope.raceChanged = function() {
             $scope.checkMin($scope.profile);
             $scope.refreshComputed();
+        };
+
+        $scope.caracChanged = function() {
+            $scope.refreshComputed();
+        };
+
+        $scope.bonusChanged = function(caracId) {
+            if (($scope.profile.race == $scope.races[5] && caracId == 'VUE')
+                || caracId == 'ATT'
+                || caracId == 'DEG'
+                || ($scope.profile.race == $scope.races[0] && caracId == 'REG')) {
+                $scope.refreshCombat($scope.computed);
+            }
         };
 
         $scope.selectProfile = function (profile) {
@@ -389,7 +497,7 @@ angular.module('profilesApp', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.degCritique = function(profile, nbD3Deg) {
             var critique = (nbD3Deg + Math.floor(nbD3Deg / 2) ) * 2;
-            critique += profile.bp['DEG'] + profile.bm['DEG']
+            critique += profile.bp['DEG'] + profile.bm['DEG'];
             return critique;
         };
 
