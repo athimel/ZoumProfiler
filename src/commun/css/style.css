@@ -2,10 +2,22 @@
     font-style: italic;
 }
 
-.infodev {
-    font-style: italic;
-    color: #aaa;
+.export {
+    color: #555555;
+    height: 250px;
+    width: 100%;
+    background-color: #eeeeee;
+    font-family: monospace;
+    border: 1px solid #222222;
+    padding: 5px;
 }
+
+.export:focus {
+    border-color: #66AFE9;
+    outline: 0px none;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(102, 175, 233, 0.6);
+}
+
 
 input.carac {
     width: 50px;

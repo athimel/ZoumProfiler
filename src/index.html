@@ -96,15 +96,29 @@
                 </div>
 
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                    <tabset ng-if="!compare.show">
+                    <tabset ng-if="profile">
                         <tab heading="Pehiksage">
                             <pehiksage></pehiksage>
                         </tab>
                         <tab heading="Mouchage">
                             <mouchage></mouchage>
                         </tab>
+                        <tab heading="Equipmentage">
+                            <equipmentage></equipmentage>
+                        </tab>
+                        <tab heading="Exportage">
+                            <exportage></exportage>
+                        </tab>
                     </tabset>
-                    <comparaisage ng-if="compare.show" ></comparaisage>
+
+                    <comparaisage></comparaisage>
+
+                    <div class="row actionbar">
+                        <button type="button" class="btn btn-sm btn-success" ng-click="saveProfile()">
+                            <span class="glyphicon glyphicon-save"></span> Enregistrer le profil
+                        </button>
+                    </div>
+
                 </div>
 
             </div>
