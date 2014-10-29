@@ -124,9 +124,9 @@
                         <tr ng-repeat="combatApt in computed.combat|orderBy:'name'">
                             <td>{{combatApt.name}}</td>
                             <td>{{combatApt.ATT}}</td>
-                            <td>{{combatApt.DEG}}</td>
-                            <td ng-if="combatApt.DEG_R">{{combatApt.DEG_R}}</td>
-                            <td ng-if="!combatApt.DEG_R">-</td>
+                            <td>{{combatApt.DEG}}<span ng-if="combatApt.DEG_CRITIQ">/{{combatApt.DEG_CRITIQ}}</span></td>
+                            <td ng-if="combatApt.DEG_RESIST">{{combatApt.DEG_RESIST}}<span ng-if="combatApt.DEG_RESIST_CRITIQ">/{{combatApt.DEG_RESIST_CRITIQ}}</span></td>
+                            <td ng-if="!combatApt.DEG_RESIST">-</td>
                         </tr>
                     </tbody>
                 </table>

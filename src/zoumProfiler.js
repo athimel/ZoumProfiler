@@ -215,6 +215,40 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             };
         };
 
+        $scope.getProjoMaxDistance = function(profile) {
+            var vueMax = profile.caracs["VUE"] + profile.bm["VUE"];
+//            1-4 : 1 case
+//            5-9 : 2 cases
+//            10-15 : 3 cases
+//            16-22 : 4 cases
+//            23-30 : 5 cases
+//            31-39 : 6 cases
+//            40-49 : 7 cases
+//            50-60 : 8 cases
+//            61-72 : 9 cases
+            if (vueMax >= 73) {
+                return 10;
+            } else if (vueMax >= 61) {
+                return 9;
+            } else if (vueMax >= 50) {
+                return 8;
+            } else if (vueMax >= 40) {
+                return 7;
+            } else if (vueMax >= 31) {
+                return 6;
+            } else if (vueMax >= 23) {
+                return 5;
+            } else if (vueMax >= 16) {
+                return 4;
+            } else if (vueMax >= 10) {
+                return 3;
+            } else if (vueMax >= 5) {
+                return 2;
+            } else {
+                return 1;
+            }
+        };
+
         /**
          * Take a sort or comp and computes its combat values (ATT, DEG, ...)
          */
@@ -260,41 +294,49 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             // Compute DEG
             switch (compOrSortDeBase.id) {
                 case 'projo':
+                    var porteeMax = $scope.getProjoMaxDistance($scope.profile);
                     var d3DegProjo = Math.floor($scope.profile.caracs['VUE'] / 2);
-                    result.DEG = d3DegProjo * 2 + $scope.profile.bm['DEG'];
-                    result.DEG += "/" + ($scope.degCritique($scope.profile, d3DegProjo) - $scope.profile.bp['DEG']);
+                    result.DEG = d3DegProjo * 2 + $scope.profile.bm['DEG'] + porteeMax * 2;
+                    result.DEG_CRITIQ = $scope.degCritique($scope.profile, d3DegProjo) - $scope.profile.bp['DEG']  + porteeMax * 2;
+                    result.DEG_RESIST = Math.floor(result.DEG / 2);
+                    result.DEG_RESIST_CRITIQ = Math.floor(result.DEG_CRITIQ / 2);
                     break;
                 case 'cdb':
                     var d3DegCdb = $scope.profile.caracs['DEG'];
                     var bonusD3DegCdb = Math.min(compOrSort.level * 3, Math.floor($scope.profile.caracs['DEG'] / 2));
                     result.DEG = (d3DegCdb + bonusD3DegCdb) * 2 + $scope.profile.bp['DEG'] + $scope.profile.bm['DEG'];
-                    result.DEG += "/" + ($scope.degCritique($scope.profile, d3DegCdb) + bonusD3DegCdb * 2);
+                    result.DEG_CRITIQ = $scope.degCritique($scope.profile, d3DegCdb) + bonusD3DegCdb * 2;
                     break;
                 case 'bs':
                     var d3DegBs = Math.floor($scope.profile.caracs['ATT'] / 2);
                     var bmDegBs = Math.floor(($scope.profile.bp['DEG'] + $scope.profile.bm['DEG']) / 2);
                     result.DEG = d3DegBs * 2 + bmDegBs;
-                    result.DEG += "/" + ($scope.degCritique($scope.profile, d3DegBs) - $scope.profile.bp['DEG'] - $scope.profile.bm['DEG'] + bmDegBs);
+                    result.DEG_CRITIQ = $scope.degCritique($scope.profile, d3DegBs) - $scope.profile.bp['DEG'] - $scope.profile.bm['DEG'] + bmDegBs;
                     break;
                 case 'rp':
                     result.DEG = $scope.profile.caracs['DEG'] * 2 + $scope.profile.bm['DEG'];
+                    result.DEG_RESIST = Math.floor(result.DEG / 2);
                     break;
                 case 'vampi':
                     result.DEG = $scope.profile.caracs['DEG'] * 2 + $scope.profile.bm['DEG'];
-                    result.DEG += "/" + ($scope.degCritique($scope.profile, $scope.profile.caracs['DEG']) - $scope.profile.bp['DEG']);
+                    result.DEG_CRITIQ = $scope.degCritique($scope.profile, $scope.profile.caracs['DEG']) - $scope.profile.bp['DEG'];
+                    result.DEG_RESIST = Math.floor(result.DEG / 2);
+                    result.DEG_RESIST_CRITIQ = Math.floor(result.DEG_CRITIQ / 2);
                     break;
                 case 'frene':
                     result.DEG = ($scope.profile.caracs['DEG'] * 2 + $scope.profile.bp['DEG'] + $scope.profile.bm['DEG']) * 2;
-                    result.DEG += "/" + ($scope.degCritique($scope.profile, $scope.profile.caracs['DEG']) * 2);
+                    result.DEG_CRITIQ = $scope.degCritique($scope.profile, $scope.profile.caracs['DEG']) * 2;
                     break;
                 case 'siphon':
                     result.DEG = $scope.profile.caracs['REG'] * 2 + $scope.profile.bp['DEG'] + $scope.profile.bm['DEG'];
-                    result.DEG += "/" + $scope.degCritique($scope.profile, $scope.profile.caracs['REG']);
+                    result.DEG_CRITIQ = $scope.degCritique($scope.profile, $scope.profile.caracs['REG']);
+                    result.DEG_RESIST = Math.floor(result.DEG / 2);
+                    result.DEG_RESIST_CRITIQ = Math.floor(result.DEG_CRITIQ / 2);
                     break;
 
                 default:
                     result.DEG = $scope.profile.caracs['DEG'] * 2 + $scope.profile.bp['DEG'] + $scope.profile.bm['DEG'];
-                    result.DEG += "/" + $scope.degCritique($scope.profile, $scope.profile.caracs['DEG']);
+                    result.DEG_CRITIQ = $scope.degCritique($scope.profile, $scope.profile.caracs['DEG']);
             }
 
             return result;
