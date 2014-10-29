@@ -111,7 +111,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.combatCompsSortsMap = {
             // comps
-            ca    : true, ap : true, charger : true, cdb : true, rotobaffe : true, frene : true, bs : true,
+            ca    : true, ap : true, charger : true, cdb : true, rotobaffe : true, frene : true, bs : true, piege_feu : true,
             // sorts
             vampi : true, rp : true, projo : true, siphon : true
         };
@@ -277,6 +277,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                     result.ATT = d6AttBS * 3.5 + Math.floor(($scope.profile.bp['ATT'] + $scope.profile.bm['ATT']) / 2);
                     break;
                 case 'rp':
+                case 'piege_feu':
                     result.ATT = '-';
                     break;
                 case 'vampi':
@@ -293,6 +294,11 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
 
             // Compute DEG
             switch (compOrSortDeBase.id) {
+                case 'piege_feu':
+                    var d3DegPiege = Math.floor(($scope.profile.caracs['VUE'] + $scope.profile.caracs['ESQ']) / 2);
+                    result.DEG = d3DegPiege * 2;
+                    result.DEG_RESIST = Math.floor(result.DEG / 2);
+                    break;
                 case 'projo':
                     var porteeMax = $scope.getProjoMaxDistance($scope.profile);
                     var d3DegProjo = Math.floor($scope.profile.caracs['VUE'] / 2);
@@ -426,6 +432,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         $scope.bonusChanged = function(caracId) {
             if (($scope.profile.race == $scope.races[5] && caracId == 'VUE')
                 || caracId == 'ATT'
+                || caracId == 'ESQ'
                 || caracId == 'DEG'
                 || ($scope.profile.race == $scope.races[0] && caracId == 'REG')) {
                 $scope.refreshCombat($scope.computed);
