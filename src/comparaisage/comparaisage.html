@@ -19,7 +19,7 @@
                         (
                         <span ng-if="carac.type == 'T'">{{p.caracs[carac.id] | duration}}</span>
                         <span ng-if="carac.type == 'D1'">{{p.caracs[carac.id]}}</span>
-                        <span ng-if="carac.type == 'D3'">{{p.caracs[carac.id] * 2}}<span ng-if="carac.id == 'DEG'">/{{degCritique(p, p.caracs[carac.id])}}</span></span>
+                        <span ng-if="carac.type == 'D3'">{{p.caracs[carac.id] * 2}}<span ng-if="carac.id == 'DEG'">/{{degCritiqueComp(p, p.caracs['DEG'])}}</span></span>
                         <span ng-if="carac.type == 'D6'">{{p.caracs[carac.id] * 3.5}}</span>
                         )
                     </td>
