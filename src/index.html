@@ -45,9 +45,10 @@
         <div class="container-fluid" ng-controller="ZoumProfilerController">
             <div class="row">
                 <div class="col-sm-3 col-md-2 sidebar">
-                    <div class="alert alert-warning">Attention, les profils que vous allez créer ne seront sauvegardés que quand
-                        vous cliquerez sur "Enregistrer le profil".<br>D'autre part, ils sont stockés (pour l'instant) dans votre
-                        navigateur uniquement, ce qui signifie que vous ne les retrouverez pas si vous utilisez un autre navigateur.
+                    <div class="alert alert-warning">Attention, les profils que vous allez créer ne seront sauvegardés
+                        que quand vous cliquerez sur "Enregistrer le profil" ou quand vous sélectionnez un autre profil.
+                        <br>D'autre part, ils sont stockés (pour l'instant) dans votre navigateur uniquement, ce qui
+                        signifie que vous ne les retrouverez pas si vous utilisez un autre navigateur.
                     </div>
                     <div>
                         <div class="alert alert-success" ng-if="successMessage" ng-bind-html="successMessage"></div>
@@ -114,12 +115,12 @@
                     <comparaisage></comparaisage>
 
                     <div class="row actionbar" ng-if="profile">
-                        <button type="button" class="btn btn-sm btn-success" ng-click="saveProfile()">
+                        <button type="button" class="btn btn-sm btn-success" ng-disabled="!hasModification()" ng-click="saveProfile()">
                             <span class="glyphicon glyphicon-save"></span> Enregistrer le profil
                         </button>
 
-                        <button type="button" class="btn btn-sm btn-default" disabled="disabled">
-                            <span class="glyphicon glyphicon-ban-circle"></span> Annuler les modifications (Coming soon)
+                        <button type="button" class="btn btn-sm btn-default" ng-disabled="!hasModification()" ng-click="cancelModifications()">
+                            <span class="glyphicon glyphicon-ban-circle"></span> Annuler les modifications
                         </button>
                     </div>
 

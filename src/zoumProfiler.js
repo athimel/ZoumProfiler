@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
-    .controller('ZoumProfilerController', ['$scope', function($scope) {
+    .controller('ZoumProfilerController', ['$scope', '$window', function($scope, $window) {
 
         /* ********************************************* */
         /* **                Static data              ** */
@@ -175,6 +175,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         };
 
         $scope.saveToStorage = function() {
+            console.log("Saving profiles");
             localStorage.setItem("profiles", angular.toJson($scope.profiles));
         };
 
@@ -443,6 +444,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             $scope.reset();
             $scope.checkMin(profile);
             $scope.profile = profile;
+            $scope.originalProfile = angular.copy($scope.profile);
             $scope.checkBonus();
             $scope.refreshComputed();
         };
@@ -468,6 +470,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.saveProfile = function() {
             $scope.saveToStorage();
+            $scope.originalProfile = angular.copy($scope.profile);
         };
 
         $scope.deleteProfile = function(profile) {
@@ -579,8 +582,18 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         };
 
         $scope.reset = function() {
+
+            if (angular.isDefined($scope.profile) && $scope.hasModification()) {
+                if ($window.confirm("Vous avez des modifications sur votre profil, voulez-vous les enregistrer ?")) {
+                    $scope.saveProfile();
+                } else {
+                    $scope.cancelModifications();
+                }
+            }
+
             delete $scope.compare.profiles;
             delete $scope.profile;
+            delete $scope.originalProfile;
             delete $scope.computed;
             delete $scope.import.json;
 
@@ -617,6 +630,15 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                 });
             });
             $scope.compare.show = true;
+        };
+
+        $scope.hasModification = function() {
+            return !angular.equals($scope.profile, $scope.originalProfile);
+        };
+
+        $scope.cancelModifications = function() {
+            angular.copy($scope.originalProfile, $scope.profile);
+            $scope.refreshComputed();
         };
 
         /* ********************************************* */
