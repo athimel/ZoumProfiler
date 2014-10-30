@@ -487,6 +487,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             if ($window.confirm(message)) {
                 $scope.profiles.splice($scope.profiles.indexOf(profile), 1);
                 $scope.saveToStorage();
+                delete $scope.compare.map[profile.id];
             }
         };
 
