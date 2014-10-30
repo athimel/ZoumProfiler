@@ -573,14 +573,6 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             $scope.import.show = true;
         };
 
-        $scope.importProfile = function() {
-            var newProfile = angular.fromJson($scope.import.json);
-            $scope.profiles.push(newProfile);
-            delete $scope.import.json;
-            $scope.import.show = false;
-            $scope.saveToStorage();
-        };
-
         $scope.reset = function() {
 
             if (angular.isDefined($scope.profile) && $scope.hasModification()) {
