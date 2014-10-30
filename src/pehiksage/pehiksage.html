@@ -68,7 +68,8 @@
                                 <input ng-if="carac.id != 'TOUR'" type="number" class="carac"
                                        ng-model="profile.bp[carac.id]"
                                        ng-disabled="carac.id == 'PV' || carac.id == 'VUE'" ng-change="bonusChanged(carac.id)"/>
-                                <input ng-if="carac.id != 'TOUR'" type="number" class="carac" ng-model="profile.bm[carac.id]" ng-change="bonusChanged(carac.id)"/>
+                                <input ng-if="carac.id != 'TOUR'" type="number" class="carac" ng-model="profile.bm[carac.id]"
+                                       ng-change="bonusChanged(carac.id)" step="{{carac.id == 'PV' ? 5 : 1}}"/>
                             </td>
                             <td>
                                 <span ng-if="carac.type == 'T'">{{profile.caracs[carac.id] | duration}}</span>
