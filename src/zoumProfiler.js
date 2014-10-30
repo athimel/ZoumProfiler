@@ -473,10 +473,21 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             $scope.originalProfile = angular.copy($scope.profile);
         };
 
+        $scope.getProfileName = function(profile) {
+            var result = profile.name;
+            if (angular.isDefined(profile.profile)) {
+                result += " (" + profile.profile + ")";
+            }
+            return result;
+        };
+
         $scope.deleteProfile = function(profile) {
             $scope.reset();
-            $scope.profiles.splice($scope.profiles.indexOf(profile), 1);
-            $scope.saveToStorage();
+            var message = "Souhaitez-vous supprimer le profil " + $scope.getProfileName(profile) + " de manière définitive ?";
+            if ($window.confirm(message)) {
+                $scope.profiles.splice($scope.profiles.indexOf(profile), 1);
+                $scope.saveToStorage();
+            }
         };
 
         $scope.min = function(race, carac) {
@@ -576,7 +587,8 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         $scope.reset = function() {
 
             if (angular.isDefined($scope.profile) && $scope.hasModification()) {
-                if ($window.confirm("Vous avez des modifications sur votre profil, voulez-vous les enregistrer ?")) {
+                var message = "Vous avez des modifications sur le profil " + $scope.getProfileName($scope.profile) + ", voulez-vous les enregistrer ?";
+                if ($window.confirm(message)) {
                     $scope.saveProfile();
                 } else {
                     $scope.cancelModifications();
