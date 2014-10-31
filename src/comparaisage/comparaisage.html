@@ -16,11 +16,13 @@
                     <td>{{carac.id}}</td>
                     <td ng-repeat="p in compare.profiles"> {{ p.caracs[carac.id] }}
                         <span ng-if="carac.type == 'D3' || carac.type == 'D6'">{{carac.type}}</span>
+                        <span ng-if="p.bp[carac.id] >= 0">+</span>{{p.bp[carac.id]}}
+                        <span ng-if="p.bm[carac.id] >= 0">+</span>{{p.bm[carac.id]}}
                         (
                         <span ng-if="carac.type == 'T'">{{p.caracs[carac.id] | duration}}</span>
-                        <span ng-if="carac.type == 'D1'">{{p.caracs[carac.id]}}</span>
-                        <span ng-if="carac.type == 'D3'">{{p.caracs[carac.id] * 2}}<span ng-if="carac.id == 'DEG'">/{{degCritiqueComp(p, p.caracs['DEG'])}}</span></span>
-                        <span ng-if="carac.type == 'D6'">{{p.caracs[carac.id] * 3.5}}</span>
+                        <span ng-if="carac.type == 'D1'">{{p.caracs[carac.id] + p.bp[carac.id] + p.bm[carac.id]}}</span>
+                        <span ng-if="carac.type == 'D3'">{{p.caracs[carac.id] * 2 + p.bp[carac.id] + p.bm[carac.id]}}<span ng-if="carac.id == 'DEG'">/{{degCritiqueComp(p, p.caracs['DEG'])}}</span></span>
+                        <span ng-if="carac.type == 'D6'">{{p.caracs[carac.id] * 3.5 + p.bp[carac.id] + p.bm[carac.id]}}</span>
                         )
                     </td>
                 </tr>
