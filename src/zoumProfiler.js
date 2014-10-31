@@ -123,6 +123,13 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             $scope.levels['n' + i] = count;
         }
 
+        var tourValue = 720;
+        $scope.tourValues = [tourValue];
+        for (var idx=0; idx<44; idx++) {
+            tourValue -= Math.max(30 - 3 * idx, 2.5);
+            $scope.tourValues.push(Math.floor(tourValue));
+        }
+
         /* ********************************************* */
         /* **             Contextual data             ** */
         /* ********************************************* */
@@ -392,6 +399,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                 newComputed.piCaracts += newComputed.invested[carac.id];
                 newComputed.nextCosts[carac.id] = $scope.nextCost($scope.profile, carac);
             });
+            newComputed.currentTour = $scope.profile.caracs['TOUR'];
             $scope.refreshCombat(newComputed);
             if ($scope.profile.comps) {
                 angular.forEach(Object.keys($scope.profile.comps), function (compId) {
@@ -427,9 +435,48 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             $scope.refreshComputed();
         };
 
-        $scope.caracChanged = function() {
+        $scope.checkTourValue = function() {
+            var newValue = $scope.profile.caracs['TOUR'];
+            if (angular.isDefined(newValue) && newValue > 470 && newValue < 720) {
+                var currentValue = $scope.computed.currentTour;
+                if ($scope.tourValues.indexOf(newValue) == -1 && angular.isDefined(currentValue)) {
+                    var currentIndex = $scope.tourValues.indexOf(currentValue);
+                    var newComputedValue;
+                    var newIndex = 0;
+                    if (currentIndex == -1) {
+                        // Increase or decrease one by one until a known value is reached
+                        var value = newValue;
+                        if (currentValue > newValue) {
+                            while ($scope.tourValues.indexOf(value) == -1) {
+                                value--;
+                            }
+                        } else {
+                            while ($scope.tourValues.indexOf(value) == -1) {
+                                value++;
+                            }
+                        }
+                        newIndex = $scope.tourValues.indexOf(value);
+                    } else {
+                        // Go directly to the next known value
+                        if (currentValue > newValue) {
+                            newIndex = currentIndex + 1;
+                        } else {
+                            newIndex = Math.max(currentIndex - 1, 0);
+                        }
+                    }
+                    newComputedValue = $scope.tourValues[newIndex];
+                    $scope.profile.caracs['TOUR'] = newComputedValue;
+                }
+            }
+        };
+
+        $scope.caracChanged = function(caracId) {
+            if (caracId == 'TOUR') {
+                $scope.checkTourValue();
+            }
             $scope.refreshComputed();
         };
+
         $scope.bonusChanged = function(caracId) {
             if (($scope.profile.race == $scope.races[5] && caracId == 'VUE')
                 || caracId == 'ATT'

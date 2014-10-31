@@ -61,7 +61,7 @@
                             <td>
                                 <input type="number" class="carac" ng-model="profile.caracs[carac.id]" size="2"
                                        min="{{carac.min}}" max="{{carac.max}}" step="{{carac.step}}"
-                                       ng-change="caracChanged()"/>
+                                       ng-change="caracChanged(carac.id)"/>
                                 <span ng-if="carac.type == 'D3' || carac.type == 'D6'">{{carac.type}}</span>
                             </td>
                             <td>
