@@ -4,12 +4,16 @@
 
 .export {
     color: #555555;
-    height: 250px;
-    width: 100%;
     background-color: #eeeeee;
     font-family: monospace;
     border: 1px solid #222222;
     padding: 5px;
+}
+
+textarea.export {
+    font-size: 12px;
+    height: 250px;
+    width: 100%;
 }
 
 .export:focus {

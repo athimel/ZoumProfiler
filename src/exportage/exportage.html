@@ -1,5 +1,23 @@
 
 <div class="form-group" ng-controller="ExportageController">
+    <label class="col-sm-2 control-label">Résumé</label>
+
+    <div class="col-sm-10">
+        <textarea class="export" readonly select-on-click >
+<B>{{profile.name}} ({{profile.profile}})</B>
+{{profile.race}} Niv. >= {{computed.level}} - {{computed.totalPi}}PI
+Durée du tour {{profile.caracs['TOUR'] | duration}}
+PV {{profile.caracs['PV']}} => {{profile.caracs['PV'] + profile.bm['PV']}}
+Vue {{profile.caracs['VUE']}} Cases =>  {{profile.caracs['VUE'] + profile.bm['VUE']}}
+Attaque {{profile.caracs['ATT']}}D6 => moy. AN {{profile.caracs['ATT']*3.5 + profile.bp['ATT'] + profile.bm['ATT']}}
+Dégâts {{profile.caracs['DEG']}}D3 => moy. AN {{profile.caracs['DEG']*2 + profile.bp['DEG'] + profile.bm['DEG']}}/{{degCritiqueComp(profile, profile.caracs['DEG'])}}
+Esquive {{profile.caracs['ESQ']}}D6 => moy. {{profile.caracs['ESQ']*3.5 + profile.bp['ESQ'] + profile.bm['ESQ']}}
+Régén. {{profile.caracs['REG']}}D3 => moy. {{profile.caracs['REG']*2 + profile.bp['REG'] + profile.bm['REG']}}
+Armure {{profile.caracs['ARM']}}D3 => moy. {{profile.caracs['ARM']*2 + profile.bp['ARM'] + profile.bm['ARM']}}
+
+Compétences : {{compList()}}</textarea>
+    </div>
+
     <label class="col-sm-2 control-label">Profil au format JSON</label>
 
     <div class="col-sm-10">
