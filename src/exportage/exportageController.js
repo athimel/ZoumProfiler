@@ -35,6 +35,40 @@ angular.module('zoumProfilerApp')
             return result;
         };
 
+        $scope.attWithAP = function() {
+            var result = "";
+            angular.forEach($scope.comps, function(comp) {
+                if (comp.id == "ap") {
+                    for (var lvl = comp.levels; lvl >= 1; lvl--) {
+                        var compId = comp.id + lvl;
+                        if ($scope.profile.comps[compId] === true) {
+                            var compWithLevel = $scope.compsMap[compId];
+                            result = " - moy. AP" + lvl + " " + $scope.getAttForAp(compWithLevel);
+                            break;
+                        }
+                    }
+                }
+            });
+            return result;
+        };
+
+        $scope.degWithCdB = function() {
+            var result = "";
+            angular.forEach($scope.comps, function(comp) {
+                if (comp.id == "cdb") {
+                    for (var lvl = comp.levels; lvl >= 1; lvl--) {
+                        var compId = comp.id + lvl;
+                        if ($scope.profile.comps[compId] === true) {
+                            var compWithLevel = $scope.compsMap[compId];
+                            var degForCdb = $scope.getDegForCdB(compWithLevel);
+                            result = " - moy. CdB" + lvl + " " + degForCdb.DEG + "/" + degForCdb.DEG_CRITIQ;
+                            break;
+                        }
+                    }
+                }
+            });
+            return result;
+        };
 
     }]);
 

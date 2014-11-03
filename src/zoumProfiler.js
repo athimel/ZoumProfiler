@@ -257,6 +257,21 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             }
         };
 
+        $scope.getAttForAp = function(compApWithLevel) {
+            var d6AttAp = $scope.profile.caracs['ATT'];
+            var bonusD6AttAp = Math.min(compApWithLevel.level * 3, Math.floor($scope.profile.caracs['ATT'] / 2));
+            return (d6AttAp + bonusD6AttAp) * 3.5 + $scope.profile.bp['ATT'] + $scope.profile.bm['ATT'];
+        };
+
+        $scope.getDegForCdB = function(compCdbWithLevel) {
+            var result = {};
+            var d3DegCdb = $scope.profile.caracs['DEG'];
+            var bonusD3DegCdb = Math.min(compCdbWithLevel.level * 3, Math.floor($scope.profile.caracs['DEG'] / 2));
+            result.DEG = (d3DegCdb + bonusD3DegCdb) * 2 + $scope.profile.bp['DEG'] + $scope.profile.bm['DEG'];
+            result.DEG_CRITIQ = $scope.degCritiqueComp($scope.profile, d3DegCdb) + bonusD3DegCdb * 2;
+            return result;
+        };
+
         /**
          * Take a sort or comp and computes its combat values (ATT, DEG, ...)
          */
@@ -273,9 +288,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                     result.ATT = $scope.profile.caracs['VUE'] * 3.5 + $scope.profile.bm['ATT'];
                     break;
                 case 'ap':
-                    var d6AttAp = $scope.profile.caracs['ATT'];
-                    var bonusD6AttAp = Math.min(compOrSort.level * 3, Math.floor($scope.profile.caracs['ATT'] / 2));
-                    result.ATT = (d6AttAp + bonusD6AttAp) * 3.5 + $scope.profile.bp['ATT'] + $scope.profile.bm['ATT'];
+                    result.ATT = $scope.getAttForAp(compOrSort);
                     break;
                 case 'bs':
                     var d6AttBS = Math.floor($scope.profile.caracs['ATT'] / 3) * 2;
@@ -316,10 +329,9 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                     result.DEG_RESIST_CRITIQ = Math.floor(result.DEG_CRITIQ / 2);
                     break;
                 case 'cdb':
-                    var d3DegCdb = $scope.profile.caracs['DEG'];
-                    var bonusD3DegCdb = Math.min(compOrSort.level * 3, Math.floor($scope.profile.caracs['DEG'] / 2));
-                    result.DEG = (d3DegCdb + bonusD3DegCdb) * 2 + $scope.profile.bp['DEG'] + $scope.profile.bm['DEG'];
-                    result.DEG_CRITIQ = $scope.degCritiqueComp($scope.profile, d3DegCdb) + bonusD3DegCdb * 2;
+                    var degForCdb = $scope.getDegForCdB(compOrSort);
+                    result.DEG = degForCdb.DEG;
+                    result.DEG_CRITIQ = degForCdb.DEG_CRITIQ;
                     break;
                 case 'bs':
                     var d3DegBs = Math.floor($scope.profile.caracs['ATT'] / 2);
