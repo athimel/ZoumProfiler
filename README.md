@@ -3,6 +3,7 @@ ZoumProfiler
 
 Outil de profiling pour MountyHall
 
+Démo : http://zoumbox.org/mh/ZoumProfiler/
 
 Construction via Gulp :
 
