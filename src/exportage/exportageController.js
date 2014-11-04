@@ -7,7 +7,7 @@ angular.module('zoumProfilerApp')
     })
     .controller('ExportageController', ['$scope', function ($scope) {
 
-        $scope.compList = function() {
+        $scope.compsList = function() {
             var result = "";
             angular.forEach($scope.comps, function(comp) {
                 if (comp.reservedFor) {
@@ -22,6 +22,23 @@ angular.module('zoumProfilerApp')
                             break;
                         }
                     }
+                }
+            });
+            if (result.length > 1) {
+                result = result.substring(0, result.length - 1);
+            }
+            return result;
+        };
+
+        $scope.sortsList = function() {
+            var result = "";
+            angular.forEach($scope.sorts, function(sort) {
+                if (sort.reservedFor) {
+                    if (sort.reservedFor === $scope.profile.race) {
+                        result += $scope.getCompOrSortShortName(sort.id) + "|";
+                    }
+                } else {
+                    // TODO AThimel 04/11/2014 Do it for owned sorts
                 }
             });
             if (result.length > 1) {

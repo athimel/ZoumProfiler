@@ -78,6 +78,8 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.compsMap = {}; // { "cdb1" : { ... } }
         $scope.compsByType = {}; // { "Combat" : [{cdb1}, {cdb2}] }
+        $scope.sortsMap = {}; // { "vampi" : { ... } }
+
         angular.forEach($scope.comps, function(comp) {
             for(var i = 1; i <= comp.levels; i++) {
                 var newCompId;
@@ -289,17 +291,28 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             return result;
         };
 
-        $scope.getCompOrSortShortName = function(compId) {
-            var result = compId;
-            var comp = $scope.compsMap[compId];
-            if (comp) {
-                if (comp.short) {
-                    result = comp.short; // HE or CdM4
+        $scope.getCompOrSort = function(compOrSortId) {
+            var result = $scope.compsMap[compOrSortId];
+            if (!result) {
+                result = $scope.sortsMap[compOrSortId];
+            }
+            if (!result) {
+                console.error("Unknown comp/sort: " + compOrSortId)
+            }
+            return result;
+        };
+
+        $scope.getCompOrSortShortName = function(compOrSortId) {
+            var result = compOrSortId;
+            var compOrSort = $scope.getCompOrSort(compOrSortId);
+            if (compOrSort) {
+                if (compOrSort.short) {
+                    result = compOrSort.short; // HE or CdM4
                 } else {
-                    if (comp.levels > 1) {
-                        result = compId; // cdm4
+                    if (compOrSort.levels > 1) {
+                        result = compOrSortId; // cdm4
                     } else {
-                        result = comp.id; // he
+                        result = compOrSort.id; // he
                     }
                 }
             }
