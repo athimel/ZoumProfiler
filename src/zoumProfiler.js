@@ -76,48 +76,53 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             { id : 'siphon', name : 'Siphon des âmes', reservedFor : $scope.races[0] }
         ];
 
-        $scope.compsMap = {}; // { "cdb1" : { ... } }
+        $scope.makeCompSortMap = function(compsOrSorts) {
+            var resultMap = {};
+            angular.forEach(compsOrSorts, function(compOrSort) {
+                var levels = compOrSort.levels;
+                if (!levels) {
+                    levels = 1;
+                }
+                for (var i = 1; i <= levels; i++) {
+                    var newCompOrSort = compOrSort;
+                    if (levels > 1) {
+                        newCompOrSort = angular.copy(compOrSort);
+                        newCompOrSort.id = compOrSort.id + i;
+                        newCompOrSort.level = i;
+                        newCompOrSort.cost = compOrSort.cost * i;
+                        newCompOrSort.name += " - niveau " + i;
+                        if (newCompOrSort.short) {
+                            newCompOrSort.short = newCompOrSort.short + i;
+                        }
+                    }
+
+                    if (i > 1) {
+                        newCompOrSort.requires = compOrSort.id + (i - 1);
+                    }
+                    if (i < levels) {
+                        newCompOrSort.requiredFor = compOrSort.id + (i + 1);
+                    }
+
+                    resultMap[newCompOrSort.id] = newCompOrSort;
+                }
+            });
+            return resultMap;
+
+        };
+
+        $scope.compsMap = $scope.makeCompSortMap($scope.comps); // { "cdb1" : { ... } }
+        $scope.sortsMap = $scope.makeCompSortMap($scope.sorts); // { "vampi" : { ... } }
+
         $scope.compsByType = {}; // { "Combat" : [{cdb1}, {cdb2}] }
-        $scope.sortsMap = {}; // { "vampi" : { ... } }
 
-        angular.forEach($scope.comps, function(comp) {
-            for(var i = 1; i <= comp.levels; i++) {
-                var newCompId;
-                if (comp.levels > 1) {
-                    newCompId = comp.id + i;
-                } else {
-                    newCompId = comp.id;
+        angular.forEach(Object.keys($scope.compsMap), function(compId) {
+            var comp = $scope.compsMap[compId];
+            if(!comp.reservedFor) {
+                var compType = comp.type;
+                if(angular.isUndefined($scope.compsByType[compType])) {
+                    $scope.compsByType[compType] = [];
                 }
-                var newComp = {
-                    id: newCompId,
-                    cost: comp.cost * i,
-                    name: comp.name,
-                    type: comp.type,
-                    level: i
-                };
-                if (comp.short) {
-                    newComp.short = comp.short;
-                }
-                if(comp.levels > 1) {
-                    newComp.name += " - niveau " + i;
-                    if (newComp.short) {
-                        newComp.short = newComp.short + i;
-                    }
-                }
-                if(i > 1) {
-                    newComp.requires = comp.id + (i - 1);
-                }
-                if(i < comp.levels) {
-                    newComp.requiredFor = comp.id + (i + 1);
-                }
-                $scope.compsMap[newComp.id] = newComp;
-
-                if(!comp.reservedFor) {
-                    if(angular.isUndefined($scope.compsByType[comp.type])) {
-                        $scope.compsByType[comp.type] = [];
-                    }
-                    $scope.compsByType[comp.type].push(newComp);
-                }
+                $scope.compsByType[compType].push(comp);
             }
         });
 
