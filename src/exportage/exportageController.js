@@ -12,18 +12,13 @@ angular.module('zoumProfilerApp')
             angular.forEach($scope.comps, function(comp) {
                 if (comp.reservedFor) {
                     if (comp.reservedFor === $scope.profile.race) {
-                        result += comp.id + "|";
+                        result += $scope.getCompOrSortShortName(comp.id) + "|";
                     }
                 } else {
                     for (var lvl = comp.levels; lvl >= 1; lvl--) {
-                        var compId = comp.id + lvl;
+                        var compId = $scope.getCompId(comp, lvl);
                         if ($scope.profile.comps[compId] === true) {
-                            if (comp.levels > 1) {
-                                result += compId + "|"; // cdm4
-                            } else {
-                                result += comp.id + "|"; // he
-                            }
-
+                            result += $scope.getCompOrSortShortName(compId) + "|";
                             break;
                         }
                     }
@@ -40,10 +35,10 @@ angular.module('zoumProfilerApp')
             angular.forEach($scope.comps, function(comp) {
                 if (comp.id == "ap") {
                     for (var lvl = comp.levels; lvl >= 1; lvl--) {
-                        var compId = comp.id + lvl;
+                        var compId = $scope.getCompId(comp, lvl);
                         if ($scope.profile.comps[compId] === true) {
                             var compWithLevel = $scope.compsMap[compId];
-                            result = " - moy. AP" + lvl + " " + $scope.getAttForAp(compWithLevel);
+                            result = " - moy. " + $scope.getCompOrSortShortName(compId) + " " + $scope.getAttForAp(compWithLevel);
                             break;
                         }
                     }
@@ -57,11 +52,11 @@ angular.module('zoumProfilerApp')
             angular.forEach($scope.comps, function(comp) {
                 if (comp.id == "cdb") {
                     for (var lvl = comp.levels; lvl >= 1; lvl--) {
-                        var compId = comp.id + lvl;
+                        var compId = $scope.getCompId(comp, lvl);
                         if ($scope.profile.comps[compId] === true) {
                             var compWithLevel = $scope.compsMap[compId];
                             var degForCdb = $scope.getDegForCdB(compWithLevel);
-                            result = " - moy. CdB" + lvl + " " + degForCdb.DEG + "/" + degForCdb.DEG_CRITIQ;
+                            result = " - moy. " + $scope.getCompOrSortShortName(compId) + " " + degForCdb.DEG + "/" + degForCdb.DEG_CRITIQ;
                             break;
                         }
                     }

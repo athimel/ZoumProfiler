@@ -23,20 +23,20 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         ];
 
         $scope.comps = [
-            { id : 'cdm', levels : 5, cost : 10, name : "Connaissance des monstres", type : "Connaissance" },
-            { id : 'idc', levels : 1, cost : 10, name : "Identification des champignons", type : "Connaissance" },
+            { id : 'cdm', levels : 5, cost : 10, name : "Connaissance des monstres", type : "Connaissance", short : "CdM" },
+            { id : 'idc', levels : 1, cost : 10, name : "Identification des champignons", type : "Connaissance", short : "IdC" },
             { id : 'insultes', levels : 3, cost : 10, name : "Insultes", type : "Utile" },
             { id : 'miner', levels : 1, cost : 10, name : "Miner", type : "Utile" },
             { id : 'tailler', levels : 1, cost : 10, name : "Tailler", type : "Artisanat" },
             { id : 'pistage', levels : 1, cost : 10, name : "Pistage", type : "Utile" },
             { id : 'bidouiller', levels : 1, cost : 20, name : "Bidouille", type : "Artisanat" },
             { id : 'course', levels : 1, cost : 20, name : "Course", type : "Déplacement" },
-            { id : 'de', levels : 1, cost : 20, name : "Déplacement Éclair", type : "Déplacement" },
+            { id : 'de', levels : 1, cost : 20, name : "Déplacement Éclair", type : "Déplacement", short : "DE" },
             { id : 'ca', levels : 1, cost : 20, name : "Contre-Attaquer", type : "Combat" },
             { id : 'dressage', levels : 1, cost : 20, name : "Dressage", type : "Utile" },
             { id : 'parer', levels : 2, cost : 20, name : "Parer", type : "Combat" },
             { id : 'interposer', levels : 2, cost : 20, name : "S'interposer", type : "Combat" },
-            { id : 'he', levels : 1, cost : 20, name : "Hurlement Effrayan", type : "Combat" },
+            { id : 'he', levels : 1, cost : 20, name : "Hurlement Effrayan", type : "Combat", short : "HE" },
             { id : 'lancer', levels : 1, cost : 30, name : "Lancer de potions", type : "Combat" },
             { id : 'marquage', levels : 1, cost : 30, name : "Marquage", type : "Utile" },
             { id : 'reparation', levels : 1, cost : 30, name : "Réparation", type : "Artisanat" },
@@ -46,33 +46,33 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             { id : 'retraite', levels : 2, cost : 40, name : "Retraite", type : "Combat" },
             { id : 'melange', levels : 1, cost : 40, name : "Mélange Magique", type : "Artisanat" },
             { id : 'shamaner', levels : 1, cost : 50, name : "Shamaner", type : "Utile" },
-            { id : 'ap', levels : 7, cost : 50, name : "Attaque Précise", type : "Combat" },
+            { id : 'ap', levels : 7, cost : 50, name : "Attaque Précise", type : "Combat", short : "AP" },
             { id : 'charger', levels : 1, cost : 50, name : "Charger", type : "Combat" },
             { id : 'piege_feu', levels : 1, cost : 50, name : "Construire un piège à feu", type : "Artisanat" },
             { id : 'piege_glue', levels : 1, cost : 50, name : "Construire un piège à glue", type : "Artisanat" },
-            { id : 'cdb', levels : 7, cost : 50, name : "Coup de Butoir", type : "Combat" },
+            { id : 'cdb', levels : 7, cost : 50, name : "Coup de Butoir", type : "Combat", short : "CdB" },
             { id : 'rotobaffe', levels : 6, cost : 80, name : "Rotobaffe", type : "Combat" },
             { id : 'painthure', levels : 1, cost : 100, name : "Painthure de Guerre", type : "Utile" },
-            { id : 'em', levels : 1, cost : 100, name : "Ecriture Magique", type : "Artisanat" },
-            { id : 'frene', levels : 1, cost : 100, name : "Frénésie", type : "Combat" },
+            { id : 'em', levels : 1, cost : 100, name : "Ecriture Magique", type : "Artisanat", short : "EM" },
+            { id : 'frene', levels : 1, cost : 100, name : "Frénésie", type : "Combat", short : "Fréné" },
             { id : 'necro', levels : 1, cost : 100, name : "Nécromancie", type : "Artisanat" },
             { id : 'golem_cuir', levels : 1, cost : 150, name : "Golémologie de cuir", type : "Artisanat" },
             { id : 'golem_metal', levels : 1, cost : 150, name : "Golémologie de métal", type : "Artisanat" },
             { id : 'golem_mithril', levels : 1, cost : 150, name : "Golémologie de mithril", type : "Artisanat" },
             { id : 'golem_papier', levels : 1, cost : 150, name : "Golémologie de papier", type : "Artisanat" },
 
-            { id : 'am', levels : 1, cost : 0, name : 'Accélération du Métabolisme', reservedFor : $scope.races[2], type : "Utile" },
-            { id : 'bs', levels : 1, cost : 0, name : 'Botte Secrète', reservedFor : $scope.races[4], type : "Attaque" },
+            { id : 'am', levels : 1, cost : 0, name : 'Accélération du Métabolisme', reservedFor : $scope.races[2], type : "Utile", short : "AM" },
+            { id : 'bs', levels : 1, cost : 0, name : 'Botte Secrète', reservedFor : $scope.races[4], type : "Attaque", short : "BS" },
             { id : 'balayage', levels : 1, cost : 0, name : 'Balayage', reservedFor : $scope.races[0], type : "Combat" },
             { id : 'camou', levels : 1, cost : 0, name : 'Camouflage', reservedFor : $scope.races[5], type : "Utile" },
-            { id : 'ra', levels : 1, cost : 0, name : 'Régénération Accrue', reservedFor : $scope.races[1], type : "Utile" }
+            { id : 'ra', levels : 1, cost : 0, name : 'Régénération Accrue', reservedFor : $scope.races[1], type : "Utile", short : "RA" }
         ];
 
         $scope.sorts = [
-            { id : 'vampi', name : 'Vampirisme', reservedFor : $scope.races[2] },
-            { id : 'rp', name : 'Rafale Psychique', reservedFor : $scope.races[1] },
-            { id : 'projo', name : 'Projectile Magique', reservedFor : $scope.races[5] },
-            { id : 'hypno', name : 'Hypnotisme', reservedFor : $scope.races[4] },
+            { id : 'vampi', name : 'Vampirisme', reservedFor : $scope.races[2], short : "Vampi" },
+            { id : 'rp', name : 'Rafale Psychique', reservedFor : $scope.races[1], short : "RP" },
+            { id : 'projo', name : 'Projectile Magique', reservedFor : $scope.races[5], short : "Projo" },
+            { id : 'hypno', name : 'Hypnotisme', reservedFor : $scope.races[4], short : "Hypno" },
             { id : 'siphon', name : 'Siphon des âmes', reservedFor : $scope.races[0] }
         ];
 
@@ -80,25 +80,37 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         $scope.compsByType = {}; // { "Combat" : [{cdb1}, {cdb2}] }
         angular.forEach($scope.comps, function(comp) {
             for(var i = 1; i <= comp.levels; i++) {
-                if(!comp.reservedFor) {
-                    var newComp = {
-                        id: comp.id + i,
-                        cost: comp.cost * i,
-                        name: comp.name,
-                        type: comp.type,
-                        level: i
-                    };
-                    if(comp.levels > 1) {
-                        newComp.name += " - niveau " + i;
+                var newCompId;
+                if (comp.levels > 1) {
+                    newCompId = comp.id + i;
+                } else {
+                    newCompId = comp.id;
+                }
+                var newComp = {
+                    id: newCompId,
+                    cost: comp.cost * i,
+                    name: comp.name,
+                    type: comp.type,
+                    level: i
+                };
+                if (comp.short) {
+                    newComp.short = comp.short;
+                }
+                if(comp.levels > 1) {
+                    newComp.name += " - niveau " + i;
+                    if (newComp.short) {
+                        newComp.short = newComp.short + i;
                     }
-                    if(i > 1) {
-                        newComp.requires = comp.id + (i - 1);
-                    }
-                    if(i < comp.levels) {
-                        newComp.requiredFor = comp.id + (i + 1);
-                    }
-                    $scope.compsMap[newComp.id] = newComp;
+                }
+                if(i > 1) {
+                    newComp.requires = comp.id + (i - 1);
+                }
+                if(i < comp.levels) {
+                    newComp.requiredFor = comp.id + (i + 1);
+                }
+                $scope.compsMap[newComp.id] = newComp;
 
+                if(!comp.reservedFor) {
                     if(angular.isUndefined($scope.compsByType[comp.type])) {
                         $scope.compsByType[comp.type] = [];
                     }
@@ -179,6 +191,18 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                     profile.id = $scope.randomId();
                 }
             });
+
+            // Because some profiles was created when "de" was "de1"
+            angular.forEach($scope.comps, function(comp) {
+                if (comp.levels == 1) {
+                    angular.forEach($scope.profiles, function(profile) {
+                        if (profile.comps[comp.id + "1"] === true) {
+                            delete profile.comps[comp.id + "1"];
+                            profile.comps[comp.id] = true;
+                        }
+                    });
+                }
+            });
         };
 
         $scope.saveToStorage = function() {
@@ -257,6 +281,30 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             }
         };
 
+        $scope.getCompId = function(comp, lvl) {
+            var result = comp.id;
+            if (comp.levels > 1) {
+                result += lvl;
+            }
+            return result;
+        };
+
+        $scope.getCompOrSortShortName = function(compId) {
+            var result = compId;
+            var comp = $scope.compsMap[compId];
+            if (comp) {
+                if (comp.short) {
+                    result = comp.short; // HE or CdM4
+                } else {
+                    if (comp.levels > 1) {
+                        result = compId; // cdm4
+                    } else {
+                        result = comp.id; // he
+                    }
+                }
+            }
+            return result;
+        };
         $scope.getAttForAp = function(compApWithLevel) {
             var d6AttAp = $scope.profile.caracs['ATT'];
             var bonusD6AttAp = Math.min(compApWithLevel.level * 3, Math.floor($scope.profile.caracs['ATT'] / 2));
@@ -391,7 +439,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                         }
                     } else {
                         for (var lvl = comp.levels; lvl >= 1; lvl--) {
-                            var compId = comp.id + lvl;
+                            var compId = $scope.getCompId(comp, lvl);
                             if ($scope.profile.comps[compId] === true) {
                                 var compComputed = $scope.computeCombat($scope.compsMap[compId], comp);
                                 computed.combat.push(compComputed);
