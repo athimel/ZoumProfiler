@@ -1,14 +1,4 @@
 angular.module('zoumProfilerApp')
-    .directive('selectOnClick', function () {
-        return {
-            restrict: 'A',
-            link: function (scope, element, attrs) {
-                element.on('click', function () {
-                    this.select();
-                });
-            }
-        };
-    })
     .filter('duration', function() {
         return function(input) {
             var sign = input < 0 ? "-" : "";
