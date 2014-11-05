@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
+angular.module('zoumProfilerApp', ['ui.bootstrap'])
     .controller('ZoumProfilerController', ['$scope', '$window', function($scope, $window) {
 
         /* ********************************************* */
