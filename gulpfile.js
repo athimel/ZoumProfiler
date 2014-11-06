@@ -56,8 +56,8 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest(bases.dist))
         .pipe(rename({ suffix : '.min' }))
         .pipe(uglify())
-        .pipe(gulp.dest(bases.dist))
-        .pipe(notify({ message : 'Scripts task complete' }));
+        .pipe(gulp.dest(bases.dist));
+//        .pipe(notify({ message : 'Scripts task complete' }));
 });
 
 // Styles
@@ -69,8 +69,8 @@ gulp.task('styles', function() {
         .pipe(gulp.dest(bases.dist))
         .pipe(rename({ suffix : '.min' }))
         .pipe(minifycss())
-        .pipe(gulp.dest(bases.dist))
-        .pipe(notify({ message : 'Styles task complete' }));
+        .pipe(gulp.dest(bases.dist));
+//        .pipe(notify({ message : 'Styles task complete' }));
 });
 
 // Images
@@ -78,8 +78,8 @@ gulp.task('images', function() {
     return gulp.src(paths.images, {cwd: bases.src})
         .pipe(cache(imagemin({ optimizationLevel : 3, progressive : true, interlaced : true })))
         .pipe(rename({dirname: 'images'}))
-        .pipe(gulp.dest(bases.dist))
-        .pipe(notify({ message : 'Images task complete' }));
+        .pipe(gulp.dest(bases.dist));
+//        .pipe(notify({ message : 'Images task complete' }));
 });
 
 // Other resources
