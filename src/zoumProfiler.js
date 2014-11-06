@@ -789,7 +789,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             $scope.profiles.push(newProfile);
             $scope.saveToStorage();
             $scope.reset();
-            $scope.addSuccessMessage("Le profile <b>" + $scope.getProfileName(newProfile) + "</b> a bien été ajouté à vos profils");
+            $scope.addSuccessMessage("Le profil <b>" + $scope.getProfileName(newProfile) + "</b> a bien été ajouté à votre liste de profils");
         };
 
         $scope._addMessage = function(list, message) {
