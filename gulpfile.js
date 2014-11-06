@@ -30,7 +30,7 @@ var paths = {
     scripts : ['**/*.js'],
     styles  : ['**/*.css'],
     images  : ['**/*.png'],
-    libs    : ['angular/angular.min.js',
+    libs    : ['angular/angular.min.js', 'angular-sanitize/angular-sanitize.min.js',
         'angular-ui-bootstrap-bower/ui-bootstrap.min.js', 'angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js',
         'bootstrap/dist/js/bootstrap.min.js', 'jquery/dist/jquery.min.js', 'underscore/underscore.js']
 };

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('zoumProfilerApp', ['ui.bootstrap'])
-    .controller('ZoumProfilerController', ['$scope', '$window', function($scope, $window) {
+angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
+    .controller('ZoumProfilerController', ['$scope', '$window', '$location', function($scope, $window, $location) {
 
         /* ********************************************* */
         /* **                Static data              ** */
@@ -157,6 +157,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap'])
         $scope.compare = { show : false, map : {} };
         $scope.profile;
         $scope.computed;
+        $scope.messages = { success:[], errors:[] };
 
         /* ********************************************* */
         /* **                 Profiles                ** */
@@ -771,11 +772,57 @@ angular.module('zoumProfilerApp', ['ui.bootstrap'])
             $scope.refreshComputed();
         };
 
+        $scope._importProfile = function(newProfile) {
+            if (newProfile.comps) {
+                angular.forEach($scope.comps, function (comp) {
+                    if (comp.levels > 1) {
+                        for (var lvl = comp.levels; lvl >= 1; lvl--) {
+                            var compIdHigherLvl = $scope.getCompId(comp, lvl + 1);
+                            if (newProfile.comps[compIdHigherLvl] === true) {
+                                var compId = $scope.getCompId(comp, lvl);
+                                newProfile.comps[compId] = true;
+                            }
+                        }
+                    }
+                });
+            }
+            $scope.profiles.push(newProfile);
+            $scope.saveToStorage();
+            $scope.reset();
+            $scope.addSuccessMessage("Le profile <b>" + $scope.getProfileName(newProfile) + "</b> a bien été importé");
+        };
+
+        $scope._addMessage = function(list, message) {
+            list.push(message);
+        };
+
+
+        $scope.addSuccessMessage = function(message) {
+            $scope._addMessage($scope.messages.success, message);
+        };
+
+        $scope.addErrorMessage = function(message) {
+            $scope._addMessage($scope.messages.errors, message);
+        };
+
         /* ********************************************* */
         /* **                 Startup                 ** */
         /* ********************************************* */
 
         $scope.loadFromStorage();
+
+        if ($location) {
+            var value = $location.search();
+            if (value && value.import) {
+                try {
+                    var newProfile = angular.fromJson(value.import);
+                    $scope._importProfile(newProfile);
+                    $location.search('import', '');
+                } catch (eee) {
+                    $scope.addErrorMessage("Impossible d'importer le profile");
+                }
+            }
+        }
 
         if($scope.profiles && $scope.profiles.length == 1) {
             $scope.selectProfile($scope.profiles[0]);

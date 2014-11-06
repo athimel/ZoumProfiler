@@ -12,6 +12,7 @@
         <script src="libs/jquery.min.js"></script>
 
         <script src="libs/angular.min.js"></script>
+        <script src="libs/angular-sanitize.min.js"></script>
 
         <script src="libs/bootstrap.min.js"></script>
         <script src="libs/ui-bootstrap.min.js"></script>
@@ -49,17 +50,16 @@
                         <br>D'autre part, ils sont stockés (pour l'instant) dans votre navigateur uniquement, ce qui
                         signifie que vous ne les retrouverez pas si vous utilisez un autre navigateur.
                     </div>
-                    <div>
-                        <div class="alert alert-success" ng-if="successMessage" ng-bind-html="successMessage"></div>
-                        <div ng-repeat="errorMessage in errorMessages" class="alert alert-danger">{{errorMessage}}</div>
-                    </div>
+                    <div class="alert alert-success" ng-repeat="message in messages.success" ng-bind-html="message"></div>
+                    <div class="alert alert-danger" ng-repeat="message in messages.errors" ng-bind-html="message"></div>
+
                     <ul class="nav nav-sidebar">
                         <li ng-repeat="p in profiles | orderBy:['name','profile']"
                             ng-class="{true:'active', false:''}[profile == p]">
 
                             <input type="checkbox" value="" ng-model="compare.map[p.id]"/>
 
-                            <a href="#" ng-click="selectProfile(p)">
+                            <a ng-click="selectProfile(p)">
                                 {{p.name}} <span ng-if="p.profile" class="profile">({{p.profile}})</span>
                             </a>
 

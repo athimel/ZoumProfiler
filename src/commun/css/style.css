@@ -12,8 +12,19 @@
 
 textarea.export {
     font-size: 12px;
-    height: 250px;
     width: 100%;
+}
+
+textarea.export-large {
+    height: 250px;
+}
+
+textarea.export-medium {
+    height: 125px;
+}
+
+textarea.export-small {
+    height: 30px;
 }
 
 .export:focus {

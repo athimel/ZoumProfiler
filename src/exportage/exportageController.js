@@ -5,7 +5,7 @@ angular.module('zoumProfilerApp')
             templateUrl: 'exportage/exportage.html'
         };
     })
-    .controller('ExportageController', ['$scope', function ($scope) {
+    .controller('ExportageController', ['$scope', '$filter', function ($scope, $filter) {
 
         $scope.compsList = function() {
             var result = "";
@@ -79,6 +79,13 @@ angular.module('zoumProfilerApp')
                     }
                 }
             });
+            return result;
+        };
+
+        $scope.getShareProfileUrl = function() {
+            var profile = $filter('exportable')($scope.profile, $scope.comps, $scope.getCompId);
+            var urlSafeJson = encodeURIComponent(JSON.stringify(profile));
+            var result = "http://zoumbox.org/mh/ZoumProfiler/#?import=" + urlSafeJson;
             return result;
         };
 

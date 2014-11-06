@@ -3,7 +3,7 @@
     <label class="col-sm-2 control-label">Résumé</label>
 
     <div class="col-sm-10">
-        <textarea class="export" readonly select-on-click >
+        <textarea class="export export-large" readonly select-on-click >
 <B>{{profile.name}} ({{profile.profile}})</B>
 {{profile.race}} Niv. >= {{computed.level}} - {{computed.totalPi}}PI
 Durée du tour {{profile.caracs['TOUR'] | duration}}
@@ -22,6 +22,12 @@ Sortilèges : {{sortsList()}}</textarea>
     <label class="col-sm-2 control-label">Profil au format JSON</label>
 
     <div class="col-sm-10">
-        <textarea class="export" readonly select-on-click >{{profile|exportable:comps:getCompId}}</textarea>
+        <textarea class="export export-medium" readonly select-on-click >{{profile|exportable:comps:getCompId}}</textarea>
+    </div>
+
+    <label class="col-sm-2 control-label">URL de partage</label>
+
+    <div class="col-sm-10">
+        <textarea class="export export-medium" readonly select-on-click >{{getShareProfileUrl()}}</textarea>
     </div>
 </div>
