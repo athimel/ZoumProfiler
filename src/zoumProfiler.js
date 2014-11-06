@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
-    .controller('ZoumProfilerController', ['$scope', '$window', '$location', function($scope, $window, $location) {
+    .controller('ZoumProfilerController', ['$scope', '$window', '$location', '$timeout', function($scope, $window, $location, $timeout) {
 
         /* ********************************************* */
         /* **                Static data              ** */
@@ -789,13 +789,15 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             $scope.profiles.push(newProfile);
             $scope.saveToStorage();
             $scope.reset();
-            $scope.addSuccessMessage("Le profile <b>" + $scope.getProfileName(newProfile) + "</b> a bien été importé");
+            $scope.addSuccessMessage("Le profile <b>" + $scope.getProfileName(newProfile) + "</b> a bien été ajouté à vos profils");
         };
 
         $scope._addMessage = function(list, message) {
             list.push(message);
+            $timeout(function() {
+                $scope.removeMessage(message);
+            }, 10000);
         };
-
 
         $scope.addSuccessMessage = function(message) {
             $scope._addMessage($scope.messages.success, message);
@@ -803,6 +805,18 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.addErrorMessage = function(message) {
             $scope._addMessage($scope.messages.errors, message);
+        };
+
+        $scope.removeMessage = function(message) {
+            var successIndex = $scope.messages.success.indexOf(message);
+            if (successIndex != -1) {
+                $scope.messages.success.splice(successIndex, 1);
+            } else {
+                var errorIndex = $scope.messages.errors.indexOf(message);
+                if (errorIndex != -1) {
+                    $scope.messages.errors.splice(errorIndex, 1);
+                }
+            }
         };
 
         /* ********************************************* */

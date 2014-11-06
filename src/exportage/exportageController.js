@@ -86,6 +86,7 @@ angular.module('zoumProfilerApp')
             var profile = $filter('exportable')($scope.profile, $scope.comps, $scope.getCompId);
             var urlSafeJson = encodeURIComponent(JSON.stringify(profile));
             var result = "http://zoumbox.org/mh/ZoumProfiler/#?import=" + urlSafeJson;
+//            result = "file:///home/thimel/WORK/perso/ZoumProfiler/dist/index.html#?import=" + urlSafeJson;
             return result;
         };
 
