@@ -170,21 +170,25 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         /* **                 Methods                 ** */
         /* ********************************************* */
 
-        $scope.checkBonus = function() {
+        $scope._checkBonus = function(profile) {
             angular.forEach($scope.caracs, function(carac) {
-                if(!$scope.profile.bp) {
-                    $scope.profile.bp = {};
+                if(!profile.bp) {
+                    profile.bp = {};
                 }
-                if(!$scope.profile.bm) {
-                    $scope.profile.bm = {};
+                if(!profile.bm) {
+                    profile.bm = {};
                 }
-                if(!$scope.profile.bp[carac.id]) {
-                    $scope.profile.bp[carac.id] = 0;
+                if(!profile.bp[carac.id]) {
+                    profile.bp[carac.id] = 0;
                 }
-                if(!$scope.profile.bm[carac.id]) {
-                    $scope.profile.bm[carac.id] = 0;
+                if(!profile.bm[carac.id]) {
+                    profile.bm[carac.id] = 0;
                 }
             });
+        };
+
+        $scope.checkBonus = function() {
+            $scope._checkBonus($scope.profile);
         };
 
         $scope.loadFromStorage = function() {
@@ -794,6 +798,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                 angular.forEach($scope.profiles, function(profile) {
                     if(profile.id == id) {
                         $scope.compare.profiles.push(profile);
+                        $scope._checkBonus(profile); // In case this is an old profile without bp/bm
                         angular.forEach(Object.keys(profile.comps), function(compId) {
                             if(profile.comps[compId] === true && angular.isUndefined(compsAdded[compId])) {
                                 $scope.compare.comps.push($scope.compsMap[compId]);
