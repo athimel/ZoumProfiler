@@ -9,7 +9,7 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <th ng-repeat="p in compare.profiles | orderBy:['name','profile']" class="compare-title">{{getProfileName(p)}}</th>
+                    <th ng-repeat="p in compare.profiles | orderBy:['name','profile']" class="compare-title select-profile" ng-click="selectProfile(p)">{{getProfileName(p)}}</th>
                 </tr>
                 <tr ng-repeat="carac in caracs">
                     <td>{{carac.id}}</td>
@@ -28,7 +28,7 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <th ng-repeat="p in compare.profiles | orderBy:['name','profile']" class="compare-title">{{getProfileName(p)}}</th>
+                    <th ng-repeat="p in compare.profiles | orderBy:['name','profile']" class="compare-title select-profile" ng-click="selectProfile(p)">{{getProfileName(p)}}</th>
                 </tr>
                 <tr ng-repeat="comp in compare.comps | orderBy:'name'">
                     <td></td>
