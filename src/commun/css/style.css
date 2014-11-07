@@ -37,7 +37,13 @@ textarea.export-small {
 input.carac {
     width: 50px;
 }
-
+td.best {
+    font-weight: bold;
+}
+th.compare-title {
+    font-style: italic;
+    color: #428bca;
+}
 
 thead tr td {
     font-weight: bold;
@@ -103,8 +109,9 @@ thead tr td {
     padding-top: 10px;
 }
 
-th.title {
+th.compare-category {
     text-align: center;
+    background-color: #87CEEB;
 }
 
 table.compare tr td:first-child {

@@ -7,6 +7,9 @@ angular.module('zoumProfilerApp')
     })
     .controller('ComparaisageController', ['$scope', function ($scope) {
 
+        $scope.isBest = function(caracOrCompId, profileId) {
+            return $scope.compare.best[caracOrCompId] && $scope.compare.best[caracOrCompId][profileId];
+        };
     }]);
 
 

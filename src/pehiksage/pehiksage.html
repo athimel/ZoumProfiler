@@ -73,9 +73,7 @@
                             </td>
                             <td>
                                 <span ng-if="carac.type == 'T'">{{profile.caracs[carac.id] | duration}}</span>
-                                <span ng-if="carac.type == 'D1'">{{profile.caracs[carac.id] + profile.bp[carac.id] + profile.bm[carac.id]}}</span>
-                                <span ng-if="carac.type == 'D3'">{{profile.caracs[carac.id] * 2 + profile.bp[carac.id] + profile.bm[carac.id]}}<span ng-if="carac.id == 'DEG'">/{{degCritiqueComp(profile, profile.caracs['DEG'])}}</span></span>
-                                <span ng-if="carac.type == 'D6'">{{profile.caracs[carac.id] * 3.5 + profile.bp[carac.id] + profile.bm[carac.id]}}</span>
+                                <span ng-if="carac.type != 'T'">{{getCaracAverage(profile, carac)}}<span ng-if="carac.id == 'DEG'">/{{degCritiqueComp(profile, profile.caracs['DEG'])}}</span></span>
                             </td>
                             <td>{{computed.amelioCount[carac.id]}}</td>
                             <td>{{computed.invested[carac.id]}} PI ({{computed.percentInvested[carac.id] |

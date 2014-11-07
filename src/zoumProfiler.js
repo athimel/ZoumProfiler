@@ -12,14 +12,14 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         $scope.races = ['Darkling', 'Durakuir', 'Kastar', 'Nkrwapu', 'Skrim', 'Tomawak'];
 
         $scope.caracs = [
-            {id : 'TOUR', type : 'T', min : 470, max : 720, cost : 18},
-            {id : 'PV', type : 'D1', min : 30, max : 580, step : 10, minDurakuir : 40, cost : 16, costDurakuir : 12, costNkrwapu : 15},
-            {id : 'VUE', type : 'D1', min : 3, max : 58, step : 1, minTomawak : 4, cost : 16, costTomawak : 12, costNkrwapu : 15},
-            {id : 'ATT', type : 'D6', min : 3, max : 58, step : 1, minSkrim : 4, cost : 16, costSkrim : 12, costNkrwapu : 15},
-            {id : 'ESQ', type : 'D6', min : 3, max : 50, step : 1, cost : 16, costNkrwapu : 15},
-            {id : 'DEG', type : 'D3', min : 3, max : 58, step : 1, minKastar : 4, cost : 16, costKastar : 12, costNkrwapu : 15},
-            {id : 'REG', type : 'D3', min : 1, max : 42, step : 1, minDarkling : 2, cost : 30, costDarkling : 22, costNkrwapu : 29},
-            {id : 'ARM', type : 'D3', min : 1, max : 35, step : 1, cost : 30, costNkrwapu : 29}
+            {id : 'TOUR', type : 'T', coef : 1, min : 470, max : 720, cost : 18},
+            {id : 'PV',  type : 'D1', coef : 1, min : 30, max : 580, step : 10, minDurakuir : 40, cost : 16, costDurakuir : 12, costNkrwapu : 15},
+            {id : 'VUE', type : 'D1', coef : 1, min : 3, max : 58, step : 1, minTomawak : 4, cost : 16, costTomawak : 12, costNkrwapu : 15},
+            {id : 'ATT', type : 'D6', coef : 3.5, min : 3, max : 58, step : 1, minSkrim : 4, cost : 16, costSkrim : 12, costNkrwapu : 15},
+            {id : 'ESQ', type : 'D6', coef : 3.5, min : 3, max : 50, step : 1, cost : 16, costNkrwapu : 15},
+            {id : 'DEG', type : 'D3', coef : 2, min : 3, max : 58, step : 1, minKastar : 4, cost : 16, costKastar : 12, costNkrwapu : 15},
+            {id : 'REG', type : 'D3', coef : 2, min : 1, max : 42, step : 1, minDarkling : 2, cost : 30, costDarkling : 22, costNkrwapu : 29},
+            {id : 'ARM', type : 'D3', coef : 2, min : 1, max : 35, step : 1, cost : 30, costNkrwapu : 29}
         ];
 
         $scope.comps = [
@@ -589,9 +589,10 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         $scope.copyProfile = function(profile) {
             $scope.reset();
             var newProfile = angular.copy(profile);
-            newProfile.profile = newProfile.profile + " (copie)";
+            newProfile.profile = newProfile.profile + "-2";
             newProfile.id = $scope.randomId();
             $scope.profiles.push(newProfile);
+            $scope.saveToStorage();
         };
 
         $scope.saveProfile = function() {
@@ -742,6 +743,48 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             return result;
         };
 
+        $scope.getCaracAverage = function(profile, carac) {
+            var caracId = carac.id;
+            var result = profile.caracs[caracId] * carac.coef + profile.bp[caracId] + profile.bm[caracId];
+            return result;
+        };
+
+        $scope.computeBest = function(profiles) {
+            var result = {};
+            angular.forEach($scope.caracs, function(carac) {
+                var bestValue = carac.type == 'T' ? 999 : -999;
+                var bestProfileId = {};
+                angular.forEach(profiles, function(profile) {
+                    var value = $scope.getCaracAverage(profile, carac);
+                    if (value == bestValue) {
+                        bestProfileId[profile.id] = true;
+                    } else if ((carac.type == 'T' && value <= bestValue) || (carac.type != 'T' && value >= bestValue)) {
+                        bestValue = value;
+                        bestProfileId = {};
+                        bestProfileId[profile.id] = true;
+                    }
+                });
+                var count = Object.keys(bestProfileId).length;
+                if (count > 0 && count < profiles.length) {
+                    result[carac.id] = bestProfileId;
+                }
+            });
+
+            angular.forEach(Object.keys($scope.compsMap), function(compId) {
+                var bestProfileId = {};
+                angular.forEach(profiles, function(profile) {
+                    if (profile.comps[compId]) {
+                        bestProfileId[profile.id] = true;
+                    }
+                });
+                var count = Object.keys(bestProfileId).length;
+                if (count > 0 && count < profiles.length) {
+                    result[compId] = bestProfileId;
+                }
+            });
+            return result;
+        };
+
         $scope.compareProfiles = function() {
             $scope.reset();
             $scope.compare.profiles = [];
@@ -760,6 +803,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                     }
                 });
             });
+            $scope.compare.best = $scope.computeBest($scope.compare.profiles);
             $scope.compare.show = true;
         };
 
