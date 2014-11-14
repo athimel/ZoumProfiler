@@ -1,11 +1,11 @@
 angular.module('zoumProfilerApp')
-    .directive('exportage', function() {
+    .directive('export', function() {
         return {
             restrict: 'E',
-            templateUrl: 'exportage/exportage.html'
+            templateUrl: 'export/export.html'
         };
     })
-    .controller('ExportageController', ['$scope', '$filter', function ($scope, $filter) {
+    .controller('ExportController', ['$scope', '$filter', function ($scope, $filter) {
 
         $scope.compsList = function() {
             var result = "";

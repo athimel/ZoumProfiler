@@ -1,11 +1,11 @@
 angular.module('zoumProfilerApp')
-    .directive('mouchage', function() {
+    .directive('mouches', function() {
         return {
             restrict: 'E',
-            templateUrl: 'mouchage/mouchage.html'
+            templateUrl: 'mouches/mouches.html'
         };
     })
-    .controller('MouchageController', ['$scope', function ($scope) {
+    .controller('MouchesController', ['$scope', function ($scope) {
 
         $scope.mouches = ['Crobate', 'Héros', 'Lunettes', 'Miel', 'Nabolisants', 'Rivatant', 'Telaite', 'Vertie', 'Xidant'];
 

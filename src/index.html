@@ -93,24 +93,74 @@
                 </div>
 
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                    <tabset ng-if="profile">
-                        <tab heading="Pehiksage">
-                            <pehiksage></pehiksage>
-                        </tab>
-                        <tab heading="Mouchage">
-                            <mouchage></mouchage>
-                        </tab>
-                        <tab heading="Equipmentage">
-                            <equipmentage></equipmentage>
-                        </tab>
-                        <tab heading="Exportage">
-                            <exportage></exportage>
-                        </tab>
-                    </tabset>
 
-                    <importage></importage>
+                    <br/>
+                    <div ng-if="computed.totalPi > config.maxPi" class="alert alert-danger">Ce profil dépasse la limite de <b>{{config.maxPi}}
+                        PI</b>. Il vous manque <b>{{computed.totalPi - config.maxPi}} PI</b>.
+                    </div>
 
-                    <comparaisage></comparaisage>
+                    <form ng-if="profile" class="form-horizontal" role="form">
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label">Trõll</label>
+
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" id="name" ng-model="profile.name">
+                            </div>
+
+                            <label for="name" class="col-sm-1 control-label">Profil</label>
+
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" id="profile" ng-model="profile.profile">
+                            </div>
+
+                            <label class="col-sm-4 control-label">
+                                <span ng-class="{true:'error', false:''}[computed.totalPi > config.maxPi]">{{computed.totalPi}} PI</span>
+                                (Niveau >= {{computed.level}}) - reste {{config.maxPi - computed.totalPi}} PI
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Race</label>
+
+                            <div class="col-sm-10">
+                                <span ng-repeat="race in races">
+                                    <input type="radio" ng-model="profile.race" name="race" value="{{race}}" ng-required="true"
+                                           ng-change="raceChanged()"/>
+                                    {{race}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <fight></fight>
+
+                        <tabset ng-if="profile">
+
+                            <tab heading="Caractéristiques">
+                                <caracteristiques></caracteristiques>
+                            </tab>
+                            <tab heading="Compétences">
+                                <competences></competences>
+                            </tab>
+                            <tab heading="Sortilèges">
+                                <sortileges></sortileges>
+                            </tab>
+                            <tab heading="Mouches">
+                                <mouches></mouches>
+                            </tab>
+                            <tab heading="Équipement">
+                                <equipement></equipement>
+                            </tab>
+                            <tab heading="Export">
+                                <export></export>
+                            </tab>
+                        </tabset>
+
+                    </form>
+
+                    <import></import>
+
+                    <compare></compare>
 
                     <div class="row actionbar" ng-if="profile">
                         <button type="button" class="btn btn-sm btn-success" ng-disabled="!hasModification()" ng-click="saveProfile()">

@@ -1,11 +1,11 @@
 angular.module('zoumProfilerApp')
-    .directive('comparaisage', function() {
+    .directive('compare', function() {
         return {
             restrict: 'E',
-            templateUrl: 'comparaisage/comparaisage.html'
+            templateUrl: 'compare/compare.html'
         };
     })
-    .controller('ComparaisageController', ['$scope', function ($scope) {
+    .controller('CompareController', ['$scope', function ($scope) {
 
         $scope.isBest = function(caracOrCompId, profileId) {
             return $scope.compare.best[caracOrCompId] && $scope.compare.best[caracOrCompId][profileId];

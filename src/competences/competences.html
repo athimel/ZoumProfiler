@@ -1,0 +1,60 @@
+<div class="form-group comp-box" ng-controller="CompetencesController">
+
+    <!--div class="row">
+        <label class="col-sm-2 control-label">PI investis</label>
+        <div class="col-sm-2">{{computed.piComps}} ({{computed.percentComps | number:2}}%) </div>
+    </div-->
+
+    <div class="col-sm-3">
+        <label>Combat</label>
+
+        <div class="checkbox" ng-repeat="comp in compsByType['Combat']|orderBy:'name'">
+            <label>
+                <input type="checkbox" value="" ng-model="profile.comps[comp.id]"
+                       ng-change="checkCompLevel(comp)"/>
+                {{comp.name}} (<b>{{comp.cost}} PI</b>)
+            </label>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <label>Connaissance</label>
+
+        <div class="checkbox" ng-repeat="comp in compsByType['Connaissance']|orderBy:'name'">
+            <label>
+                <input type="checkbox" value="" ng-model="profile.comps[comp.id]"
+                       ng-change="checkCompLevel(comp)"/>
+                {{comp.name}} (<b>{{comp.cost}} PI</b>)
+            </label>
+        </div>
+        <label>Utile</label>
+
+        <div class="checkbox" ng-repeat="comp in compsByType['Utile']|orderBy:'name'">
+            <label>
+                <input type="checkbox" value="" ng-model="profile.comps[comp.id]"
+                       ng-change="checkCompLevel(comp)"/>
+                {{comp.name}} (<b>{{comp.cost}} PI</b>)
+            </label>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <label>Déplacement</label>
+
+        <div class="checkbox" ng-repeat="comp in compsByType['Déplacement']|orderBy:'name'">
+            <label>
+                <input type="checkbox" value="" ng-model="profile.comps[comp.id]"
+                       ng-change="checkCompLevel(comp)"/>
+                {{comp.name}} (<b>{{comp.cost}} PI</b>)
+            </label>
+        </div>
+        <label>Artisanat</label>
+
+        <div class="checkbox" ng-repeat="comp in compsByType['Artisanat']|orderBy:'name'">
+            <label>
+                <input type="checkbox" value="" ng-model="profile.comps[comp.id]"
+                       ng-change="checkCompLevel(comp)"/>
+                {{comp.name}} (<b>{{comp.cost}} PI</b>)
+            </label>
+        </div>
+    </div>
+
+</div>

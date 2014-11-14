@@ -1,11 +1,11 @@
 angular.module('zoumProfilerApp')
-    .directive('importage', function() {
+    .directive('import', function() {
         return {
             restrict: 'E',
-            templateUrl: 'importage/importage.html'
+            templateUrl: 'import/import.html'
         };
     })
-    .controller('ImportageController', ['$scope', function ($scope) {
+    .controller('ImportController', ['$scope', function ($scope) {
 
         $scope.importProfile = function() {
             var newProfile = angular.fromJson($scope.import.json);
