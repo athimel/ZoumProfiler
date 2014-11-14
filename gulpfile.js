@@ -22,7 +22,8 @@ var gulp = require('gulp'),
 var bases = {
     src  : 'src/',
     deps : 'bower_components/',
-    dist : 'dist/'
+    dist : 'dist/',
+    fonts : 'dist/fonts/'
 };
 
 var paths = {
@@ -30,6 +31,7 @@ var paths = {
     scripts : ['**/*.js'],
     styles  : ['**/*.css'],
     images  : ['**/*.png'],
+    fonts   : ['commun/fonts/*'],
     libs    : ['angular/angular.min.js', 'angular-sanitize/angular-sanitize.min.js',
         'angular-ui-bootstrap-bower/ui-bootstrap.min.js', 'angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js',
         'bootstrap/dist/js/bootstrap.min.js', 'jquery/dist/jquery.min.js', 'underscore/underscore.js']
@@ -92,6 +94,10 @@ gulp.task('resources', function() {
     gulp.src(paths.libs, {cwd: bases.deps})
         .pipe(rename({dirname: 'libs'}))
         .pipe(gulp.dest(bases.dist));
+
+    // Copy everything from fonts
+    gulp.src(paths.fonts, {cwd: bases.src})
+        .pipe(gulp.dest(bases.fonts));
 });
 
 // Default task
