@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
-    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', 'base', function($scope, $window, $location, $timeout, base) {
+    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', 'base', function($scope, $window, $location, $timeout, $filter, base) {
 
         $scope.races = base.races;
 
@@ -56,7 +56,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             // Because some profiles was created before I add "id"
             angular.forEach($scope.profiles, function(profile) {
                 if(angular.isUndefined(profile.id)) {
-                    profile.id = $scope.randomId();
+                    profile.id = $scope._randomId();
                 }
             });
 
@@ -383,13 +383,13 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             $scope.refreshComputed();
         };
 
-        $scope.randomId = function() {
+        $scope._randomId = function() {
             return "p-" + new Date().getTime() + "-" + Math.random();
         };
 
         $scope.addProfile = function() {
             $scope.reset();
-            var newProfile = { comps : {cdm1 : true}, id : $scope.randomId() };
+            var newProfile = { comps : {cdm1 : true}, id : $scope._randomId() };
             $scope.profiles.push(newProfile);
             $scope.selectProfile(newProfile);
         };
@@ -398,7 +398,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             $scope.reset();
             var newProfile = angular.copy(profile);
             newProfile.profile = newProfile.profile + "-2";
-            newProfile.id = $scope.randomId();
+            newProfile.id = $scope._randomId();
             $scope.profiles.push(newProfile);
             $scope.saveToStorage();
         };
@@ -408,17 +408,9 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             $scope.originalProfile = angular.copy($scope.profile);
         };
 
-        $scope.getProfileName = function(profile) {
-            var result = profile.name;
-            if (angular.isDefined(profile.profile)) {
-                result += " (" + profile.profile + ")";
-            }
-            return result;
-        };
-
         $scope.deleteProfile = function(profile) {
             $scope.reset();
-            var message = "Souhaitez-vous supprimer le profil " + $scope.getProfileName(profile) + " de manière définitive ?";
+            var message = "Souhaitez-vous supprimer le profil " + $filter('prettyName')(profile) + " de manière définitive ?";
             if ($window.confirm(message)) {
                 $scope.profiles.splice($scope.profiles.indexOf(profile), 1);
                 $scope.saveToStorage();
@@ -504,7 +496,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         $scope.reset = function() {
 
             if (angular.isDefined($scope.profile) && $scope.hasModification()) {
-                var message = "Vous avez des modifications sur le profil " + $scope.getProfileName($scope.profile) + ", voulez-vous les enregistrer ?";
+                var message = "Vous avez des modifications sur le profil " + $filter('prettyName')($scope.profile) + ", voulez-vous les enregistrer ?";
                 if ($window.confirm(message)) {
                     $scope.saveProfile();
                 } else {
@@ -538,63 +530,8 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             return result;
         };
 
-        $scope.computeBest = function(profiles) {
-            var result = {};
-            angular.forEach(base.caracs, function(carac) {
-                var bestValue = carac.type == 'T' ? 999 : -999;
-                var bestProfileId = {};
-                angular.forEach(profiles, function(profile) {
-                    var value = $scope.getCaracAverage(profile, carac);
-                    if (value == bestValue) {
-                        bestProfileId[profile.id] = true;
-                    } else if ((carac.type == 'T' && value <= bestValue) || (carac.type != 'T' && value >= bestValue)) {
-                        bestValue = value;
-                        bestProfileId = {};
-                        bestProfileId[profile.id] = true;
-                    }
-                });
-                var count = Object.keys(bestProfileId).length;
-                if (count > 0 && count < profiles.length) {
-                    result[carac.id] = bestProfileId;
-                }
-            });
-
-            angular.forEach(Object.keys(base.compsMap), function(compId) {
-                var bestProfileId = {};
-                angular.forEach(profiles, function(profile) {
-                    if (profile.comps[compId]) {
-                        bestProfileId[profile.id] = true;
-                    }
-                });
-                var count = Object.keys(bestProfileId).length;
-                if (count > 0 && count < profiles.length) {
-                    result[compId] = bestProfileId;
-                }
-            });
-            return result;
-        };
-
-        $scope.compareProfiles = function() {
-            $scope.reset();
-            $scope.compare.profiles = [];
-            $scope.compare.comps = [];
-            var compsAdded = {};
-            angular.forEach($scope.getCompareIds(), function(id) {
-                angular.forEach($scope.profiles, function(profile) {
-                    if(profile.id == id) {
-                        $scope.compare.profiles.push(profile);
-                        $scope._checkBonus(profile); // In case this is an old profile without bp/bm
-                        angular.forEach(Object.keys(profile.comps), function(compId) {
-                            if(profile.comps[compId] === true && angular.isUndefined(compsAdded[compId])) {
-                                $scope.compare.comps.push(base.compsMap[compId]);
-                                compsAdded[compId] = true;
-                            }
-                        });
-                    }
-                });
-            });
-            $scope.compare.best = $scope.computeBest($scope.compare.profiles);
-            $scope.compare.show = true;
+        $scope.startCompareUseCase = function() {
+            $scope.$broadcast('startCompareUseCase');
         };
 
         $scope.hasModification = function() {
@@ -625,7 +562,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             angular.forEach($scope.profiles, function(profile) {
                 var areEquals = angular.equals(profile, newProfile);
                 if (!areEquals && profile.id == newProfile.id) {
-                    newProfile.id = $scope.randomId();
+                    newProfile.id = $scope._randomId();
                 }
                 profileAlreadyExists |= areEquals;
             });
@@ -634,7 +571,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             } else {
                 $scope.profiles.push(newProfile);
                 $scope.saveToStorage();
-                $scope.addSuccessMessage("Le profil <b>" + $scope.getProfileName(newProfile) + "</b> a bien été ajouté à votre liste de profils");
+                $scope.addSuccessMessage("Le profil <b>" + $filter('prettyName')(newProfile) + "</b> a bien été ajouté à votre liste de profils");
             }
             $scope.reset();
         };
@@ -689,6 +626,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                     $scope._importProfile(newProfile);
                     $location.search('import', '');
                 } catch (eee) {
+                    console.error("Error during profile import: ", eee);
                     $scope.addErrorMessage("Impossible d'importer le profile");
                 }
             }
