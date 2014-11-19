@@ -5,7 +5,7 @@ angular.module('zoumProfilerApp')
             templateUrl: 'export/export.html'
         };
     })
-    .controller('ExportController', ['$scope', '$filter', function ($scope, $filter) {
+    .controller('ExportController', ['$scope', '$filter', '$location', function ($scope, $filter, $location) {
 
         $scope.compsList = function() {
             var result = "";
@@ -85,8 +85,15 @@ angular.module('zoumProfilerApp')
         $scope.getShareProfileUrl = function() {
             var profile = $filter('exportable')($scope.profile, $scope.comps, $scope.getCompId);
             var urlSafeJson = encodeURIComponent(JSON.stringify(profile));
-            var result = "http://zoumbox.org/mh/ZoumProfiler/#?import=" + urlSafeJson;
-//            result = "file:///home/thimel/WORK/perso/ZoumProfiler/dist/index.html#?import=" + urlSafeJson;
+
+            var absUrl = $location.absUrl();
+            var hashIndex = absUrl.indexOf('#');
+            if (hashIndex != -1) {
+                absUrl = absUrl.substring(0, hashIndex);
+            }
+
+            var result = absUrl + "#?import=" + urlSafeJson;
+            // result = "http://zoumbox.org/mh/ZoumProfiler/#?import=" + urlSafeJson;
             return result;
         };
 
