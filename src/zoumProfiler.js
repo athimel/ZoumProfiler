@@ -1,153 +1,9 @@
 'use strict';
 
 angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
-    .controller('ZoumProfilerController', ['$scope', '$window', '$location', '$timeout', function($scope, $window, $location, $timeout) {
+    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', 'base', function($scope, $window, $location, $timeout, base) {
 
-        /* ********************************************* */
-        /* **                Static data              ** */
-        /* ********************************************* */
-
-        $scope.config = { maxPi : 18290 };
-
-        $scope.races = ['Darkling', 'Durakuir', 'Kastar', 'Nkrwapu', 'Skrim', 'Tomawak'];
-
-        $scope.caracs = [
-            {id : 'TOUR', type : 'T', coef : 1, min : 470, max : 720, cost : 18},
-            {id : 'PV',  type : 'D1', coef : 1, min : 30, max : 580, step : 10, minDurakuir : 40, cost : 16, costDurakuir : 12, costNkrwapu : 15},
-            {id : 'VUE', type : 'D1', coef : 1, min : 3, max : 58, step : 1, minTomawak : 4, cost : 16, costTomawak : 12, costNkrwapu : 15},
-            {id : 'ATT', type : 'D6', coef : 3.5, min : 3, max : 58, step : 1, minSkrim : 4, cost : 16, costSkrim : 12, costNkrwapu : 15},
-            {id : 'ESQ', type : 'D6', coef : 3.5, min : 3, max : 50, step : 1, cost : 16, costNkrwapu : 15},
-            {id : 'DEG', type : 'D3', coef : 2, min : 3, max : 58, step : 1, minKastar : 4, cost : 16, costKastar : 12, costNkrwapu : 15},
-            {id : 'REG', type : 'D3', coef : 2, min : 1, max : 42, step : 1, minDarkling : 2, cost : 30, costDarkling : 22, costNkrwapu : 29},
-            {id : 'ARM', type : 'D3', coef : 2, min : 1, max : 35, step : 1, cost : 30, costNkrwapu : 29}
-        ];
-
-        $scope.comps = [
-            { id : 'cdm', levels : 5, cost : 10, name : "Connaissance des monstres", type : "Connaissance", short : "CdM" },
-            { id : 'idc', levels : 1, cost : 10, name : "Identification des champignons", type : "Connaissance", short : "IdC" },
-            { id : 'insultes', levels : 3, cost : 10, name : "Insultes", type : "Utile" },
-            { id : 'miner', levels : 1, cost : 10, name : "Miner", type : "Utile" },
-            { id : 'tailler', levels : 1, cost : 10, name : "Tailler", type : "Artisanat" },
-            { id : 'pistage', levels : 1, cost : 10, name : "Pistage", type : "Utile" },
-            { id : 'bidouiller', levels : 1, cost : 20, name : "Bidouille", type : "Artisanat" },
-            { id : 'course', levels : 1, cost : 20, name : "Course", type : "Déplacement" },
-            { id : 'de', levels : 1, cost : 20, name : "Déplacement Éclair", type : "Déplacement", short : "DE" },
-            { id : 'ca', levels : 1, cost : 20, name : "Contre-Attaquer", type : "Combat" },
-            { id : 'dressage', levels : 1, cost : 20, name : "Dressage", type : "Utile" },
-            { id : 'parer', levels : 2, cost : 20, name : "Parer", type : "Combat" },
-            { id : 'interposer', levels : 2, cost : 20, name : "S'interposer", type : "Combat" },
-            { id : 'he', levels : 1, cost : 20, name : "Hurlement Effrayan", type : "Combat", short : "HE" },
-            { id : 'lancer', levels : 1, cost : 30, name : "Lancer de potions", type : "Combat" },
-            { id : 'marquage', levels : 1, cost : 30, name : "Marquage", type : "Utile" },
-            { id : 'reparation', levels : 1, cost : 30, name : "Réparation", type : "Artisanat" },
-            { id : 'grattage', levels : 1, cost : 30, name : "Grattage", type : "Artisanat" },
-            { id : 'baroufle', levels : 4, cost : 30, name : "Baroufle", type : "Utile" },
-            { id : 'planter', levels : 1, cost : 40, name : "Planter un champignon", type : "Artisanat" },
-            { id : 'retraite', levels : 2, cost : 40, name : "Retraite", type : "Combat" },
-            { id : 'melange', levels : 1, cost : 40, name : "Mélange Magique", type : "Artisanat" },
-            { id : 'shamaner', levels : 1, cost : 50, name : "Shamaner", type : "Utile" },
-            { id : 'ap', levels : 7, cost : 50, name : "Attaque Précise", type : "Combat", short : "AP" },
-            { id : 'charger', levels : 1, cost : 50, name : "Charger", type : "Combat" },
-            { id : 'piege_feu', levels : 1, cost : 50, name : "Construire un piège à feu", type : "Artisanat" },
-            { id : 'piege_glue', levels : 1, cost : 50, name : "Construire un piège à glue", type : "Artisanat" },
-            { id : 'cdb', levels : 7, cost : 50, name : "Coup de Butoir", type : "Combat", short : "CdB" },
-            { id : 'rotobaffe', levels : 6, cost : 80, name : "Rotobaffe", type : "Combat" },
-            { id : 'painthure', levels : 1, cost : 100, name : "Painthure de Guerre", type : "Utile" },
-            { id : 'em', levels : 1, cost : 100, name : "Ecriture Magique", type : "Artisanat", short : "EM" },
-            { id : 'frene', levels : 1, cost : 100, name : "Frénésie", type : "Combat", short : "Fréné" },
-            { id : 'necro', levels : 1, cost : 100, name : "Nécromancie", type : "Artisanat" },
-            { id : 'golem_cuir', levels : 1, cost : 150, name : "Golémologie de cuir", type : "Artisanat" },
-            { id : 'golem_metal', levels : 1, cost : 150, name : "Golémologie de métal", type : "Artisanat" },
-            { id : 'golem_mithril', levels : 1, cost : 150, name : "Golémologie de mithril", type : "Artisanat" },
-            { id : 'golem_papier', levels : 1, cost : 150, name : "Golémologie de papier", type : "Artisanat" },
-
-            { id : 'am', levels : 1, cost : 0, name : 'Accélération du Métabolisme', reservedFor : $scope.races[2], type : "Utile", short : "AM" },
-            { id : 'bs', levels : 1, cost : 0, name : 'Botte Secrète', reservedFor : $scope.races[4], type : "Attaque", short : "BS" },
-            { id : 'balayage', levels : 1, cost : 0, name : 'Balayage', reservedFor : $scope.races[0], type : "Combat" },
-            { id : 'camou', levels : 1, cost : 0, name : 'Camouflage', reservedFor : $scope.races[5], type : "Utile" },
-            { id : 'ra', levels : 1, cost : 0, name : 'Régénération Accrue', reservedFor : $scope.races[1], type : "Utile", short : "RA" }
-        ];
-
-        $scope.sorts = [
-            { id : 'vampi', name : 'Vampirisme', reservedFor : $scope.races[2], short : "Vampi" },
-            { id : 'rp', name : 'Rafale Psychique', reservedFor : $scope.races[1], short : "RP" },
-            { id : 'projo', name : 'Projectile Magique', reservedFor : $scope.races[5], short : "Projo" },
-            { id : 'hypno', name : 'Hypnotisme', reservedFor : $scope.races[4], short : "Hypno" },
-            { id : 'siphon', name : 'Siphon des âmes', reservedFor : $scope.races[0] }
-        ];
-
-        $scope.makeCompSortMap = function(compsOrSorts) {
-            var resultMap = {};
-            angular.forEach(compsOrSorts, function(compOrSort) {
-                var levels = compOrSort.levels;
-                if (!levels) {
-                    levels = 1;
-                }
-                for (var i = 1; i <= levels; i++) {
-                    var newCompOrSort = compOrSort;
-                    if (levels > 1) {
-                        newCompOrSort = angular.copy(compOrSort);
-                        newCompOrSort.id = compOrSort.id + i;
-                        newCompOrSort.level = i;
-                        newCompOrSort.cost = compOrSort.cost * i;
-                        newCompOrSort.name += " - niveau " + i;
-                        if (newCompOrSort.short) {
-                            newCompOrSort.short = newCompOrSort.short + i;
-                        }
-                    }
-
-                    if (i > 1) {
-                        newCompOrSort.requires = compOrSort.id + (i - 1);
-                    }
-                    if (i < levels) {
-                        newCompOrSort.requiredFor = compOrSort.id + (i + 1);
-                    }
-
-                    resultMap[newCompOrSort.id] = newCompOrSort;
-                }
-            });
-            return resultMap;
-
-        };
-
-        $scope.compsMap = $scope.makeCompSortMap($scope.comps); // { "cdb1" : { ... } }
-        $scope.sortsMap = $scope.makeCompSortMap($scope.sorts); // { "vampi" : { ... } }
-
-        $scope.compsByType = {}; // { "Combat" : [{cdb1}, {cdb2}] }
-
-        angular.forEach(Object.keys($scope.compsMap), function(compId) {
-            var comp = $scope.compsMap[compId];
-            if(!comp.reservedFor) {
-                var compType = comp.type;
-                if(angular.isUndefined($scope.compsByType[compType])) {
-                    $scope.compsByType[compType] = [];
-                }
-                $scope.compsByType[compType].push(comp);
-            }
-        });
-
-        $scope.compTypes = Object.keys($scope.compsByType);
-
-        $scope.combatCompsSortsMap = {
-            // comps
-            ca    : true, ap : true, charger : true, cdb : true, rotobaffe : true, frene : true, bs : true, piege_feu : true,
-            // sorts
-            vampi : true, rp : true, projo : true, siphon : true
-        };
-
-        $scope.levels = {};
-        var count = 0;
-        for(var i = 2; i <= 60; i++) {
-            count += i * 10;
-            $scope.levels['n' + i] = count;
-        }
-
-        var tourValue = 720;
-        $scope.tourValues = [tourValue];
-        for (var idx=0; idx<44; idx++) {
-            tourValue -= Math.max(30 - 3 * idx, 2.5);
-            $scope.tourValues.push(Math.floor(tourValue));
-        }
+        $scope.races = base.races;
 
         /* ********************************************* */
         /* **             Contextual data             ** */
@@ -171,7 +27,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         /* ********************************************* */
 
         $scope._checkBonus = function(profile) {
-            angular.forEach($scope.caracs, function(carac) {
+            angular.forEach(base.caracs, function(carac) {
                 if(!profile.bp) {
                     profile.bp = {};
                 }
@@ -205,7 +61,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             });
 
             // Because some profiles was created when "de" was "de1"
-            angular.forEach($scope.comps, function(comp) {
+            angular.forEach(base.comps, function(comp) {
                 if (comp.levels == 1) {
                     angular.forEach($scope.profiles, function(profile) {
                         if (profile.comps[comp.id + "1"] === true) {
@@ -226,7 +82,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             if(angular.isUndefined(profile.caracs)) {
                 profile.caracs = {};
             }
-            angular.forEach($scope.caracs, function(carac) {
+            angular.forEach(base.caracs, function(carac) {
                 if(angular.isUndefined(profile.caracs[carac.id])) {
                     if(carac.id == 'TOUR') {
                         profile.caracs[carac.id] = carac.max;
@@ -302,9 +158,9 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         };
 
         $scope.getCompOrSort = function(compOrSortId) {
-            var result = $scope.compsMap[compOrSortId];
+            var result = base.compsMap[compOrSortId];
             if (!result) {
-                result = $scope.sortsMap[compOrSortId];
+                result = base.sortsMap[compOrSortId];
             }
             if (!result) {
                 console.error("Unknown comp/sort: " + compOrSortId)
@@ -441,8 +297,8 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.refreshCombat = function(computed) {
             computed.combat = [];
-            angular.forEach($scope.sorts, function(sort) {
-                if ($scope.combatCompsSortsMap[sort.id]) {
+            angular.forEach(base.sorts, function(sort) {
+                if (base.combatCompsSortsMap[sort.id]) {
                     if (sort.reservedFor) {
                         if (sort.reservedFor === $scope.profile.race) {
                             var sortComputed = $scope.computeCombat(sort, sort);
@@ -453,8 +309,8 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                     }
                 }
             });
-            angular.forEach($scope.comps, function(comp) {
-                if ($scope.combatCompsSortsMap[comp.id]) {
+            angular.forEach(base.comps, function(comp) {
+                if (base.combatCompsSortsMap[comp.id]) {
                     if (comp.reservedFor) {
                         if (comp.reservedFor === $scope.profile.race) {
                             var reservedCompComputed = $scope.computeCombat(comp, comp);
@@ -464,7 +320,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                         for (var lvl = comp.levels; lvl >= 1; lvl--) {
                             var compId = $scope.getCompId(comp, lvl);
                             if ($scope.profile.comps[compId] === true) {
-                                var compComputed = $scope.computeCombat($scope.compsMap[compId], comp);
+                                var compComputed = $scope.computeCombat(base.compsMap[compId], comp);
                                 computed.combat.push(compComputed);
                                 break;
                             }
@@ -476,7 +332,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.refreshComputed = function() {
             var newComputed = $scope.newComputed();
-            angular.forEach($scope.caracs, function(carac) {
+            angular.forEach(base.caracs, function(carac) {
                 newComputed.amelioCount[carac.id] = $scope.amelioCount($scope.profile, carac);
                 newComputed.invested[carac.id] = $scope.invested($scope.profile, carac);
                 newComputed.piCaracts += newComputed.invested[carac.id];
@@ -487,25 +343,25 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             if ($scope.profile.comps) {
                 angular.forEach(Object.keys($scope.profile.comps), function (compId) {
                     if ($scope.profile.comps[compId] === true) {
-                        newComputed.piComps += $scope.compsMap[compId].cost;
+                        newComputed.piComps += base.compsMap[compId].cost;
                     }
                 });
             }
             newComputed.totalPi = newComputed.piCaracts + newComputed.piComps;
-            if (newComputed.totalPi >= $scope.config.maxPi) {
+            if (newComputed.totalPi >= base.config.maxPi) {
                 newComputed.level = 60;
             } else if (newComputed.totalPi < 20) {
                 newComputed.level = 1;
             } else {
-                for (i = 2; i < 60; i++) {
-                    if (newComputed.totalPi >= $scope.levels['n' + i]) {
+                for (var i = 2; i < 60; i++) {
+                    if (newComputed.totalPi >= base.levels['n' + i]) {
                         newComputed.level = i;
                     } else {
                         break;
                     }
                 }
             }
-            angular.forEach($scope.caracs, function(carac) {
+            angular.forEach(base.caracs, function(carac) {
                 newComputed.percentInvested[carac.id] = 100 * newComputed.invested[carac.id] / newComputed.piCaracts;
             });
             newComputed.percentCaracts = 100 * newComputed.piCaracts / newComputed.totalPi;
@@ -516,58 +372,6 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         $scope.raceChanged = function() {
             $scope.checkMin($scope.profile);
             $scope.refreshComputed();
-        };
-
-        $scope.checkTourValue = function() {
-            var newValue = $scope.profile.caracs['TOUR'];
-            if (angular.isDefined(newValue) && newValue > 470 && newValue < 720) {
-                var currentValue = $scope.computed.currentTour;
-                if ($scope.tourValues.indexOf(newValue) == -1 && angular.isDefined(currentValue)) {
-                    var currentIndex = $scope.tourValues.indexOf(currentValue);
-                    var newComputedValue;
-                    var newIndex = 0;
-                    if (currentIndex == -1) {
-                        // Increase or decrease one by one until a known value is reached
-                        var value = newValue;
-                        if (currentValue > newValue) {
-                            while ($scope.tourValues.indexOf(value) == -1) {
-                                value--;
-                            }
-                        } else {
-                            while ($scope.tourValues.indexOf(value) == -1) {
-                                value++;
-                            }
-                        }
-                        newIndex = $scope.tourValues.indexOf(value);
-                    } else {
-                        // Go directly to the next known value
-                        if (currentValue > newValue) {
-                            newIndex = currentIndex + 1;
-                        } else {
-                            newIndex = Math.max(currentIndex - 1, 0);
-                        }
-                    }
-                    newComputedValue = $scope.tourValues[newIndex];
-                    $scope.profile.caracs['TOUR'] = newComputedValue;
-                }
-            }
-        };
-
-        $scope.caracChanged = function(caracId) {
-            if (caracId == 'TOUR') {
-                $scope.checkTourValue();
-            }
-            $scope.refreshComputed();
-        };
-
-        $scope.bonusChanged = function(caracId) {
-            if (($scope.profile.race == $scope.races[5] && caracId == 'VUE')
-                || caracId == 'ATT'
-                || caracId == 'ESQ'
-                || caracId == 'DEG'
-                || ($scope.profile.race == $scope.races[0] && caracId == 'REG')) {
-                $scope.refreshCombat($scope.computed);
-            }
         };
 
         $scope.selectProfile = function (profile) {
@@ -692,25 +496,6 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             return $scope.degCritique0(profile, nbD3Deg, false, true);
         };
 
-        $scope.checkCompLevel = function(comp) {
-            if($scope.profile.comps[comp.id] === true) {
-                var comp1 = $scope.compsMap[comp.id];
-                while(comp1.requires) {
-                    $scope.profile.comps[comp1.requires] = true;
-                    comp1 = $scope.compsMap[comp1.requires];
-                }
-            } else if($scope.profile.comps[comp.id] === false) {
-                delete $scope.profile.comps[comp.id];
-                var comp2 = $scope.compsMap[comp.id];
-                while(comp2.requiredFor) {
-                    $scope.profile.comps[comp2.requiredFor] = false;
-                    delete $scope.profile.comps[comp2.requiredFor];
-                    comp2 = $scope.compsMap[comp2.requiredFor];
-                }
-            }
-            $scope.refreshComputed();
-        };
-
         $scope.startImport = function() {
             $scope.reset();
             $scope.import.show = true;
@@ -755,7 +540,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.computeBest = function(profiles) {
             var result = {};
-            angular.forEach($scope.caracs, function(carac) {
+            angular.forEach(base.caracs, function(carac) {
                 var bestValue = carac.type == 'T' ? 999 : -999;
                 var bestProfileId = {};
                 angular.forEach(profiles, function(profile) {
@@ -774,7 +559,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                 }
             });
 
-            angular.forEach(Object.keys($scope.compsMap), function(compId) {
+            angular.forEach(Object.keys(base.compsMap), function(compId) {
                 var bestProfileId = {};
                 angular.forEach(profiles, function(profile) {
                     if (profile.comps[compId]) {
@@ -801,7 +586,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                         $scope._checkBonus(profile); // In case this is an old profile without bp/bm
                         angular.forEach(Object.keys(profile.comps), function(compId) {
                             if(profile.comps[compId] === true && angular.isUndefined(compsAdded[compId])) {
-                                $scope.compare.comps.push($scope.compsMap[compId]);
+                                $scope.compare.comps.push(base.compsMap[compId]);
                                 compsAdded[compId] = true;
                             }
                         });
@@ -823,7 +608,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
 
         $scope._importProfile = function(newProfile) {
             if (newProfile.comps) {
-                angular.forEach($scope.comps, function (comp) {
+                angular.forEach(base.comps, function (comp) {
                     if (comp.levels > 1) {
                         for (var lvl = comp.levels; lvl >= 1; lvl--) {
                             var compIdHigherLvl = $scope.getCompId(comp, lvl + 1);
