@@ -1,0 +1,9 @@
+.idea
+*iml
+node_modules
+bower_components
+lib
+dist
+/*~
+/*/*~
+notes.txt
