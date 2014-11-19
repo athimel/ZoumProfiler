@@ -157,7 +157,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         $scope.compare = { show : false, map : {} };
         $scope.profile;
         $scope.computed;
-        $scope.messages = { success:[], errors:[] };
+        $scope.messages = { success:[], errors:[], warnings:[] };
 
         /* ********************************************* */
         /* **                 Profiles                ** */
@@ -835,10 +835,22 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                     }
                 });
             }
-            $scope.profiles.push(newProfile);
-            $scope.saveToStorage();
+            var profileAlreadyExists = false;
+            angular.forEach($scope.profiles, function(profile) {
+                var areEquals = angular.equals(profile, newProfile);
+                if (!areEquals && profile.id == newProfile.id) {
+                    newProfile.id = $scope.randomId();
+                }
+                profileAlreadyExists |= areEquals;
+            });
+            if (profileAlreadyExists) {
+                $scope.addWarningMessage("Un profil identique existe déjà dans votre liste de profils");
+            } else {
+                $scope.profiles.push(newProfile);
+                $scope.saveToStorage();
+                $scope.addSuccessMessage("Le profil <b>" + $scope.getProfileName(newProfile) + "</b> a bien été ajouté à votre liste de profils");
+            }
             $scope.reset();
-            $scope.addSuccessMessage("Le profil <b>" + $scope.getProfileName(newProfile) + "</b> a bien été ajouté à votre liste de profils");
         };
 
         $scope._addMessage = function(list, message) {
@@ -850,6 +862,10 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.addSuccessMessage = function(message) {
             $scope._addMessage($scope.messages.success, message);
+        };
+
+        $scope.addWarningMessage = function(message) {
+            $scope._addMessage($scope.messages.warnings, message);
         };
 
         $scope.addErrorMessage = function(message) {
@@ -864,6 +880,11 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
                 var errorIndex = $scope.messages.errors.indexOf(message);
                 if (errorIndex != -1) {
                     $scope.messages.errors.splice(errorIndex, 1);
+                } else {
+                    var warningIndex = $scope.messages.warnings.indexOf(message);
+                    if (warningIndex != -1) {
+                        $scope.messages.warnings.splice(warningIndex, 1);
+                    }
                 }
             }
         };

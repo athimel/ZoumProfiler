@@ -47,8 +47,9 @@
                         <br>D'autre part, ils sont stockés (pour l'instant) dans votre navigateur uniquement, ce qui
                         signifie que vous ne les retrouverez pas si vous utilisez un autre navigateur.
                     </div>
-                    <div class="alert alert-success" ng-repeat="message in messages.success" ng-bind-html="message" ng-click="removeMessage(message)"></div>
                     <div class="alert alert-danger" ng-repeat="message in messages.errors" ng-bind-html="message" ng-click="removeMessage(message)"></div>
+                    <div class="alert alert-warning" ng-repeat="message in messages.warnings" ng-bind-html="message" ng-click="removeMessage(message)"></div>
+                    <div class="alert alert-success" ng-repeat="message in messages.success" ng-bind-html="message" ng-click="removeMessage(message)"></div>
 
                     <ul class="nav nav-sidebar">
                         <li ng-repeat="p in profiles | orderBy:['name','profile']"
