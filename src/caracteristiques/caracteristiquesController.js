@@ -7,9 +7,17 @@ angular.module('ZoumProfiler')
     })
     .controller('CaracteristiquesController', ['$scope', 'base', function ($scope, base) {
 
+        /* ********************************************* */
+        /* **           Base stuff exposed            ** */
+        /* ********************************************* */
+
         $scope.caracs = base.caracs;
 
         $scope.degCritiqueComp = base.degCritiqueComp;
+
+        /* ********************************************* */
+        /* **          Controller's methods           ** */
+        /* ********************************************* */
 
         $scope.checkTourValue = function() {
             var newValue = $scope.profile.caracs['TOUR'];

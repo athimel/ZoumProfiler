@@ -7,12 +7,28 @@ angular.module('ZoumProfiler')
     })
     .controller('CompareController', ['$scope', 'base', function ($scope, base) {
 
+        /* ********************************************* */
+        /* **           Base stuff exposed            ** */
+        /* ********************************************* */
+
         $scope.caracs = base.caracs;
 
         $scope.degCritiqueComp = base.degCritiqueComp;
 
+        /* ********************************************* */
+        /* **             Contextual data             ** */
+        /* ********************************************* */
+
+        $scope.compareProfiles = [];
+        $scope.compareComps = [];
+        $scope.compareBest = {};
+
+        /* ********************************************* */
+        /* **          Controller's methods           ** */
+        /* ********************************************* */
+
         $scope.isBest = function(caracOrCompId, profileId) {
-            return $scope.compare.best[caracOrCompId] && $scope.compare.best[caracOrCompId][profileId];
+            return $scope.compareBest[caracOrCompId] && $scope.compareBest[caracOrCompId][profileId];
         };
 
         $scope._computeBest = function(profiles) {
@@ -53,26 +69,26 @@ angular.module('ZoumProfiler')
 
         $scope._initCompare = function() {
             $scope._reset();
-            $scope.compare.profiles = [];
-            $scope.compare.comps = [];
+            $scope.compareProfiles = [];
+            $scope.compareComps = [];
             var compsAdded = {};
             var compareIds = $scope.getCompareIds();
             angular.forEach(compareIds, function(id) {
                 angular.forEach($scope.profiles, function(profile) {
                     if(profile.id == id) {
-                        $scope.compare.profiles.push(profile);
+                        $scope.compareProfiles.push(profile);
                         $scope._checkBonus(profile); // In case this is an old profile without bp/bm
                         angular.forEach(Object.keys(profile.comps), function(compId) {
                             if(profile.comps[compId] === true && angular.isUndefined(compsAdded[compId])) {
-                                $scope.compare.comps.push(base.compsMap[compId]);
+                                $scope.compareComps.push(base.compsMap[compId]);
                                 compsAdded[compId] = true;
                             }
                         });
                     }
                 });
             });
-            $scope.compare.best = $scope._computeBest($scope.compare.profiles);
-            $scope.compare.show = true;
+            $scope.compareBest = $scope._computeBest($scope.compareProfiles);
+            $scope.compareContext.show = true;
         };
 
         $scope.$on('startCompareUseCase', function() {

@@ -3,6 +3,10 @@
 angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
     .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', 'base', function($scope, $window, $location, $timeout, $filter, base) {
 
+        /* ********************************************* */
+        /* **           Base stuff exposed            ** */
+        /* ********************************************* */
+
         $scope.races = base.races;
         $scope.config = base.config;
 
@@ -10,8 +14,8 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         /* **             Contextual data             ** */
         /* ********************************************* */
 
-        $scope.import = { show : false };
-        $scope.compare = { show : false, map : {} };
+        $scope.importContext = { show : false };
+        $scope.compareContext = { show : false, map : {} };
         $scope.profile;
         $scope.computed;
         $scope.messages = { success:[], warnings:[], errors:[] };
@@ -312,13 +316,13 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             if ($window.confirm(message)) {
                 $scope.profiles.splice($scope.profiles.indexOf(profile), 1);
                 $scope._saveToStorage();
-                delete $scope.compare.map[profile.id];
+                delete $scope.compareContext.map[profile.id];
             }
         };
 
         $scope.startImport = function() {
             $scope._reset();
-            $scope.import.show = true;
+            $scope.importContext.show = true;
         };
 
         $scope._reset = function() {
@@ -332,20 +336,18 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 }
             }
 
-            delete $scope.compare.profiles;
             delete $scope.profile;
             delete $scope.originalProfile;
             delete $scope.computed;
-            delete $scope.import.json;
 
-            $scope.import.show = false;
-            $scope.compare.show = false;
+            $scope.importContext.show = false;
+            $scope.compareContext.show = false;
         };
 
         $scope.getCompareIds = function() {
             var result = [];
-            angular.forEach(Object.keys($scope.compare.map), function(id) {
-                if($scope.compare.map[id] === true) {
+            angular.forEach(Object.keys($scope.compareContext.map), function(id) {
+                if($scope.compareContext.map[id] === true) {
                     result.push(id);
                 }
             });
@@ -361,39 +363,6 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             $scope._refreshComputed();
         };
 
-        $scope._importProfile = function(newProfile) {
-            if (newProfile.comps) {
-                angular.forEach(base.comps, function (comp) {
-                    if (comp.levels > 1) {
-                        for (var lvl = comp.levels; lvl >= 1; lvl--) {
-                            var compIdHigherLvl = base.getCompId(comp, lvl + 1);
-                            if (newProfile.comps[compIdHigherLvl] === true) {
-                                var compId = base.getCompId(comp, lvl);
-                                newProfile.comps[compId] = true;
-                            }
-                        }
-                    }
-                });
-            }
-
-            var profileAlreadyExists = false;
-            angular.forEach($scope.profiles, function(profile) {
-                var areEquals = angular.equals(profile, newProfile);
-                if (!areEquals && profile.id == newProfile.id) {
-                    newProfile.id = $scope._randomId();
-                }
-                profileAlreadyExists |= areEquals;
-            });
-            if (profileAlreadyExists) {
-                $scope._addWarningMessage("Un profil identique existe déjà dans votre liste de profils");
-            } else {
-                $scope.profiles.push(newProfile);
-                $scope._saveToStorage();
-                $scope._addSuccessMessage("Le profil <b>" + $filter('prettyName')(newProfile) + "</b> a bien été ajouté à votre liste de profils");
-            }
-            $scope._reset();
-        };
-
         /* ********************************************* */
         /* **                 Startup                 ** */
         /* ********************************************* */
@@ -404,8 +373,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             var value = $location.search();
             if (value && value.import) {
                 try {
-                    var newProfile = angular.fromJson(value.import);
-                    $scope._importProfile(newProfile);
+                    $scope.importContext.startupImportJson = value.import;
                     $location.search('import', '');
                 } catch (eee) {
                     console.error("Error during profile import: ", eee);

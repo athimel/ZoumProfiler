@@ -179,7 +179,10 @@ angular.module('ZoumProfiler')
             $scope._refreshFightCapabilities();
         });
 
-        // Compute on controller startup
+        /* ********************************************* */
+        /* **                 Startup                 ** */
+        /* ********************************************* */
+
         $scope._refreshFightCapabilities();
 
     }]);

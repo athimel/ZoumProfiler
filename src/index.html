@@ -55,7 +55,7 @@
                         <li ng-repeat="p in profiles | orderBy:['name','profile']"
                             ng-class="{true:'active', false:''}[profile == p]">
 
-                            <input type="checkbox" value="" ng-model="compare.map[p.id]"/>
+                            <input type="checkbox" value="" ng-model="compareContext.map[p.id]"/>
 
                             <a ng-click="selectProfile(p)" class="select-profile">
                                 {{p.name}} <span ng-if="p.profile" class="profile">({{p.profile}})</span>

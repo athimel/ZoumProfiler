@@ -7,8 +7,16 @@ angular.module('ZoumProfiler')
     })
     .controller('ExportController', ['$scope', '$filter', '$location', 'base', function ($scope, $filter, $location, base) {
 
+        /* ********************************************* */
+        /* **           Base stuff exposed            ** */
+        /* ********************************************* */
+
         $scope.degCritiqueComp = base.degCritiqueComp;
         $scope.getCompId = base.getCompId;
+
+        /* ********************************************* */
+        /* **          Controller's methods           ** */
+        /* ********************************************* */
 
         $scope._getCompOrSortShortName = function(compOrSortId) {
             var result = compOrSortId;
