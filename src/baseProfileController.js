@@ -94,7 +94,6 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
         };
 
         $scope._saveToStorage = function() {
-            console.log("Saving profiles");
             localStorage.setItem("profiles", angular.toJson($scope.profiles));
         };
 
