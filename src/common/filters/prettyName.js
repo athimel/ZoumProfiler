@@ -1,4 +1,4 @@
-angular.module('zoumProfilerApp')
+angular.module('ZoumProfiler')
     .filter('prettyName', function() {
         return function(profile) {
             var result = profile.name;

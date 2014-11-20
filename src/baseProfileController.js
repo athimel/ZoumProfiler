@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
+angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
     .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', 'base', function($scope, $window, $location, $timeout, $filter, base) {
 
         $scope.races = base.races;

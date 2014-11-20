@@ -1,4 +1,4 @@
-angular.module('zoumProfilerApp')
+angular.module('ZoumProfiler')
     .directive('header', function() {
         return {
             restrict: 'E',

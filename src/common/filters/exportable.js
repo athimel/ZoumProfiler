@@ -1,4 +1,4 @@
-angular.module('zoumProfilerApp')
+angular.module('ZoumProfiler')
     .filter('exportable', function() {
         return function(input, comps, getCompId) {
             var result = angular.copy(input);

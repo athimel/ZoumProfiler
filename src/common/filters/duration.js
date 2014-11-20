@@ -1,4 +1,4 @@
-angular.module('zoumProfilerApp')
+angular.module('ZoumProfiler')
     .filter('duration', function() {
         return function(input) {
             var sign = input < 0 ? "-" : "";
