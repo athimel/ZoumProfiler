@@ -267,11 +267,6 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
             $scope._startRefreshFightCapabilities();
         };
 
-        $scope.raceChanged = function() {
-            $scope._checkCaracMin($scope.profile);
-            $scope._refreshComputed();
-        };
-
 
         /* ********************************************* */
         /* **           Profiles management           ** */
