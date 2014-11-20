@@ -13,6 +13,7 @@ angular.module('ZoumProfiler')
 
         $scope.degCritiqueComp = base.degCritiqueComp;
         $scope.getCompId = base.getCompId;
+        $scope.comps = base.comps;
 
         /* ********************************************* */
         /* **          Controller's methods           ** */
