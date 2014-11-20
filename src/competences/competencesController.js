@@ -36,7 +36,7 @@ angular.module('zoumProfilerApp')
                     comp2 = base.compsMap[comp2.requiredFor];
                 }
             }
-            $scope.refreshComputed();
+            $scope._refreshComputed();
         };
 
     }]);

@@ -9,6 +9,8 @@ angular.module('zoumProfilerApp')
 
         $scope.caracs = base.caracs;
 
+        $scope.degCritiqueComp = base.degCritiqueComp;
+
         $scope.isBest = function(caracOrCompId, profileId) {
             return $scope.compare.best[caracOrCompId] && $scope.compare.best[caracOrCompId][profileId];
         };
@@ -50,7 +52,7 @@ angular.module('zoumProfilerApp')
         };
 
         $scope._initCompare = function() {
-            $scope.reset();
+            $scope._reset();
             $scope.compare.profiles = [];
             $scope.compare.comps = [];
             var compsAdded = {};
@@ -73,7 +75,9 @@ angular.module('zoumProfilerApp')
             $scope.compare.show = true;
         };
 
-        $scope.$on('startCompareUseCase', $scope._initCompare);
+        $scope.$on('startCompareUseCase', function() {
+            $scope._initCompare();
+        });
 
     }]);
 

@@ -1,15 +1,14 @@
 angular.module('zoumProfilerApp')
     .factory('base', function () {
-        var result = {};
+        var base = {};
 
-        result.races = ['Darkling', 'Durakuir', 'Kastar', 'Nkrwapu', 'Skrim', 'Tomawak'];
+        base.races = ['Darkling', 'Durakuir', 'Kastar', 'Nkrwapu', 'Skrim', 'Tomawak'];
 
+        base.config = { maxPi: 18290 };
 
-        result.config = { maxPi: 18290 };
+        base.races = ['Darkling', 'Durakuir', 'Kastar', 'Nkrwapu', 'Skrim', 'Tomawak'];
 
-        result.races = ['Darkling', 'Durakuir', 'Kastar', 'Nkrwapu', 'Skrim', 'Tomawak'];
-
-        result.caracs = [
+        base.caracs = [
             {id: 'TOUR', type: 'T', coef: 1, min: 470, max: 720, cost: 18},
             {id: 'PV', type: 'D1', coef: 1, min: 30, max: 580, step: 10, minDurakuir: 40, cost: 16, costDurakuir: 12, costNkrwapu: 15},
             {id: 'VUE', type: 'D1', coef: 1, min: 3, max: 58, step: 1, minTomawak: 4, cost: 16, costTomawak: 12, costNkrwapu: 15},
@@ -20,7 +19,7 @@ angular.module('zoumProfilerApp')
             {id: 'ARM', type: 'D3', coef: 2, min: 1, max: 35, step: 1, cost: 30, costNkrwapu: 29}
         ];
 
-        result.comps = [
+        base.comps = [
             { id: 'cdm', levels: 5, cost: 10, name: "Connaissance des monstres", type: "Connaissance", short: "CdM" },
             { id: 'idc', levels: 1, cost: 10, name: "Identification des champignons", type: "Connaissance", short: "IdC" },
             { id: 'insultes', levels: 3, cost: 10, name: "Insultes", type: "Utile" },
@@ -59,22 +58,22 @@ angular.module('zoumProfilerApp')
             { id: 'golem_mithril', levels: 1, cost: 150, name: "Golémologie de mithril", type: "Artisanat" },
             { id: 'golem_papier', levels: 1, cost: 150, name: "Golémologie de papier", type: "Artisanat" },
 
-            { id: 'am', levels: 1, cost: 0, name: 'Accélération du Métabolisme', reservedFor: result.races[2], type: "Utile", short: "AM" },
-            { id: 'bs', levels: 1, cost: 0, name: 'Botte Secrète', reservedFor: result.races[4], type: "Attaque", short: "BS" },
-            { id: 'balayage', levels: 1, cost: 0, name: 'Balayage', reservedFor: result.races[0], type: "Combat" },
-            { id: 'camou', levels: 1, cost: 0, name: 'Camouflage', reservedFor: result.races[5], type: "Utile" },
-            { id: 'ra', levels: 1, cost: 0, name: 'Régénération Accrue', reservedFor: result.races[1], type: "Utile", short: "RA" }
+            { id: 'am', levels: 1, cost: 0, name: 'Accélération du Métabolisme', reservedFor: base.races[2], type: "Utile", short: "AM" },
+            { id: 'bs', levels: 1, cost: 0, name: 'Botte Secrète', reservedFor: base.races[4], type: "Attaque", short: "BS" },
+            { id: 'balayage', levels: 1, cost: 0, name: 'Balayage', reservedFor: base.races[0], type: "Combat" },
+            { id: 'camou', levels: 1, cost: 0, name: 'Camouflage', reservedFor: base.races[5], type: "Utile" },
+            { id: 'ra', levels: 1, cost: 0, name: 'Régénération Accrue', reservedFor: base.races[1], type: "Utile", short: "RA" }
         ];
 
-        result.sorts = [
-            { id: 'vampi', name: 'Vampirisme', reservedFor: result.races[2], short: "Vampi" },
-            { id: 'rp', name: 'Rafale Psychique', reservedFor: result.races[1], short: "RP" },
-            { id: 'projo', name: 'Projectile Magique', reservedFor: result.races[5], short: "Projo" },
-            { id: 'hypno', name: 'Hypnotisme', reservedFor: result.races[4], short: "Hypno" },
-            { id: 'siphon', name: 'Siphon des âmes', reservedFor: result.races[0] }
+        base.sorts = [
+            { id: 'vampi', name: 'Vampirisme', reservedFor: base.races[2], short: "Vampi" },
+            { id: 'rp', name: 'Rafale Psychique', reservedFor: base.races[1], short: "RP" },
+            { id: 'projo', name: 'Projectile Magique', reservedFor: base.races[5], short: "Projo" },
+            { id: 'hypno', name: 'Hypnotisme', reservedFor: base.races[4], short: "Hypno" },
+            { id: 'siphon', name: 'Siphon des âmes', reservedFor: base.races[0] }
         ];
 
-        result.makeCompSortMap = function (compsOrSorts) {
+        function _makeCompSortMap(compsOrSorts) {
             var resultMap = {};
             angular.forEach(compsOrSorts, function (compOrSort) {
                 var levels = compOrSort.levels;
@@ -105,32 +104,88 @@ angular.module('zoumProfilerApp')
                 }
             });
             return resultMap;
+        }
 
-        };
+        base.compsMap = _makeCompSortMap(base.comps); // { "cdb1" : { ... } }
+        base.sortsMap = _makeCompSortMap(base.sorts); // { "vampi" : { ... } }
 
-        result.compsMap = result.makeCompSortMap(result.comps); // { "cdb1" : { ... } }
-        result.sortsMap = result.makeCompSortMap(result.sorts); // { "vampi" : { ... } }
-
-        result.combatCompsSortsMap = {
+        base.combatCompsSortsMap = {
             // comps
             ca: true, ap: true, charger: true, cdb: true, rotobaffe: true, frene: true, bs: true, piege_feu: true,
             // sorts
             vampi: true, rp: true, projo: true, siphon: true
         };
 
-        result.levels = {};
+        base.levels = {};
         var count = 0;
         for (var i = 2; i <= 60; i++) {
             count += i * 10;
-            result.levels['n' + i] = count;
+            base.levels['n' + i] = count;
         }
 
         var tourValue = 720;
-        result.tourValues = [tourValue];
+        base.tourValues = [tourValue];
         for (var idx = 0; idx < 44; idx++) {
             tourValue -= Math.max(30 - 3 * idx, 2.5);
-            result.tourValues.push(Math.floor(tourValue));
+            base.tourValues.push(Math.floor(tourValue));
         }
 
-        return result;
+        function _degCritique0(profile, nbD3Deg, includeBP, includeBM) {
+            var critique = (nbD3Deg + Math.floor(nbD3Deg / 2) ) * 2;
+            if (angular.isDefined(includeBP) && includeBP === true) {
+                critique += profile.bp['DEG']
+            }
+            if (angular.isDefined(includeBM) && includeBM === true) {
+                critique += profile.bm['DEG'];
+            }
+            return critique;
+        }
+
+        base.degCritiqueComp = function(profile, nbD3Deg) {
+            return _degCritique0(profile, nbD3Deg, true, true);
+        };
+
+        base.degCritiqueSort = function(profile, nbD3Deg) {
+            return _degCritique0(profile, nbD3Deg, false, true);
+        };
+
+        base.degCritiqueNoBonus = function(profile, nbD3Deg) {
+            return _degCritique0(profile, nbD3Deg, false, false);
+        };
+
+        base.getCompId = function(comp, lvl) {
+            var result = comp.id;
+            if (comp.levels > 1) {
+                result += lvl;
+            }
+            return result;
+        };
+
+        base.getCompOrSort = function(compOrSortId) {
+            var result = base.compsMap[compOrSortId];
+            if (!result) {
+                result = base.sortsMap[compOrSortId];
+            }
+            if (!result) {
+                console.error("Unknown comp/sort: " + compOrSortId)
+            }
+            return result;
+        };
+
+        base.getAttForAp = function(compApWithLevel, profile) {
+            var d6AttAp = profile.caracs['ATT'];
+            var bonusD6AttAp = Math.min(compApWithLevel.level * 3, Math.floor(profile.caracs['ATT'] / 2));
+            return (d6AttAp + bonusD6AttAp) * 3.5 + profile.bp['ATT'] + profile.bm['ATT'];
+        };
+
+        base.getDegForCdB = function(compCdbWithLevel, profile) {
+            var result = {};
+            var d3DegCdb = profile.caracs['DEG'];
+            var bonusD3DegCdb = Math.min(compCdbWithLevel.level * 3, Math.floor(profile.caracs['DEG'] / 2));
+            result.DEG = (d3DegCdb + bonusD3DegCdb) * 2 + profile.bp['DEG'] + profile.bm['DEG'];
+            result.DEG_CRITIQ = base.degCritiqueComp(profile, d3DegCdb) + bonusD3DegCdb * 2;
+            return result;
+        };
+
+        return base;
     });

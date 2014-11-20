@@ -1,10 +1,10 @@
 
 <div class="form-group" ng-controller="ExportController">
-    <label class="col-sm-2 control-label" for="export-summary">Résumé</label>
 
+    <label class="col-sm-2 control-label" for="export-summary">Résumé</label>
     <div class="col-sm-10">
         <textarea id="export-summary" class="export export-large" readonly select-on-click >
-<B>{{profile.name}} ({{profile.profile}})</B>
+<B>{{profile|prettyName}}</B>
 {{profile.race}} Niv. >= {{computed.level}} - {{computed.totalPi}}PI
 Durée du tour {{profile.caracs['TOUR'] | duration}}
 PV {{profile.caracs['PV']}} => {{profile.caracs['PV'] + profile.bm['PV']}}
@@ -20,14 +20,13 @@ Sortilèges : {{sortsList()}}</textarea>
     </div>
 
     <label class="col-sm-2 control-label" for="export-json">Profil au format JSON</label>
-
     <div class="col-sm-10">
         <textarea id="export-json" class="export export-medium" readonly select-on-click >{{profile|exportable:comps:getCompId}}</textarea>
     </div>
 
     <label class="col-sm-2 control-label" for="export-url">URL de partage</label>
-
     <div class="col-sm-10">
         <textarea id="export-url" class="export export-medium" readonly select-on-click >{{getShareProfileUrl()}}</textarea>
     </div>
+
 </div>

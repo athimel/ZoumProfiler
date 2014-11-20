@@ -5,20 +5,40 @@ angular.module('zoumProfilerApp')
             templateUrl: 'export/export.html'
         };
     })
-    .controller('ExportController', ['$scope', '$filter', '$location', function ($scope, $filter, $location) {
+    .controller('ExportController', ['$scope', '$filter', '$location', 'base', function ($scope, $filter, $location, base) {
+
+        $scope.degCritiqueComp = base.degCritiqueComp;
+        $scope.getCompId = base.getCompId;
+
+        $scope._getCompOrSortShortName = function(compOrSortId) {
+            var result = compOrSortId;
+            var compOrSort = base.getCompOrSort(compOrSortId);
+            if (compOrSort) {
+                if (compOrSort.short) {
+                    result = compOrSort.short; // HE or CdM4
+                } else {
+                    if (compOrSort.levels > 1) {
+                        result = compOrSortId; // cdm4
+                    } else {
+                        result = compOrSort.id; // he
+                    }
+                }
+            }
+            return result;
+        };
 
         $scope.compsList = function() {
             var result = "";
-            angular.forEach($scope.comps, function(comp) {
+            angular.forEach(base.comps, function(comp) {
                 if (comp.reservedFor) {
                     if (comp.reservedFor === $scope.profile.race) {
-                        result += $scope.getCompOrSortShortName(comp.id) + "|";
+                        result += $scope._getCompOrSortShortName(comp.id) + "|";
                     }
                 } else {
                     for (var lvl = comp.levels; lvl >= 1; lvl--) {
-                        var compId = $scope.getCompId(comp, lvl);
+                        var compId = base.getCompId(comp, lvl);
                         if ($scope.profile.comps[compId] === true) {
-                            result += $scope.getCompOrSortShortName(compId) + "|";
+                            result += $scope._getCompOrSortShortName(compId) + "|";
                             break;
                         }
                     }
@@ -32,10 +52,10 @@ angular.module('zoumProfilerApp')
 
         $scope.sortsList = function() {
             var result = "";
-            angular.forEach($scope.sorts, function(sort) {
+            angular.forEach(base.sorts, function(sort) {
                 if (sort.reservedFor) {
                     if (sort.reservedFor === $scope.profile.race) {
-                        result += $scope.getCompOrSortShortName(sort.id) + "|";
+                        result += $scope._getCompOrSortShortName(sort.id) + "|";
                     }
                 } else {
                     // TODO AThimel 04/11/2014 Do it for owned sorts
@@ -49,13 +69,13 @@ angular.module('zoumProfilerApp')
 
         $scope.attWithAP = function() {
             var result = "";
-            angular.forEach($scope.comps, function(comp) {
+            angular.forEach(base.comps, function(comp) {
                 if (comp.id == "ap") {
                     for (var lvl = comp.levels; lvl >= 1; lvl--) {
-                        var compId = $scope.getCompId(comp, lvl);
+                        var compId = base.getCompId(comp, lvl);
                         if ($scope.profile.comps[compId] === true) {
-                            var compWithLevel = $scope.compsMap[compId];
-                            result = " - moy. " + $scope.getCompOrSortShortName(compId) + " " + $scope.getAttForAp(compWithLevel);
+                            var compWithLevel = base.compsMap[compId];
+                            result = " - moy. " + $scope._getCompOrSortShortName(compId) + " " + base.getAttForAp(compWithLevel, $scope.profile);
                             break;
                         }
                     }
@@ -66,14 +86,14 @@ angular.module('zoumProfilerApp')
 
         $scope.degWithCdB = function() {
             var result = "";
-            angular.forEach($scope.comps, function(comp) {
+            angular.forEach(base.comps, function(comp) {
                 if (comp.id == "cdb") {
                     for (var lvl = comp.levels; lvl >= 1; lvl--) {
-                        var compId = $scope.getCompId(comp, lvl);
+                        var compId = base.getCompId(comp, lvl);
                         if ($scope.profile.comps[compId] === true) {
-                            var compWithLevel = $scope.compsMap[compId];
-                            var degForCdb = $scope.getDegForCdB(compWithLevel);
-                            result = " - moy. " + $scope.getCompOrSortShortName(compId) + " " + degForCdb.DEG + "/" + degForCdb.DEG_CRITIQ;
+                            var compWithLevel = base.compsMap[compId];
+                            var degForCdb = base.getDegForCdB(compWithLevel, $scope.profile);
+                            result = " - moy. " + $scope._getCompOrSortShortName(compId) + " " + degForCdb.DEG + "/" + degForCdb.DEG_CRITIQ;
                             break;
                         }
                     }
@@ -83,7 +103,7 @@ angular.module('zoumProfilerApp')
         };
 
         $scope.getShareProfileUrl = function() {
-            var profile = $filter('exportable')($scope.profile, $scope.comps, $scope.getCompId);
+            var profile = $filter('exportable')($scope.profile, base.comps, base.getCompId);
             var urlSafeJson = encodeURIComponent(JSON.stringify(profile));
 
             var absUrl = $location.absUrl();

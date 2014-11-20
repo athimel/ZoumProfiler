@@ -1,5 +1,6 @@
 
 <div class="form-group comp-box" ng-controller="FightController">
+
     <label class="col-sm-2 control-label">Aptitudes au combat</label>
 
     <div class="col-sm-10">
@@ -7,20 +8,21 @@
             <thead>
             <tr>
                 <td>Type d'attaque</td>
-                <td>Attaque (moy.)</td>
-                <td>Dégats (moy.)</td>
-                <td>Dégats résistés (moy.)</td>
+                <td>Attaque moy.</td>
+                <td>Dégats moy. (résisté)</td>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="combatApt in computed.combat|orderBy:'name'">
-                <td>{{combatApt.name}}</td>
-                <td>{{combatApt.ATT}}</td>
-                <td>{{combatApt.DEG}}<span ng-if="combatApt.DEG_CRITIQ">/{{combatApt.DEG_CRITIQ}}</span></td>
-                <td ng-if="combatApt.DEG_RESIST">{{combatApt.DEG_RESIST}}<span ng-if="combatApt.DEG_RESIST_CRITIQ">/{{combatApt.DEG_RESIST_CRITIQ}}</span></td>
-                <td ng-if="!combatApt.DEG_RESIST">-</td>
+            <tr ng-repeat="fc in fightCapabilities|orderBy:'name'">
+                <td>{{fc.name}}</td>
+                <td>{{fc.ATT}}</td>
+                <td>
+                    {{fc.DEG}}<span ng-if="fc.DEG_CRITIQ">/{{fc.DEG_CRITIQ}}</span>
+                    <span ng-if="fc.DEG_RESIST">({{fc.DEG_RESIST}}<span ng-if="fc.DEG_RESIST_CRITIQ">/{{fc.DEG_RESIST_CRITIQ}}</span>)</span>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
+
 </div>

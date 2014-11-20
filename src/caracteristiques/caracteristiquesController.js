@@ -9,6 +9,8 @@ angular.module('zoumProfilerApp')
 
         $scope.caracs = base.caracs;
 
+        $scope.degCritiqueComp = base.degCritiqueComp;
+
         $scope.checkTourValue = function() {
             var newValue = $scope.profile.caracs['TOUR'];
             if (angular.isDefined(newValue) && newValue > 470 && newValue < 720) {
@@ -48,7 +50,7 @@ angular.module('zoumProfilerApp')
             if (caracId == 'TOUR') {
                 $scope.checkTourValue();
             }
-            $scope.refreshComputed();
+            $scope._refreshComputed();
         };
 
         $scope.bonusChanged = function(caracId) {
@@ -57,7 +59,8 @@ angular.module('zoumProfilerApp')
                 || caracId == 'ESQ'
                 || caracId == 'DEG'
                 || ($scope.profile.race == base.races[0] && caracId == 'REG')) {
-                $scope.refreshCombat($scope.computed);
+
+                $scope._startRefreshFightCapabilities();
             }
         };
 
