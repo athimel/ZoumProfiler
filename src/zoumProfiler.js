@@ -4,6 +4,7 @@ angular.module('zoumProfilerApp', ['ui.bootstrap', 'ngSanitize'])
     .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', 'base', function($scope, $window, $location, $timeout, $filter, base) {
 
         $scope.races = base.races;
+        $scope.config = base.config;
 
         /* ********************************************* */
         /* **             Contextual data             ** */

@@ -2,8 +2,6 @@ angular.module('zoumProfilerApp')
     .factory('base', function () {
         var base = {};
 
-        base.races = ['Darkling', 'Durakuir', 'Kastar', 'Nkrwapu', 'Skrim', 'Tomawak'];
-
         base.config = { maxPi: 18290 };
 
         base.races = ['Darkling', 'Durakuir', 'Kastar', 'Nkrwapu', 'Skrim', 'Tomawak'];
