@@ -3,9 +3,16 @@ ZoumProfiler
 
 Outil de profiling pour MountyHall
 
-Démo : http://zoumbox.org/mh/ZoumProfiler/
 
-Construction via Gulp :
+Démo
+----
+
+- http://zoumbox.org/mh/ZoumProfiler/ - version stable (master)
+- http://zoumbox.org/mh/ZoumProfiler-develop/ - version en développement (develop)
+
+
+Construction via Gulp
+---------------------
 
     npm install gulp gulp-bower gulp-autoprefixer gulp-minify-css gulp-jshint gulp-concat gulp-uglify gulp-imagemin gulp-notify gulp-rename gulp-livereload gulp-cache gulp-clean bluebird --save-dev
 
@@ -17,18 +24,40 @@ Construction via Gulp :
 Les deps sont gérées via bower (fichier bower.json)
 
 
+Architecture du code
+--------------------
 
-Le code est organisé en modules :
+Le code est organisé en modules. Chaque module représente une directive qui est inclue dans le layout (index.html).
 
-- pehiks
-- mouches
-- matériel
-- comparaison de profils
+Les modules/directives utilisées sur un profil sont :
 
-La mise en composant est juste ébauchée, il faut bouger le code aux bons endroits
-L'idée est de déplacer dans le profilService le code de chargement/sauvegarde des profils
-et dans pehiksageController tout ce qui concerne la gestion des pehiks  et dans ComparaisageService.. you know
-de manière à avoir le controler de base quasi vide, juste en boostrap/gestion des modules
+- header (infos générales d'un profil) ;
+- fight (aptitudes au combat) ;
+- cracteristiques ;
+- competences ;
+- sortileges (TBD) ;
+- mouches (TBD) ;
+- equipement (TBD) ;
+- export (résumé/json/url de partage).
+
+Il y a également 2 modules/directives transverses :
+
+- import ;
+- compare (comparaison de 2+ profils).
+
+Dans src/common, on retrouve :
+
+- directives ;
+- filtres ;
+- le service de base qui contient les données statiques nécessaires au bon lancement de l'application.
 
 
+TODO
+----
 
+- Implémentation des modules/directives manquants ;
+- Ajout de l'AN dans le module fight ;
+- Encart de simulation (non persisté) dans le module fight où on saisi les ARM magiques/physique d'une cible pour voir ce que donnent les différentes attaques ;
+- Continuer de remonter du code de base dans le "baseService" ;
+- Persistence ;
+- ...
