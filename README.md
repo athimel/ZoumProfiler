@@ -56,7 +56,6 @@ TODO
 ----
 
 - Implémentation des modules/directives manquants ;
-- Ajout de l'AN dans le module fight ;
 - Encart de simulation (non persisté) dans le module fight où on saisi les ARM magiques/physique d'une cible pour voir ce que donnent les différentes attaques ;
 - Continuer de remonter du code de base dans le "baseService" ;
 - Persistence ;

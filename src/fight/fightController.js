@@ -141,6 +141,12 @@ angular.module('ZoumProfiler')
 
         $scope._refreshFightCapabilities = function() {
             var result = [];
+
+            // Attaque normale
+            var anComputed = $scope._computeFightCapabilities(base.an, base.an);
+            result.push(anComputed);
+
+            // Compétences
             angular.forEach(base.sorts, function(sort) {
                 if (base.combatCompsSortsMap[sort.id]) {
                     if (sort.reservedFor) {
@@ -153,6 +159,8 @@ angular.module('ZoumProfiler')
                     }
                 }
             });
+
+            // Sortilèges
             angular.forEach(base.comps, function(comp) {
                 if (base.combatCompsSortsMap[comp.id]) {
                     if (comp.reservedFor) {

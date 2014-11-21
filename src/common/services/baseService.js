@@ -17,6 +17,8 @@ angular.module('ZoumProfiler')
             {id: 'ARM', type: 'D3', coef: 2, min: 1, max: 35, step: 1, cost: 30, costNkrwapu: 29}
         ];
 
+        base.an = { id: 'an', name: "Attaque Normale" };
+
         base.comps = [
             { id: 'cdm', levels: 5, cost: 10, name: "Connaissance des monstres", type: "Connaissance", short: "CdM" },
             { id: 'idc', levels: 1, cost: 10, name: "Identification des champignons", type: "Connaissance", short: "IdC" },
