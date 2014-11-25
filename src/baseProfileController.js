@@ -84,6 +84,13 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 }
             });
 
+            // Because some profiles was created before I add "id"
+            angular.forEach($scope.profiles, function(profile) {
+                if(angular.isUndefined(profile.mouches)) {
+                    profile.mouches = {};
+                }
+            });
+
             // Because some profiles was created when "de" was "de1"
             angular.forEach(base.comps, function(comp) {
                 if (comp.levels == 1) {
@@ -161,6 +168,17 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                     } else {
                         profile.caracs[carac.id] = Math.max(profile.caracs[carac.id], $scope._min(profile.race, carac));
                     }
+                }
+            });
+        };
+
+        $scope._checkMouches = function(profile) {
+            if (angular.isUndefined(profile.mouches)) {
+                profile.mouches = {};
+            }
+            angular.forEach(base.mouches, function(mouche) {
+                if (angular.isUndefined(profile.mouches[mouche.type])) {
+                    profile.mouches[mouche.type] = 0;
                 }
             });
         };
@@ -279,6 +297,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         $scope.selectProfile = function (profile) {
             $scope._reset();
             $scope._checkCaracMin(profile);
+            $scope._checkMouches(profile);
             $scope.profile = profile;
             $scope.originalProfile = angular.copy($scope.profile);
             $scope.checkBonus();

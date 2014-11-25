@@ -5,9 +5,15 @@ angular.module('ZoumProfiler')
             templateUrl: 'mouches/mouches.html'
         };
     })
-    .controller('MouchesController', ['$scope', function ($scope) {
+    .controller('MouchesController', ['$scope', 'base', function ($scope, base) {
 
-        $scope.mouches = ['Crobate', 'Héros', 'Lunettes', 'Miel', 'Nabolisants', 'Rivatant', 'Telaite', 'Vertie', 'Xidant'];
+        $scope.mouches = base.mouches;
+
+        console.log($scope.mouches);
+
+        $scope.moucheChanged = function(mouche) {
+            console.log(mouche);
+        };
 
     }]);
 

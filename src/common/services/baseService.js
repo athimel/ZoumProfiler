@@ -73,6 +73,17 @@ angular.module('ZoumProfiler')
             { id: 'siphon', name: 'Siphon des âmes', reservedFor: base.races[0] }
         ];
 
+        base.mouches = [
+            { type: 'Crobate', carac: 'ATT', value:'1' },
+            { type: 'Lunettes', carac: 'VUE', value:'1' },
+            { type: 'Miel', carac: 'REG', value:'1' },
+            { type: 'Nabolisant', carac: 'DEG', value:'1' },
+            { type: 'Rivatant', carac: 'TOUR', value:'-20', unit:'min' },
+            { type: 'Telaite', carac: 'PV', value:'5' },
+            { type: 'Vertie', carac: 'ESQ', value:'1' },
+            { type: 'Xidant', carac: 'ARM', value:'1' }
+        ];
+
         function _makeCompSortMap(compsOrSorts) {
             var resultMap = {};
             angular.forEach(compsOrSorts, function (compOrSort) {
