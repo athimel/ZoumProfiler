@@ -55,6 +55,7 @@ Dans src/common, on retrouve :
 TODO
 ----
 
+- Sticky bloc pour les aptitudes au combat ;
 - Implémentation des modules/directives manquants ;
 - Encart de simulation (non persisté) dans le module fight où on saisi les ARM magiques/physique d'une cible pour voir ce que donnent les différentes attaques ;
 - Continuer de remonter du code de base dans le "baseService" ;

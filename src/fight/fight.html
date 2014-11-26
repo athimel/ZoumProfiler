@@ -1,5 +1,5 @@
 
-<div class="form-group comp-box" ng-controller="FightController">
+<div class="form-group comp-box fight-box" ng-controller="FightController">
 
     <label class="col-sm-2 control-label">Aptitudes au combat</label>
 
@@ -26,3 +26,27 @@
     </div>
 
 </div>
+
+<script>
+
+    $(document).ready(function() {
+        var stickyNavTop = $('.fight-box').offset().top;
+
+        var stickyNav = function(){
+            var scrollTop = $(window).scrollTop();
+
+            if (scrollTop > stickyNavTop) {
+                $('.fight-box').addClass('sticky');
+            } else {
+                $('.fight-box').removeClass('sticky');
+            }
+        };
+
+        stickyNav();
+
+        $(window).scroll(function() {
+            stickyNav();
+        });
+    });
+
+</script>
