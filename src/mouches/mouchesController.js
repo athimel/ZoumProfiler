@@ -9,10 +9,8 @@ angular.module('ZoumProfiler')
 
         $scope.mouches = base.mouches;
 
-        console.log($scope.mouches);
-
         $scope.moucheChanged = function(mouche) {
-            console.log(mouche);
+            // Nothing to do for the moment. Will be necessary to trigger the refreshComputed in some cases
         };
 
     }]);
