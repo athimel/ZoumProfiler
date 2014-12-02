@@ -91,6 +91,10 @@
                         <span class="glyphicon glyphicon-import"></span> Importer un profil
                     </button>
 
+                    <button type="button" class="btn btn-sm btn-primary" ng-click="startScheduler()">
+                        <span class="glyphicon glyphicon-cog"></span> Simulateur
+                    </button>
+
                 </div>
 
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -133,6 +137,8 @@
                     <import></import>
 
                     <compare></compare>
+
+                    <scheduler></scheduler>
 
                     <div class="row actionbar" ng-if="profile">
                         <button type="button" class="btn btn-sm btn-success" ng-disabled="!hasModification()" ng-click="saveProfile()">
