@@ -32,10 +32,11 @@
             <thead>
                 <tr>
                     <th class="col-sm-3">Troll</th>
-                    <th class="col-sm-4">Attaque</th>
+                    <th class="col-sm-3">Attaque</th>
+                    <th class="col-sm-1">ATT moy.</th>
                     <th class="col-sm-1">Critique ?</th>
-                    <th class="col-sm-1">DEG</th>
-                    <th class="col-sm-1">PV</th>
+                    <th class="col-sm-1">DEG moy.</th>
+                    <th class="col-sm-1">PV moy.</th>
                     <th class="col-sm-1">PV réels</th>
                     <th class="col-xs-1"></th>
                 </tr>
@@ -55,8 +56,10 @@
                     </td>
                     <td ng-if="pi.fight">{{pi.fight.name}}</td>
 
+                    <td><span ng-if="pi.fight">{{pi.fight.ATT|orDash}}</span></td>
+
                     <td>
-                        <input type="checkbox" ng-model="pi.critical" ng-disabled="!pi.fight || !pi.fight.DEG_CRITIQ"
+                        <input ng-if="pi.fight" type="checkbox" ng-model="pi.critical" ng-disabled="!pi.fight.DEG_CRITIQ"
                                ng-change="criticalChanged(pi)" />
                     </td>
 
@@ -65,8 +68,7 @@
                     <td>{{pi.pv}}</td>
 
                     <td>
-                        <input type="number" ng-model="pi.realPv" ng-disabled="!pi.fight || !pi.fight.DEG_CRITIQ"
-                               ng-change="realPvChanged(pi)" min="0" class="target" />
+                        <input ng-if="pi.fight" type="number" ng-model="pi.realPv" min="0" class="target" />
                     </td>
 
                     <td class="col-xs-1">

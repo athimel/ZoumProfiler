@@ -142,10 +142,6 @@ angular.module('ZoumProfiler')
             $scope._computeDegAndPv(planItem);
         };
 
-        $scope.realPvChanged = function(planItem) {
-            // Nothing to do
-        };
-
     }]);
 
 
