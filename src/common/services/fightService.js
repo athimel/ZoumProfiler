@@ -40,7 +40,7 @@ angular.module('ZoumProfiler')
          * Take a sort or comp and computes its fight values (ATT, DEG, ...)
          */
         fight.computeFightCapabilities = function(base, profile, compOrSort, compOrSortDeBase) {
-            var result = { name: compOrSort.name };
+            var result = { name: compOrSort.name, baseId: compOrSortDeBase.id };
 
             // Compute ATT
             switch (compOrSortDeBase.id) {

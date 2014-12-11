@@ -252,7 +252,10 @@ body {
     font-size: 0.7em;
 }
 
-
+.empty {
+    color: #adadad;
+    font-style: italic;
+}
 
 
 input.target {

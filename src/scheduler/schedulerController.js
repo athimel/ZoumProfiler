@@ -53,9 +53,43 @@ angular.module('ZoumProfiler')
             $scope.availableFights = fight.getFightCapabilities(base, planItem.troll);
         };
 
+        $scope.getAppliedArmForFight = function(figth) {
+            var result;
+            switch (figth.baseId) {
+                // sorts
+                case 'vampi':
+                case 'rp':
+                case 'projo':
+                    result = $scope.target.armM;
+                    break;
+
+                // frene
+                case 'frene':
+                    result = ($scope.target.armP + $scope.target.armM) * 2;
+                    break;
+
+                // BS
+                case 'bs':
+                    result = Math.floor(($scope.target.armP + $scope.target.armM) / 2);
+                    break;
+
+                // No ARM
+                case 'siphon':
+                case 'piege_feu':
+                    result = 0;
+                    break;
+
+                // any other physical fight
+                default:
+                    result = $scope.target.armP + $scope.target.armM;
+                    break;
+            }
+            return result;
+        };
+
         $scope.fightSelected = function(planItem) {
             planItem.deg = (planItem.fight.DEG_CRITIQ ? planItem.fight.DEG_CRITIQ : planItem.fight.DEG);
-            planItem.pv = Math.max(planItem.deg - $scope.target.armP - $scope.target.armM, 1);
+            planItem.pv = Math.max(planItem.deg - $scope.getAppliedArmForFight(planItem.fight), 1);
             delete $scope.availableFights;
             $scope.plan.push( { } );
         };
@@ -63,7 +97,7 @@ angular.module('ZoumProfiler')
         $scope.armChanged = function() {
             angular.forEach($scope.plan, function(planItem) {
                 if (planItem.deg) {
-                    planItem.pv = Math.max(planItem.deg - $scope.target.armP - $scope.target.armM, 1);
+                    planItem.pv = Math.max(planItem.deg - $scope.getAppliedArmForFight(planItem.fight), 1);
                 } else {
                     delete planItem.deg;
                 }

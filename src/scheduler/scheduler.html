@@ -44,7 +44,10 @@
                     <td ng-if="!pi.troll"><select ng-model="pi.troll" ng-options="p.name+' ('+p.profile+')' for p in profiles" ng-change="trollSelected(pi)"></select></td>
                     <td ng-if="pi.troll">{{pi.troll|prettyName}}</td>
 
-                    <td ng-if="!pi.fight"><select ng-model="pi.fight" ng-options="f.name+' ('+f.DEG+(f.DEG_CRITIQ ? '/'+f.DEG_CRITIQ : '')+')' for f in availableFights" ng-change="fightSelected(pi)"></select></td>
+                    <td ng-if="!pi.fight">
+                        <select ng-if="availableFights" ng-model="pi.fight" ng-options="f.name+' ('+f.DEG+(f.DEG_CRITIQ ? '/'+f.DEG_CRITIQ : '')+')' for f in availableFights" ng-change="fightSelected(pi)"></select>
+                        <div ng-if="!availableFights" class="empty">Veuillez choisir un profile...</div>
+                    </td>
                     <td ng-if="pi.fight">{{pi.fight.name}}</td>
 
                     <td>{{pi.deg}}</td>
