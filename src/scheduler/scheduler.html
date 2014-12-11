@@ -31,11 +31,13 @@
         <table class="table table-striped table-hover table-condensed">
             <thead>
                 <tr>
-                    <th>Troll</th>
-                    <th>Attaque</th>
-                    <th>DEG</th>
-                    <th>PV</th>
-                    <th></th>
+                    <th class="col-sm-3">Troll</th>
+                    <th class="col-sm-4">Attaque</th>
+                    <th class="col-sm-1">Critique ?</th>
+                    <th class="col-sm-1">DEG</th>
+                    <th class="col-sm-1">PV</th>
+                    <th class="col-sm-1">PV réels</th>
+                    <th class="col-xs-1"></th>
                 </tr>
             </thead>
             <tbody>
@@ -44,20 +46,30 @@
                     <td ng-if="!pi.troll">
                         <select ng-model="pi.troll" ng-options="p.name+' ('+p.profile+')' for p in profiles" ng-change="trollSelected(pi)"></select>
                     </td>
-
                     <td ng-if="pi.troll">{{pi.troll|prettyName}}</td>
 
                     <td ng-if="!pi.fight">
-                        <select ng-if="availableFights" ng-model="pi.fight" ng-options="f.name+' ('+f.DEG+(f.DEG_CRITIQ ? '/'+f.DEG_CRITIQ : '')+')' for f in availableFights" ng-change="fightSelected(pi)"></select>
+                        <select ng-if="availableFights" ng-model="pi.fight" ng-change="fightSelected(pi)"
+                                ng-options="f.name+' ('+f.DEG+(f.DEG_CRITIQ ? '/'+f.DEG_CRITIQ : '')+')' for f in availableFights"></select>
                         <span ng-if="!availableFights" class="empty">Veuillez choisir un profil...</span>
                     </td>
                     <td ng-if="pi.fight">{{pi.fight.name}}</td>
+
+                    <td>
+                        <input type="checkbox" ng-model="pi.critical" ng-disabled="!pi.fight || !pi.fight.DEG_CRITIQ"
+                               ng-change="criticalChanged(pi)" />
+                    </td>
 
                     <td>{{pi.deg}}</td>
 
                     <td>{{pi.pv}}</td>
 
                     <td>
+                        <input type="number" ng-model="pi.realPv" ng-disabled="!pi.fight || !pi.fight.DEG_CRITIQ"
+                               ng-change="realPvChanged(pi)" min="0" class="target" />
+                    </td>
+
+                    <td class="col-xs-1">
                         <button type="button" class="btn btn-xs btn-danger" ng-click="removePlanItem(pi)">
                             <span class="glyphicon glyphicon-remove"></span>
                         </button>
@@ -68,8 +80,9 @@
                 <tr>
                     <th></th>
                     <th></th>
-                    <th></th>
-                    <th>{{planTotalPv()}}</th>
+                    <th>Total</th>
+                    <th>{{planTotalDeg()}}</th>
+                    <th colspan="2" class="col-sm-2">{{planTotalPv()}}</th>
                     <th></th>
                 </tr>
             </tfoot>

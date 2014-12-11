@@ -11,10 +11,14 @@ angular.module('ZoumProfiler')
         /* **             Contextual data             ** */
         /* ********************************************* */
 
+        $scope._newPlanItem = function() {
+            return { critical: true };
+        };
+
         $scope.target = { pvMin:100, pvMax:150, percent:0, armP:0, armM:0 };
         $scope.plan = [
             //{ troll:{ name:"DZZ", profile:"lvl43" }, fight:base.compsMap["cdb5"], deg:127, pv:97 },
-            { }
+            $scope._newPlanItem()
         ];
 
 
@@ -40,7 +44,7 @@ angular.module('ZoumProfiler')
             $scope.plan.splice(index, 1);
 
             if ($scope.plan.length == index) { // That means the last element has been removed
-                $scope.plan.push( { } );
+                $scope.plan.push( $scope._newPlanItem() );
                 delete $scope.availableFights;
             }
         };
@@ -48,13 +52,25 @@ angular.module('ZoumProfiler')
         $scope.planTotalPv = function() {
             var encaissed = 0;
             angular.forEach($scope.plan, function(pi) {
-                if (pi.pv) {
+                if (pi.realPv && pi.realPv > 0) {
+                    encaissed += pi.realPv;
+                } else if (pi.pv) {
                     encaissed += pi.pv;
                 }
             });
             var remainingMin = $filter('remainingMin')($scope.target) - encaissed;
             var remainingMax = $filter('remainingMax')($scope.target) - encaissed;
             return encaissed + " (reste entre " + remainingMin + " et " + remainingMax + "PV)";
+        };
+
+        $scope.planTotalDeg = function() {
+            var encaissed = 0;
+            angular.forEach($scope.plan, function(pi) {
+                if (pi.deg) {
+                    encaissed += pi.deg;
+                }
+            });
+            return encaissed;
         };
 
         $scope.trollSelected = function(planItem) {
@@ -95,11 +111,21 @@ angular.module('ZoumProfiler')
             return result;
         };
 
-        $scope.fightSelected = function(planItem) {
-            planItem.deg = (planItem.fight.DEG_CRITIQ ? planItem.fight.DEG_CRITIQ : planItem.fight.DEG);
+        $scope._computeDegAndPv = function(planItem) {
+            planItem.deg = planItem.fight.DEG;
+            if (!planItem.fight.DEG_CRITIQ) {
+                planItem.critical = false;
+            }
+            if (planItem.critical) {
+                planItem.deg = planItem.fight.DEG_CRITIQ;
+            }
             planItem.pv = Math.max(planItem.deg - $scope.getAppliedArmForFight(planItem.fight), 1);
+        };
+
+        $scope.fightSelected = function(planItem) {
+            $scope._computeDegAndPv(planItem);
             delete $scope.availableFights;
-            $scope.plan.push( { } );
+            $scope.plan.push( $scope._newPlanItem() );
         };
 
         $scope.armChanged = function() {
@@ -111,6 +137,15 @@ angular.module('ZoumProfiler')
                 }
             });
         };
+
+        $scope.criticalChanged = function(planItem) {
+            $scope._computeDegAndPv(planItem);
+        };
+
+        $scope.realPvChanged = function(planItem) {
+            // Nothing to do
+        };
+
     }]);
 
 
