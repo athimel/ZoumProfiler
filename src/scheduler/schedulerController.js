@@ -5,7 +5,7 @@ angular.module('ZoumProfiler')
             templateUrl: 'scheduler/scheduler.html'
         };
     })
-    .controller('SchedulerController', ['$scope', 'base', 'fight', function ($scope, base, fight) {
+    .controller('SchedulerController', ['$scope', '$filter', 'base', 'fight', function ($scope, $filter, base, fight) {
 
         /* ********************************************* */
         /* **             Contextual data             ** */
@@ -52,7 +52,9 @@ angular.module('ZoumProfiler')
                     encaissed += pi.pv;
                 }
             });
-            return encaissed + " (reste " + ($scope.target.pvMin - encaissed) + " à " + ($scope.target.pvMax - encaissed) + ")";
+            var remainingMin = $filter('remainingMin')($scope.target) - encaissed;
+            var remainingMax = $filter('remainingMax')($scope.target) - encaissed;
+            return encaissed + " (reste entre " + remainingMin + " et " + remainingMax + "PV)";
         };
 
         $scope.trollSelected = function(planItem) {

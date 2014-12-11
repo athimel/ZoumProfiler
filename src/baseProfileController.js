@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
-    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', 'base', function($scope, $window, $location, $timeout, $filter, base) {
+    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', 'base',
+        function($scope, $window, $location, $timeout, $filter, base) {
 
         /* ********************************************* */
         /* **           Base stuff exposed            ** */

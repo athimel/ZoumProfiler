@@ -1,9 +1,13 @@
 angular.module('ZoumProfiler')
-    .filter('remainingPv', function() {
+    .filter('remainingMin', function() {
         return function(input) {
-
-            return (input.pvMin*(100-input.percent)/100) + " à " + (input.pvMax*(100-input.percent)/100);
+            var result = input.pvMin*(100-input.percent)/100;
+            return result;
+        };
+    })
+    .filter('remainingMax', function() {
+        return function(input) {
+            var result = input.pvMax*(100-input.percent)/100;
+            return result;
         };
     });
-
-

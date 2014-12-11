@@ -14,7 +14,7 @@
             <label for="targetPercentMax" class="col-sm-1 control-label">Blessure</label>
             <div class="col-sm-2">
                 <input type="number" class="target" id="targetPercentMax" ng-model="target.percent" step="5" min="0" max="95"/>
-                PV restants : {{target|remainingPv}}
+                (reste entre {{target|remainingMin}} et {{target|remainingMax}}PV)
             </div>
 
             <label for="targetArmP" class="col-sm-1 control-label">ARM physique</label>
