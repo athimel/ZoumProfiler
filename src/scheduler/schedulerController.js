@@ -36,7 +36,13 @@ angular.module('ZoumProfiler')
         };
 
         $scope.removePlanItem = function(item) {
-            $scope.plan.splice($scope.plan.indexOf(item), 1);
+            var index = $scope.plan.indexOf(item);
+            $scope.plan.splice(index, 1);
+
+            if ($scope.plan.length == index) { // That means the last element has been removed
+                $scope.plan.push( { } );
+                delete $scope.availableFights;
+            }
         };
 
         $scope.planTotalPv = function() {
