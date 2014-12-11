@@ -251,3 +251,14 @@ body {
     background: white;
     font-size: 0.7em;
 }
+
+.empty {
+    color: #adadad;
+    font-style: italic;
+}
+
+
+input.target {
+    width: 50px;
+    padding: 1px;
+}

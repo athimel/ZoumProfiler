@@ -1,0 +1,95 @@
+<div ng-controller="SchedulerController">
+
+    <form class="form-horizontal" role="form" ng-show="schedulerContext.show">
+
+        <div class="row">
+            <label class="col-sm-1 control-label">Cible</label>
+
+            <label for="targetPvMin" class="col-sm-1 control-label">PV</label>
+            <div class="col-sm-2">
+                <input type="number" class="target" id="targetPvMin" ng-model="target.pvMin" step="10" min="10" ng-change="pvMinChanged()"/>
+                <input type="number" class="target" id="targetPvMax" ng-model="target.pvMax" step="10" min="10" ng-change="pvMaxChanged()"/>
+            </div>
+
+            <label for="targetPercentMax" class="col-sm-1 control-label">Blessure</label>
+            <div class="col-sm-2">
+                <input type="number" class="target" id="targetPercentMax" ng-model="target.percent" step="5" min="0" max="95"/>
+                (reste entre {{target|remainingMin}} et {{target|remainingMax}}PV)
+            </div>
+
+            <label for="targetArmP" class="col-sm-1 control-label">ARM physique</label>
+            <div class="col-sm-1">
+                <input type="number" class="target" id="targetArmP" ng-model="target.armP" step="1" min="0" ng-change="armChanged()"/>
+            </div>
+
+            <label for="targetArmM" class="col-sm-1 control-label">ARM magique</label>
+            <div class="col-sm-1">
+                <input type="number" class="target" id="targetArmM" ng-model="target.armM" step="1" min="0" ng-change="armChanged()"/>
+            </div>
+        </div>
+
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th class="col-sm-3">Troll</th>
+                    <th class="col-sm-3">Attaque</th>
+                    <th class="col-sm-1">ATT moy.</th>
+                    <th class="col-sm-1">Critique ?</th>
+                    <th class="col-sm-1">DEG moy.</th>
+                    <th class="col-sm-1">PV moy.</th>
+                    <th class="col-sm-1">PV réels</th>
+                    <th class="col-xs-1"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="pi in plan">
+
+                    <td ng-if="!pi.troll">
+                        <select ng-model="pi.troll" ng-options="p.name+' ('+p.profile+')' for p in profiles" ng-change="trollSelected(pi)"></select>
+                    </td>
+                    <td ng-if="pi.troll">{{pi.troll|prettyName}}</td>
+
+                    <td ng-if="!pi.fight">
+                        <select ng-if="availableFights" ng-model="pi.fight" ng-change="fightSelected(pi)"
+                                ng-options="f.name+' ('+f.DEG+(f.DEG_CRITIQ ? '/'+f.DEG_CRITIQ : '')+')' for f in availableFights"></select>
+                        <span ng-if="!availableFights" class="empty">Veuillez choisir un profil...</span>
+                    </td>
+                    <td ng-if="pi.fight">{{pi.fight.name}}</td>
+
+                    <td><span ng-if="pi.fight">{{pi.fight.ATT|orDash}}</span></td>
+
+                    <td>
+                        <input ng-if="pi.fight" type="checkbox" ng-model="pi.critical" ng-disabled="!pi.fight.DEG_CRITIQ"
+                               ng-change="criticalChanged(pi)" />
+                    </td>
+
+                    <td>{{pi.deg}}</td>
+
+                    <td>{{pi.pv}}</td>
+
+                    <td>
+                        <input ng-if="pi.fight" type="number" ng-model="pi.realPv" min="0" class="target" />
+                    </td>
+
+                    <td class="col-xs-1">
+                        <button type="button" class="btn btn-xs btn-danger" ng-click="removePlanItem(pi)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Total</th>
+                    <th>{{planTotalDeg()}}</th>
+                    <th colspan="2" class="col-sm-2">{{planTotalPv()}}</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </form>
+
+</div>

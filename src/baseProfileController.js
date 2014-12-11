@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
-    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', 'base', function($scope, $window, $location, $timeout, $filter, base) {
+    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', 'base',
+        function($scope, $window, $location, $timeout, $filter, base) {
 
         /* ********************************************* */
         /* **           Base stuff exposed            ** */
@@ -16,6 +17,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.importContext = { show : false };
         $scope.compareContext = { show : false, map : {} };
+        $scope.schedulerContext = { show: false, target: {} };
         $scope.profile;
         $scope.computed;
         $scope.messages = { success:[], warnings:[], errors:[] };
@@ -344,6 +346,11 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             $scope.importContext.show = true;
         };
 
+        $scope.startScheduler = function() {
+            $scope._reset();
+            $scope.schedulerContext.show = true;
+        };
+
         $scope._reset = function() {
 
             if (angular.isDefined($scope.profile) && $scope.hasModification()) {
@@ -361,6 +368,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
 
             $scope.importContext.show = false;
             $scope.compareContext.show = false;
+            $scope.schedulerContext.show = false;
         };
 
         $scope.getCompareIds = function() {
