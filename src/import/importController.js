@@ -12,6 +12,50 @@ angular.module('ZoumProfiler')
         /* ********************************************* */
 
         $scope.import = {};
+        $scope._mhToZoumprofilerCompsIndex = {
+            '18': 'insultes',
+             '3': 'am',
+            '16': 'cdm',
+            '12': 'de',
+            '21': 'pistage',
+             '8': 'cdb',
+            '14': 'charger',
+            '44': 'course',
+            '11': 'ca',
+             '7': 'frene',
+             '5': 'idc',
+             '9': 'ap',
+            '29': 'miner',
+            '30': 'tailler',
+            '27': 'dressage',
+            '10': 'parer',
+            '17': 'he',
+            '24': 'bidouiller',
+            '45': 'interposer',
+            '43': 'baroufle',
+            '23': 'lancer',
+            '26': 'grattage',
+            '37': 'marquage',
+            '40': 'reparation',
+            '25': 'melange',
+            '35': 'planter',
+            '38': 'retraite',
+            '15': 'piege_feu',
+            '28': 'shamaner',
+            '42': 'rotobaffe',
+            '19': 'em',
+            '33': 'necro',
+            '46': 'painthure',
+            '41': 'golem_cuir'
+
+        };
+        $scope._mhToZoumprofilerSortsIndex = {
+             '3': 'vampi',
+             '6': 'ada',
+            '10': 'idt',
+            '27': 'bam',
+            '28': 'gds'
+        };
 
         /* ********************************************* */
         /* **          Controller's methods           ** */
@@ -67,36 +111,60 @@ angular.module('ZoumProfiler')
 
 
         $scope.importProfileFromSp = function() {
-            console.log("trollId: " + $scope.import.spTrollId);
-            console.log("password: " + $scope.import.spTrollPassword);
+            //console.log("trollId: " + $scope.import.spTrollId);
+            //console.log("password: " + $scope.import.spTrollPassword);
 
             var newProfile = { comps : {cdm1 : true}, id : $scope._randomId() };
             $scope._checkCaracMin(newProfile);
             $scope._checkBonus(newProfile);
 
-            var profilPublic2 = "104259;DevelZimZoum;Kastar;43;2011-01-21 14:07:48;;http://zoumbox.org/mh/syndikhd/104259_300.png;49;539;12;1900;20;0"; // TODO 2014/12/11 AThimel fetch remote
-            var caract = $scope.import.json; // TODO 2014/12/11 AThimel fetch remote
+            // TODO 2014/12/11 AThimel fetch remote
+            var profilPublic2 = "104259;DevelZimZoum;Kastar;43;2011-01-21 14:07:48;;http://zoumbox.org/mh/syndikhd/104259_300.png;49;539;12;1900;20;0";
+            var caract = "BMM;9;3;7;7;20;0;2;2606;1184;6;-160;0;0\n" +
+                         "BMP;7;0;2;-4;0;0;-1;0;0;17;0;156;10\n" +
+                         "CAR;14;13;30;6;140;160;4;2102;3116;3;573;0;0";
+            var comps = "C;18;90;0;2;\n" +
+                        "C;18;90;0;1;\n" +
+                        "C;3;93;0;1;\n" +
+                        "C;16;90;0;5;\n" +
+                        "C;16;90;0;4;\n" +
+                        "C;16;90;0;3;\n" +
+                        "C;16;90;0;2;\n" +
+                        "C;16;90;0;1;\n" +
+                        "C;12;90;5;1;\n" +
+                        "C;21;90;0;1;\n" +
+                        "C;8;90;0;5;\n" +
+                        "C;8;90;0;4;\n" +
+                        "C;8;90;0;3;\n" +
+                        "C;8;90;0;2;\n" +
+                        "C;8;87;0;1;\n" +
+                        "C;14;83;0;1;\n" +
+                        "C;44;90;0;1;\n" +
+                        "C;11;90;0;1;\n" +
+                        "C;7;90;0;1;\n" +
+                        "C;5;69;0;1;\n" +
+                        "C;9;43;0;2;\n" +
+                        "C;9;81;0;1;\n" +
+                        "S;3;80;0;1\n" +
+                        "S;6;75;0;1\n" +
+                        "S;10;80;0;1\n" +
+                        "S;27;80;0;1\n" +
+                        "S;28;67;0;1";
 
-            var lines = caract.split('\n');
-            console.log(lines);
-            angular.forEach(lines, function(line) {
+            var caractLines = caract.split('\n');
+            angular.forEach(caractLines, function(line) {
+                // Type; Attaque; Esquive; Dégats; Régénération; PVMax; PVActuels; Portée deVue; RM; MM; Armure; Duree du Tour; Poids; Concentration
                 var cells = line.split(';');
                 var tab;
                 switch (cells[0]) {
                     case 'CAR':
                         tab = newProfile.caracs;
-                        console.log("caracs:");
-                        console.log(tab);
                         break;
                     case 'BMM':
                         tab = newProfile.bm;
-                        console.log("bm:");
-                        console.log(tab);
                         break;
                     case 'BMP':
                         tab = newProfile.bp;
-                        console.log("bp:");
-                        console.log(tab);
                         break;
                 }
                 tab['ATT'] = parseInt(cells[1]);
@@ -107,7 +175,24 @@ angular.module('ZoumProfiler')
                 tab['VUE'] = parseInt(cells[7]);
                 tab['ARM'] = parseInt(cells[10]);
                 tab['TOUR'] = parseInt(cells[11]);
-                // Type; Attaque; Esquive; Dégats; Régénération; PVMax; PVActuels; Portée deVue; RM; MM; Armure; Duree du Tour; Poids; Concentration
+            });
+
+            var compsLines = comps.split('\n');
+            angular.forEach(compsLines, function(line) {
+                var cells = line.split(';');
+                switch (cells[0]) {
+                    case "C":
+                        var mhBaseCompId = cells[1];
+                        var baseCompId = $scope._mhToZoumprofilerCompsIndex[mhBaseCompId];
+                        var compLvl = cells[4];
+                        var compId = baseCompId + compLvl;
+                        var comp = base.getCompOrSort(compId);
+                        newProfile.comps[comp.id] = true;
+                        break;
+                    case "S":
+                        // TODO AThimel Implement sortileges
+                        break;
+                }
             });
 
             var cells = profilPublic2.split(';');
