@@ -131,94 +131,106 @@ angular.module('ZoumProfiler')
                 $http.get(urlCaract).
                     success(function (dataCaract) {
 
-                        var caractLines = dataCaract.split('\n');
-                        angular.forEach(caractLines, function (line) {
+                        if (dataCaract.substring(0, 6) == "Erreur") {
+                            $scope._addErrorMessage(dataCaract);
+                        } else {
+                            var caractLines = dataCaract.split('\n');
+                            angular.forEach(caractLines, function (line) {
 
-                            // Type; Attaque; Esquive; Dégats; Régénération; PVMax; PVActuels; Portée deVue; RM; MM; Armure; Duree du Tour; Poids; Concentration
-                            var cells = line.split(';');
+                                // Type; Attaque; Esquive; Dégats; Régénération; PVMax; PVActuels; Portée deVue; RM; MM; Armure; Duree du Tour; Poids; Concentration
+                                var cells = line.split(';');
 
-                            if (cells.length >= 12) {
-                                var tab;
-                                switch (cells[0]) {
-                                    case 'CAR':
-                                        tab = newProfile.caracs;
-                                        break;
-                                    case 'BMM':
-                                        tab = newProfile.bm;
-                                        break;
-                                    case 'BMP':
-                                        tab = newProfile.bp;
-                                        break;
-                                }
-                                tab['ATT'] = parseInt(cells[1]);
-                                tab['ESQ'] = parseInt(cells[2]);
-                                tab['DEG'] = parseInt(cells[3]);
-                                tab['REG'] = parseInt(cells[4]);
-                                tab['PV'] = parseInt(cells[5]);
-                                tab['VUE'] = parseInt(cells[7]);
-                                tab['ARM'] = parseInt(cells[10]);
-                                tab['TOUR'] = parseInt(cells[11]);
-                            }
-                        });
-
-
-                        var urlComp = "proxy/sp.php?script=SP_Aptitudes2.php&trollId=" + $scope.import.spTrollId + "&trollPassword=" + $scope.import.spTrollPassword;
-                        $http.get(urlComp).
-                            success(function (dataComp) {
-
-                                var compsLines = dataComp.split('\n');
-                                angular.forEach(compsLines, function (line) {
-
-                                    var cells = line.split(';');
-
-                                    if (cells.length >= 5) {
-                                        switch (cells[0]) {
-                                            case "C":
-                                                var mhBaseCompId = cells[1];
-                                                var baseCompId = $scope._mhToZoumprofilerCompsIndex[mhBaseCompId];
-                                                var compLvl = cells[4];
-                                                var compId = baseCompId + compLvl;
-                                                var comp = base.getCompOrSort(compId);
-                                                newProfile.comps[comp.id] = true;
-                                                break;
-                                            case "S":
-                                                // TODO AThimel Implement sortileges
-                                                break;
-                                        }
+                                if (cells.length >= 12) {
+                                    var tab;
+                                    switch (cells[0]) {
+                                        case 'CAR':
+                                            tab = newProfile.caracs;
+                                            break;
+                                        case 'BMM':
+                                            tab = newProfile.bm;
+                                            break;
+                                        case 'BMP':
+                                            tab = newProfile.bp;
+                                            break;
                                     }
-                                });
-
-
-                                var urlProfile = "proxy/sp.php?script=SP_ProfilPublic2.php&trollId=" + $scope.import.spTrollId + "&trollPassword=" + $scope.import.spTrollPassword;
-                                $http.get(urlProfile).
-                                    success(function (dataProfile) {
-
-                                        var cells = dataProfile.split(';');
-
-                                        if (cells.length >= 4) {
-                                            newProfile.name = cells[1];
-                                            newProfile.profile = "sp" + cells[3];
-                                            newProfile.race = cells[2];
-
-                                            localStorage.setItem("lastImportFor" + $scope.import.spTrollId, ""+new Date().getTime());
-
-                                            $scope._importProfile(newProfile);
-
-                                            delete $scope.import.spTrollId;
-                                            delete $scope.import.spTrollPassword;
-                                            delete $scope.import.json;
-                                        }
-
-                                    }).
-                                    error(function (data) {
-                                        $scope._addErrorMessage("Import impossible: " + data);
-                                    });
-
-                            }).
-                            error(function (data) {
-                                $scope._addErrorMessage("Import impossible: " + data);
+                                    tab['ATT'] = parseInt(cells[1]);
+                                    tab['ESQ'] = parseInt(cells[2]);
+                                    tab['DEG'] = parseInt(cells[3]);
+                                    tab['REG'] = parseInt(cells[4]);
+                                    tab['PV'] = parseInt(cells[5]);
+                                    tab['VUE'] = parseInt(cells[7]);
+                                    tab['ARM'] = parseInt(cells[10]);
+                                    tab['TOUR'] = parseInt(cells[11]);
+                                }
                             });
 
+
+                            var urlComp = "proxy/sp.php?script=SP_Aptitudes2.php&trollId=" + $scope.import.spTrollId + "&trollPassword=" + $scope.import.spTrollPassword;
+                            $http.get(urlComp).
+                                success(function (dataComp) {
+
+                                    if (dataComp.substring(0, 6) == "Erreur") {
+                                        $scope._addErrorMessage(dataComp);
+                                    } else {
+                                        var compsLines = dataComp.split('\n');
+                                        angular.forEach(compsLines, function (line) {
+
+                                            var cells = line.split(';');
+
+                                            if (cells.length >= 5) {
+                                                switch (cells[0]) {
+                                                    case "C":
+                                                        var mhBaseCompId = cells[1];
+                                                        var baseCompId = $scope._mhToZoumprofilerCompsIndex[mhBaseCompId];
+                                                        var compLvl = cells[4];
+                                                        var compId = baseCompId + compLvl;
+                                                        var comp = base.getCompOrSort(compId);
+                                                        newProfile.comps[comp.id] = true;
+                                                        break;
+                                                    case "S":
+                                                        // TODO AThimel Implement sortileges
+                                                        break;
+                                                }
+                                            }
+                                        });
+
+
+                                        var urlProfile = "proxy/sp.php?script=SP_ProfilPublic2.php&trollId=" + $scope.import.spTrollId + "&trollPassword=" + $scope.import.spTrollPassword;
+                                        $http.get(urlProfile).
+                                            success(function (dataProfile) {
+
+                                                if (dataProfile.substring(0, 6) == "Erreur") {
+                                                    $scope._addErrorMessage(dataProfile);
+                                                } else {
+                                                    var cells = dataProfile.split(';');
+
+                                                    if (cells.length >= 4) {
+                                                        newProfile.name = cells[1];
+                                                        newProfile.profile = "sp" + cells[3];
+                                                        newProfile.race = cells[2];
+
+                                                        localStorage.setItem("lastImportFor" + $scope.import.spTrollId, "" + new Date().getTime());
+
+                                                        $scope._importProfile(newProfile);
+
+                                                        delete $scope.import.spTrollId;
+                                                        delete $scope.import.spTrollPassword;
+                                                        delete $scope.import.json;
+                                                    }
+                                                }
+
+                                            }).
+                                            error(function (data) {
+                                                $scope._addErrorMessage("Import impossible: " + data);
+                                            });
+
+                                    }
+                                }).
+                                error(function (data) {
+                                    $scope._addErrorMessage("Import impossible: " + data);
+                                });
+
+                        }
 
                     }).
                     error(function (data) {
