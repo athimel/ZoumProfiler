@@ -113,106 +113,118 @@ angular.module('ZoumProfiler')
             $scope._checkCaracMin(newProfile);
             $scope._checkBonus(newProfile);
 
-            // FIXME AThimel 13/12/2014 This XHR success cascade is ugly, find a better way
+            var importDuringLast24h = false;
 
-            var urlCaract = "proxy/sp.php?script=SP_Caract.php&trollId=" + $scope.import.spTrollId + "&trollPassword=" + $scope.import.spTrollPassword;
-            $http.get(urlCaract).
-                success(function(dataCaract) {
-
-                    var caractLines = dataCaract.split('\n');
-                    angular.forEach(caractLines, function(line) {
-
-                        // Type; Attaque; Esquive; Dégats; Régénération; PVMax; PVActuels; Portée deVue; RM; MM; Armure; Duree du Tour; Poids; Concentration
-                        var cells = line.split(';');
-
-                        if (cells.length >= 12) {
-                            var tab;
-                            switch (cells[0]) {
-                                case 'CAR':
-                                    tab = newProfile.caracs;
-                                    break;
-                                case 'BMM':
-                                    tab = newProfile.bm;
-                                    break;
-                                case 'BMP':
-                                    tab = newProfile.bp;
-                                    break;
-                            }
-                            tab['ATT'] = parseInt(cells[1]);
-                            tab['ESQ'] = parseInt(cells[2]);
-                            tab['DEG'] = parseInt(cells[3]);
-                            tab['REG'] = parseInt(cells[4]);
-                            tab['PV'] = parseInt(cells[5]);
-                            tab['VUE'] = parseInt(cells[7]);
-                            tab['ARM'] = parseInt(cells[10]);
-                            tab['TOUR'] = parseInt(cells[11]);
-                        }
-                    });
+            var lastImportTxt = localStorage.getItem("lastImportFor" + $scope.import.spTrollId);
+            if (lastImportTxt) {
+                var lastImport = parseInt(lastImportTxt);
+                var now = new Date().getTime();
+                importDuringLast24h = (now - lastImport < 86400000);
+                $scope._addErrorMessage("Vous avez déjà fait un import de ce profil dans les dernières 24h.");
+            }
 
 
+            if (!importDuringLast24h) {
+                // FIXME AThimel 13/12/2014 This XHR success cascade is ugly, find a better way
 
-                    var urlComp = "proxy/sp.php?script=SP_Aptitudes2.php&trollId=" + $scope.import.spTrollId + "&trollPassword=" + $scope.import.spTrollPassword;
-                    $http.get(urlComp).
-                        success(function(dataComp) {
-                            
-                            var compsLines = dataComp.split('\n');
-                            angular.forEach(compsLines, function(line) {
+                var urlCaract = "proxy/sp.php?script=SP_Caract.php&trollId=" + $scope.import.spTrollId + "&trollPassword=" + $scope.import.spTrollPassword;
+                $http.get(urlCaract).
+                    success(function (dataCaract) {
 
-                                var cells = line.split(';');
+                        var caractLines = dataCaract.split('\n');
+                        angular.forEach(caractLines, function (line) {
 
-                                if (cells.length >= 5) {
-                                    switch (cells[0]) {
-                                        case "C":
-                                            var mhBaseCompId = cells[1];
-                                            var baseCompId = $scope._mhToZoumprofilerCompsIndex[mhBaseCompId];
-                                            var compLvl = cells[4];
-                                            var compId = baseCompId + compLvl;
-                                            var comp = base.getCompOrSort(compId);
-                                            newProfile.comps[comp.id] = true;
-                                            break;
-                                        case "S":
-                                            // TODO AThimel Implement sortileges
-                                            break;
-                                    }
+                            // Type; Attaque; Esquive; Dégats; Régénération; PVMax; PVActuels; Portée deVue; RM; MM; Armure; Duree du Tour; Poids; Concentration
+                            var cells = line.split(';');
+
+                            if (cells.length >= 12) {
+                                var tab;
+                                switch (cells[0]) {
+                                    case 'CAR':
+                                        tab = newProfile.caracs;
+                                        break;
+                                    case 'BMM':
+                                        tab = newProfile.bm;
+                                        break;
+                                    case 'BMP':
+                                        tab = newProfile.bp;
+                                        break;
                                 }
-                            });
-
-
-                            var urlProfile = "proxy/sp.php?script=SP_ProfilPublic2.php&trollId=" + $scope.import.spTrollId + "&trollPassword=" + $scope.import.spTrollPassword;
-                            $http.get(urlProfile).
-                                success(function(dataProfile) {
-
-                                    var cells = dataProfile.split(';');
-
-                                    if (cells.length >= 4) {
-                                        newProfile.name = cells[1];
-                                        newProfile.profile = "sp" + cells[3];
-                                        newProfile.race = cells[2];
-
-                                        console.log(newProfile);
-
-                                        $scope._importProfile(newProfile);
-
-                                        delete $scope.import.spTrollId;
-                                        delete $scope.import.spTrollPassword;
-                                        delete $scope.import.json;
-                                    }
-
-                                }).
-                                error(function(data) {
-                                    $scope._addErrorMessage("Import impossible: " + data);
-                                });
-
-                        }).
-                        error(function(data) {
-                            $scope._addErrorMessage("Import impossible: " + data);
+                                tab['ATT'] = parseInt(cells[1]);
+                                tab['ESQ'] = parseInt(cells[2]);
+                                tab['DEG'] = parseInt(cells[3]);
+                                tab['REG'] = parseInt(cells[4]);
+                                tab['PV'] = parseInt(cells[5]);
+                                tab['VUE'] = parseInt(cells[7]);
+                                tab['ARM'] = parseInt(cells[10]);
+                                tab['TOUR'] = parseInt(cells[11]);
+                            }
                         });
 
 
-                }).
-                error(function(data) {
-                    $scope._addErrorMessage("Import impossible: " + data);
-                });
+                        var urlComp = "proxy/sp.php?script=SP_Aptitudes2.php&trollId=" + $scope.import.spTrollId + "&trollPassword=" + $scope.import.spTrollPassword;
+                        $http.get(urlComp).
+                            success(function (dataComp) {
+
+                                var compsLines = dataComp.split('\n');
+                                angular.forEach(compsLines, function (line) {
+
+                                    var cells = line.split(';');
+
+                                    if (cells.length >= 5) {
+                                        switch (cells[0]) {
+                                            case "C":
+                                                var mhBaseCompId = cells[1];
+                                                var baseCompId = $scope._mhToZoumprofilerCompsIndex[mhBaseCompId];
+                                                var compLvl = cells[4];
+                                                var compId = baseCompId + compLvl;
+                                                var comp = base.getCompOrSort(compId);
+                                                newProfile.comps[comp.id] = true;
+                                                break;
+                                            case "S":
+                                                // TODO AThimel Implement sortileges
+                                                break;
+                                        }
+                                    }
+                                });
+
+
+                                var urlProfile = "proxy/sp.php?script=SP_ProfilPublic2.php&trollId=" + $scope.import.spTrollId + "&trollPassword=" + $scope.import.spTrollPassword;
+                                $http.get(urlProfile).
+                                    success(function (dataProfile) {
+
+                                        var cells = dataProfile.split(';');
+
+                                        if (cells.length >= 4) {
+                                            newProfile.name = cells[1];
+                                            newProfile.profile = "sp" + cells[3];
+                                            newProfile.race = cells[2];
+
+                                            localStorage.setItem("lastImportFor" + $scope.import.spTrollId, ""+new Date().getTime());
+
+                                            $scope._importProfile(newProfile);
+
+                                            delete $scope.import.spTrollId;
+                                            delete $scope.import.spTrollPassword;
+                                            delete $scope.import.json;
+                                        }
+
+                                    }).
+                                    error(function (data) {
+                                        $scope._addErrorMessage("Import impossible: " + data);
+                                    });
+
+                            }).
+                            error(function (data) {
+                                $scope._addErrorMessage("Import impossible: " + data);
+                            });
+
+
+                    }).
+                    error(function (data) {
+                        $scope._addErrorMessage("Import impossible: " + data);
+                    });
+            }
 
         };
 
