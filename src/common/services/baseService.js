@@ -177,6 +177,9 @@ angular.module('ZoumProfiler')
             if (!result) {
                 result = base.sortsMap[compOrSortId];
             }
+            if (!result && compOrSortId.substring(compOrSortId.length - 1) == '1') {
+                result = base.getCompOrSort(compOrSortId.substring(0, compOrSortId.length - 1));
+            }
             if (!result) {
                 console.error("Unknown comp/sort: " + compOrSortId)
             }

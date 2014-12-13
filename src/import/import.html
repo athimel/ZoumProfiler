@@ -2,16 +2,41 @@
 
     <form class="form-horizontal" role="form" ng-if="importContext.show">
 
-        <div class="alert alert-info">Vous pouvez coller dans la zone ci-dessous un profil au format JSON.</div>
         <div class="form-group">
 
-            <label for="importJson" class="col-sm-2 control-label">Profil au format JSON</label>
-            <div class="col-sm-10">
-                <textarea ng-model="import.json" class="form-control" id="importJson"></textarea>
+            <div class="alert alert-info">Vous pouvez coller dans la zone ci-dessous un profil au format JSON.</div>
+            <div class="row">
+                <label for="importJson" class="col-sm-2 control-label">Profil au format JSON</label>
+                <div class="col-sm-10">
+                    <textarea ng-model="import.json" class="form-control" id="importJson"></textarea>
+                </div>
             </div>
 
-            <button type="button" class="btn btn-sm btn-success" ng-click="importProfile()">
+            <button type="button" class="btn btn-sm btn-success" ng-click="importProfileFromJson()"
+                    ng-disabled="!import.json">
                 <span class="glyphicon glyphicon-import"></span> Importer le profil
+            </button>
+
+            <div class="alert alert-info">Vous pouvez entrer ici votre identifiant de troll ainsi qu'un mot de passe
+                spécifique généré via MountyHall. Pour cela allez dans "Option" &gt; "Options Troll" &gt;
+                "Générer/Révoquer un code d'accès spécifique pour les applications externes".</div>
+            <div class="alert alert-warning">L'utilisation des scripts publics est limitée par des quotas, prenez garde
+                à ne pas faire plusieurs imports par jour.</div>
+            <div class="row">
+                <label for="importFromSpTrollId" class="col-sm-2 control-label">Import depuis MountyHall</label>
+                <div class="col-sm-3">
+                    <input type="number" ng-model="import.spTrollId" class="form-control" id="importFromSpTrollId"
+                           placeholder="Numéro de troll"/>
+                </div>
+                <div class="col-sm-3">
+                    <input type="text" ng-model="import.spTrollPassword" class="form-control" id="importFromSpTrollPassword"
+                           placeholder="Mot de passe spécifique"/>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-sm btn-success" ng-click="importProfileFromSp()"
+                    ng-disabled="!import.spTrollId || !import.spTrollPassword">
+                <span class="glyphicon glyphicon-import"></span> Importer le profil depuis MountyHall
             </button>
 
         </div>
