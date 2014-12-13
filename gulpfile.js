@@ -28,6 +28,7 @@ var bases = {
 
 var paths = {
     html    : ['**/*.html'],
+    php     : ['**/*.php'],
     scripts : ['**/*.js'],
     styles  : ['**/*.css'],
     images  : ['**/*.png'],
@@ -60,6 +61,12 @@ gulp.task('scripts', function() {
         .pipe(uglify())
         .pipe(gulp.dest(bases.dist));
 //        .pipe(notify({ message : 'Scripts task complete' }));
+});
+
+// PHP
+gulp.task('php', function() {
+    return gulp.src(paths.php, {cwd: bases.src})
+        .pipe(gulp.dest(bases.dist));
 });
 
 // Styles
@@ -102,7 +109,7 @@ gulp.task('resources', function() {
 
 // Default task
 gulp.task('default', ['clean'], function() {
-    gulp.start('scripts', 'styles', 'images', 'resources');
+    gulp.start('scripts', 'styles', 'images', 'resources', 'php');
 });
 
 // Watch

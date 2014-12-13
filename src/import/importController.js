@@ -5,7 +5,7 @@ angular.module('ZoumProfiler')
             templateUrl: 'import/import.html'
         };
     })
-    .controller('ImportController', ['$scope', '$filter', 'base', function ($scope, $filter, base) {
+    .controller('ImportController', ['$scope', '$filter', '$http', 'base', function ($scope, $filter, $http, base) {
 
         /* ********************************************* */
         /* **             Contextual data             ** */
@@ -107,103 +107,113 @@ angular.module('ZoumProfiler')
         };
 
 
-
-
-
         $scope.importProfileFromSp = function() {
-            //console.log("trollId: " + $scope.import.spTrollId);
-            //console.log("password: " + $scope.import.spTrollPassword);
 
             var newProfile = { comps : {cdm1 : true}, id : $scope._randomId() };
             $scope._checkCaracMin(newProfile);
             $scope._checkBonus(newProfile);
 
-            // TODO 2014/12/11 AThimel fetch remote
-            var profilPublic2 = "104259;DevelZimZoum;Kastar;43;2011-01-21 14:07:48;;http://zoumbox.org/mh/syndikhd/104259_300.png;49;539;12;1900;20;0";
-            var caract = "BMM;9;3;7;7;20;0;2;2606;1184;6;-160;0;0\n" +
-                         "BMP;7;0;2;-4;0;0;-1;0;0;17;0;156;10\n" +
-                         "CAR;14;13;30;6;140;160;4;2102;3116;3;573;0;0";
-            var comps = "C;18;90;0;2;\n" +
-                        "C;18;90;0;1;\n" +
-                        "C;3;93;0;1;\n" +
-                        "C;16;90;0;5;\n" +
-                        "C;16;90;0;4;\n" +
-                        "C;16;90;0;3;\n" +
-                        "C;16;90;0;2;\n" +
-                        "C;16;90;0;1;\n" +
-                        "C;12;90;5;1;\n" +
-                        "C;21;90;0;1;\n" +
-                        "C;8;90;0;5;\n" +
-                        "C;8;90;0;4;\n" +
-                        "C;8;90;0;3;\n" +
-                        "C;8;90;0;2;\n" +
-                        "C;8;87;0;1;\n" +
-                        "C;14;83;0;1;\n" +
-                        "C;44;90;0;1;\n" +
-                        "C;11;90;0;1;\n" +
-                        "C;7;90;0;1;\n" +
-                        "C;5;69;0;1;\n" +
-                        "C;9;43;0;2;\n" +
-                        "C;9;81;0;1;\n" +
-                        "S;3;80;0;1\n" +
-                        "S;6;75;0;1\n" +
-                        "S;10;80;0;1\n" +
-                        "S;27;80;0;1\n" +
-                        "S;28;67;0;1";
+            // FIXME AThimel 13/12/2014 This XHR success cascade is ugly, find a better way
 
-            var caractLines = caract.split('\n');
-            angular.forEach(caractLines, function(line) {
-                // Type; Attaque; Esquive; Dégats; Régénération; PVMax; PVActuels; Portée deVue; RM; MM; Armure; Duree du Tour; Poids; Concentration
-                var cells = line.split(';');
-                var tab;
-                switch (cells[0]) {
-                    case 'CAR':
-                        tab = newProfile.caracs;
-                        break;
-                    case 'BMM':
-                        tab = newProfile.bm;
-                        break;
-                    case 'BMP':
-                        tab = newProfile.bp;
-                        break;
-                }
-                tab['ATT'] = parseInt(cells[1]);
-                tab['ESQ'] = parseInt(cells[2]);
-                tab['DEG'] = parseInt(cells[3]);
-                tab['REG'] = parseInt(cells[4]);
-                tab['PV'] = parseInt(cells[5]);
-                tab['VUE'] = parseInt(cells[7]);
-                tab['ARM'] = parseInt(cells[10]);
-                tab['TOUR'] = parseInt(cells[11]);
-            });
+            var urlCaract = "proxy/sp.php?script=SP_Caract.php&trollId=" + $scope.import.spTrollId + "&trollPassword=" + $scope.import.spTrollPassword;
+            $http.get(urlCaract).
+                success(function(dataCaract) {
 
-            var compsLines = comps.split('\n');
-            angular.forEach(compsLines, function(line) {
-                var cells = line.split(';');
-                switch (cells[0]) {
-                    case "C":
-                        var mhBaseCompId = cells[1];
-                        var baseCompId = $scope._mhToZoumprofilerCompsIndex[mhBaseCompId];
-                        var compLvl = cells[4];
-                        var compId = baseCompId + compLvl;
-                        var comp = base.getCompOrSort(compId);
-                        newProfile.comps[comp.id] = true;
-                        break;
-                    case "S":
-                        // TODO AThimel Implement sortileges
-                        break;
-                }
-            });
+                    var caractLines = dataCaract.split('\n');
+                    angular.forEach(caractLines, function(line) {
 
-            var cells = profilPublic2.split(';');
-            newProfile.name = cells[1];
-            newProfile.profile = "sp"+cells[3];
-            newProfile.race = cells[2];
+                        // Type; Attaque; Esquive; Dégats; Régénération; PVMax; PVActuels; Portée deVue; RM; MM; Armure; Duree du Tour; Poids; Concentration
+                        var cells = line.split(';');
 
-            $scope._importProfile(newProfile);
-            //delete $scope.import.spTrollId;
-            //delete $scope.import.spTrollPassword;
-            //delete $scope.import.json;
+                        if (cells.length >= 12) {
+                            var tab;
+                            switch (cells[0]) {
+                                case 'CAR':
+                                    tab = newProfile.caracs;
+                                    break;
+                                case 'BMM':
+                                    tab = newProfile.bm;
+                                    break;
+                                case 'BMP':
+                                    tab = newProfile.bp;
+                                    break;
+                            }
+                            tab['ATT'] = parseInt(cells[1]);
+                            tab['ESQ'] = parseInt(cells[2]);
+                            tab['DEG'] = parseInt(cells[3]);
+                            tab['REG'] = parseInt(cells[4]);
+                            tab['PV'] = parseInt(cells[5]);
+                            tab['VUE'] = parseInt(cells[7]);
+                            tab['ARM'] = parseInt(cells[10]);
+                            tab['TOUR'] = parseInt(cells[11]);
+                        }
+                    });
+
+
+
+                    var urlComp = "proxy/sp.php?script=SP_Aptitudes2.php&trollId=" + $scope.import.spTrollId + "&trollPassword=" + $scope.import.spTrollPassword;
+                    $http.get(urlComp).
+                        success(function(dataComp) {
+                            
+                            var compsLines = dataComp.split('\n');
+                            angular.forEach(compsLines, function(line) {
+
+                                var cells = line.split(';');
+
+                                if (cells.length >= 5) {
+                                    switch (cells[0]) {
+                                        case "C":
+                                            var mhBaseCompId = cells[1];
+                                            var baseCompId = $scope._mhToZoumprofilerCompsIndex[mhBaseCompId];
+                                            var compLvl = cells[4];
+                                            var compId = baseCompId + compLvl;
+                                            var comp = base.getCompOrSort(compId);
+                                            newProfile.comps[comp.id] = true;
+                                            break;
+                                        case "S":
+                                            // TODO AThimel Implement sortileges
+                                            break;
+                                    }
+                                }
+                            });
+
+
+                            var urlProfile = "proxy/sp.php?script=SP_ProfilPublic2.php&trollId=" + $scope.import.spTrollId + "&trollPassword=" + $scope.import.spTrollPassword;
+                            $http.get(urlProfile).
+                                success(function(dataProfile) {
+
+                                    var cells = dataProfile.split(';');
+
+                                    if (cells.length >= 4) {
+                                        newProfile.name = cells[1];
+                                        newProfile.profile = "sp" + cells[3];
+                                        newProfile.race = cells[2];
+
+                                        console.log(newProfile);
+
+                                        $scope._importProfile(newProfile);
+
+                                        delete $scope.import.spTrollId;
+                                        delete $scope.import.spTrollPassword;
+                                        delete $scope.import.json;
+                                    }
+
+                                }).
+                                error(function(data) {
+                                    $scope._addErrorMessage("Import impossible: " + data);
+                                });
+
+                        }).
+                        error(function(data) {
+                            $scope._addErrorMessage("Import impossible: " + data);
+                        });
+
+
+                }).
+                error(function(data) {
+                    $scope._addErrorMessage("Import impossible: " + data);
+                });
+
         };
 
         /* ********************************************* */
