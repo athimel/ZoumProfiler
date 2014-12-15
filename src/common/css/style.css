@@ -262,3 +262,7 @@ input.target {
     width: 50px;
     padding: 1px;
 }
+
+.import .form-horizontal {
+    margin-top: 20px;
+}
