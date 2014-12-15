@@ -13,41 +13,44 @@ angular.module('ZoumProfiler')
 
         $scope.import = {};
         $scope._mhToZoumprofilerCompsIndex = {
-            '18': 'insultes',
-             '3': 'am',
-            '16': 'cdm',
-            '12': 'de',
-            '21': 'pistage',
-             '8': 'cdb',
-            '14': 'charger',
-            '44': 'course',
+            '1': 'bs',
+            '2': 'ra',
+            '3': 'am',
+            '4': 'camou',
+            '5': 'idc',
+            '6': 'balayage',
+            '7': 'frene',
+            '8': 'cdb',
+            '9': 'ap',
+            '10': 'parer',
             '11': 'ca',
-             '7': 'frene',
-             '5': 'idc',
-             '9': 'ap',
+            '12': 'de',
+            '14': 'charger',
+            '15': 'piege_feu',
+            '16': 'cdm',
+            '17': 'he',
+            '18': 'insultes',
+            '19': 'em',
+            '21': 'pistage',
+            '23': 'lancer',
+            '24': 'bidouiller',
+            '25': 'melange',
+            '26': 'grattage',
+            '27': 'dressage',
+            '28': 'shamaner',
             '29': 'miner',
             '30': 'tailler',
-            '27': 'dressage',
-            '10': 'parer',
-            '17': 'he',
-            '24': 'bidouiller',
-            '45': 'interposer',
-            '43': 'baroufle',
-            '23': 'lancer',
-            '26': 'grattage',
-            '37': 'marquage',
-            '40': 'reparation',
-            '25': 'melange',
-            '35': 'planter',
-            '38': 'retraite',
-            '15': 'piege_feu',
-            '28': 'shamaner',
-            '42': 'rotobaffe',
-            '19': 'em',
             '33': 'necro',
-            '46': 'painthure',
-            '41': 'golem_cuir'
-
+            '35': 'planter',
+            '37': 'marquage',
+            '38': 'retraite',
+            '40': 'reparation',
+            '41': 'golem_cuir',
+            '42': 'rotobaffe',
+            '43': 'baroufle',
+            '44': 'course',
+            '45': 'interposer',
+            '46': 'painthure'
         };
         $scope._mhToZoumprofilerSortsIndex = {
              '3': 'vampi',
@@ -142,7 +145,8 @@ angular.module('ZoumProfiler')
 
                                 if (cells.length >= 12) {
                                     var tab;
-                                    switch (cells[0]) {
+                                    var type = cells[0];
+                                    switch (type) {
                                         case 'CAR':
                                             tab = newProfile.caracs;
                                             break;
@@ -157,10 +161,18 @@ angular.module('ZoumProfiler')
                                     tab['ESQ'] = parseInt(cells[2]);
                                     tab['DEG'] = parseInt(cells[3]);
                                     tab['REG'] = parseInt(cells[4]);
-                                    tab['PV'] = parseInt(cells[5]);
-                                    tab['VUE'] = parseInt(cells[7]);
+                                    if (type == 'CAR') {
+                                        tab['PV'] = parseInt(cells[5]);
+                                        tab['VUE'] = parseInt(cells[7]);
+                                    } else { // Put all in BM
+                                        newProfile.bm['PV'] = newProfile.bm['PV'] + parseInt(cells[5]);
+                                        newProfile.bm['VUE'] = newProfile.bm['VUE'] + parseInt(cells[7]);
+                                    }
+
                                     tab['ARM'] = parseInt(cells[10]);
-                                    tab['TOUR'] = parseInt(cells[11]);
+                                    if (type == 'CAR') {
+                                        tab['TOUR'] = parseInt(cells[11]);
+                                    }
                                 }
                             });
 
