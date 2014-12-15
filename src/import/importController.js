@@ -228,6 +228,11 @@ angular.module('ZoumProfiler')
                                                         delete $scope.import.spTrollId;
                                                         delete $scope.import.spTrollPassword;
                                                         delete $scope.import.json;
+
+                                                        $scope._addWarningMessage(
+                                                            "Le profil importé tient compte de vos bonus/malus en " +
+                                                            "cours, pensez à ajuster votre profil après l'import !");
+
                                                     }
                                                 }
 
@@ -262,48 +267,4 @@ angular.module('ZoumProfiler')
         }
 
     }]);
-
-
-// http://sp.mountyhall.com/SP_Aptitudes2.php?Numero = 104259 & Motdepasse = LDXWYC8Z
-/*
-C;18;90;0;2;
-C;18;90;0;1;
-C;3;93;0;1;
-C;16;90;0;5;
-C;16;90;0;4;
-C;16;90;0;3;
-C;16;90;0;2;
-C;16;90;0;1;
-C;12;90;5;1;
-C;21;90;0;1;
-C;8;90;0;5;
-C;8;90;0;4;
-C;8;90;0;3;
-C;8;90;0;2;
-C;8;87;0;1;
-C;14;83;0;1;
-C;44;90;0;1;
-C;11;90;0;1;
-C;7;90;0;1;
-C;5;69;0;1;
-C;9;43;0;2;
-C;9;81;0;1;
-S;3;80;0;1
-S;6;75;0;1
-S;10;80;0;1
-S;27;80;0;1
-S;28;67;0;1
-*/
-
-// http://sp.mountyhall.com/SP_Caract.php?Numero = 104259 & Motdepasse = LDXWYC8Z
-/*
-BMM;9;3;7;7;20;0;2;2606;1184;6;-160;0;0
-BMP;7;0;2;-4;0;0;-1;0;0;17;0;156;10
-CAR;14;13;30;6;140;160;4;2102;3116;3;573;0;0
-*/
-
-// http://sp.mountyhall.com/SP_ProfilPublic2.php?Numero = 104259 & Motdepasse = LDXWYC8Z
-/*
-104259;DevelZimZoum;Kastar;43;2011-01-21 14:07:48;;http://zoumbox.org/mh/syndikhd/104259_300.png;49;539;12;1900;20;0
-*/
 
