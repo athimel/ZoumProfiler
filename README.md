@@ -56,7 +56,7 @@ Déploiement
 
 Un simple serveur Apache suffit pour déployer le projet.
 
-  $ gulp clean && gulp && mv dist/* <emplacement apache>
+    $ gulp clean && gulp && mv dist/* /emplacement/du/projet/dans/apache
 
 Attention : pour pouvoir utiliser la fonction d'import depuis MountyHall, il faut que le serveur supporte le PHP.
 Le PHP sert à exposer un proxy permettant de contourner les problèmes de CORS.
