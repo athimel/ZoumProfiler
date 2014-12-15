@@ -51,11 +51,21 @@ Dans src/common, on retrouve :
 - filtres ;
 - le service de base qui contient les données statiques nécessaires au bon lancement de l'application.
 
+Déploiement
+-----------
+
+Un simple serveur Apache suffit pour déployer le projet.
+
+  $ gulp clean && gulp && mv dist/* <emplacement apache>
+
+Attention : pour pouvoir utiliser la fonction d'import depuis MountyHall, il faut que le serveur supporte le PHP.
+Le PHP sert à exposer un proxy permettant de contourner les problèmes de CORS.
+
 
 TODO
 ----
 
-- Sticky bloc pour les aptitudes au combat ;
+- Sticky bloc *propre* pour les aptitudes au combat ;
 - Implémentation des modules/directives manquants ;
 - Encart de simulation (non persisté) dans le module fight où on saisi les ARM magiques/physique d'une cible pour voir ce que donnent les différentes attaques ;
 - Continuer de remonter du code de base dans le "baseService" ;
