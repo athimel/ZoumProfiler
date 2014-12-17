@@ -266,3 +266,16 @@ input.target {
 .import .form-horizontal {
     margin-top: 20px;
 }
+
+td:nth-child(4).versus {
+    border-left: 1px dashed gray;
+}
+td.versus:last-child {
+    border-right: 1px dashed gray;
+}
+tr:last-child td.versus {
+    border-bottom: 1px dashed gray;
+}
+div.fight-box table.table thead tr td.versus {
+    border-top: 1px dashed gray;
+}

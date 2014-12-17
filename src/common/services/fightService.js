@@ -36,6 +36,40 @@ angular.module('ZoumProfiler')
             }
         };
 
+        fight.getAppliedArmForFight = function(compOrSort, armP, armM) {
+            var result;
+            switch (compOrSort.baseId) {
+                // sorts
+                case 'vampi':
+                case 'rp':
+                case 'projo':
+                    result = armM;
+                    break;
+
+                // frene
+                case 'frene':
+                    result = (armP + armM) * 2;
+                    break;
+
+                // BS
+                case 'bs':
+                    result = Math.floor((armP + armM) / 2);
+                    break;
+
+                // No ARM
+                case 'siphon':
+                case 'piege_feu':
+                    result = 0;
+                    break;
+
+                // any other physical fight
+                default:
+                    result = armP + armM;
+                    break;
+            }
+            return result;
+        };
+
         /**
          * Take a sort or comp and computes its fight values (ATT, DEG, ...)
          */
@@ -173,6 +207,7 @@ angular.module('ZoumProfiler')
                     }
                 }
             });
+
             return result;
         };
 

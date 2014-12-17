@@ -10,6 +10,12 @@
                 <td>Type d'attaque</td>
                 <td>Attaque moy.</td>
                 <td>Dégats moy. (résisté)</td>
+                <td class="versus">Simulation</td>
+                <td class="versus">
+                    <input type="number" ng-model="fight.armP" class="carac" min="0" ng-change="armChanged()"/>
+                    <input type="number" ng-model="fight.armM" class="carac" min="0" ng-change="armChanged()"/>
+                    (Armures P. & M.)
+                </td>
             </tr>
             </thead>
             <tbody>
@@ -19,6 +25,11 @@
                 <td>
                     {{fc.DEG}}<span ng-if="fc.DEG_CRITIQ">/{{fc.DEG_CRITIQ}}</span>
                     <span ng-if="fc.DEG_RESIST">({{fc.DEG_RESIST}}<span ng-if="fc.DEG_RESIST_CRITIQ">/{{fc.DEG_RESIST_CRITIQ}}</span>)</span>
+                </td>
+                <td class="versus"></td>
+                <td class="versus">
+                    {{fc.DEG_AA}}<span ng-if="fc.DEG_CRITIQ_AA">/{{fc.DEG_CRITIQ_AA}}</span>
+                    <span ng-if="fc.DEG_RESIST_AA">({{fc.DEG_RESIST_AA}}<span ng-if="fc.DEG_RESIST_CRITIQ_AA">/{{fc.DEG_RESIST_CRITIQ_AA}}</span>)</span>
                 </td>
             </tr>
             </tbody>
