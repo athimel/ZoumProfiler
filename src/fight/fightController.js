@@ -10,9 +10,7 @@ angular.module('ZoumProfiler')
         $scope.fightCapabilities = [];
         $scope.fight = { armP:0, armM:0 };
 
-        $scope._refreshFightCapabilities = function() {
-            $scope.fightCapabilities = fight.getFightCapabilities(base, $scope.profile);
-
+        $scope._refreshFightCapabilitiesVersusArm  = function() {
             angular.forEach($scope.fightCapabilities, function (compOrSort) {
                 var arm = fight.getAppliedArmForFight(compOrSort, $scope.fight.armP, $scope.fight.armM);
                 compOrSort.DEG_AA = Math.max(compOrSort.DEG - arm, 1);
@@ -28,8 +26,13 @@ angular.module('ZoumProfiler')
             });
         };
 
+        $scope._refreshFightCapabilities = function() {
+            $scope.fightCapabilities = fight.getFightCapabilities(base, $scope.profile);
+            $scope._refreshFightCapabilitiesVersusArm();
+        };
+
         $scope.armChanged = function() {
-            $scope._refreshFightCapabilities();
+            $scope._refreshFightCapabilitiesVersusArm();
         };
 
         $scope.$on('_startRefreshFightCapabilities', function() {
