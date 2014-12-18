@@ -49,6 +49,17 @@ angular.module('ZoumProfiler')
             }
         };
 
+        $scope.duplicatePlanItem = function(item) {
+            var newItem = angular.copy(item);
+
+            var lastIndex = $scope.plan.length - 1;
+            var lastPlan = $scope.plan[lastIndex];
+            $scope.plan.splice(lastIndex, 1);
+
+            $scope.plan.push(newItem);
+            $scope.plan.push(lastPlan);
+        };
+
         $scope.planTotalPv = function() {
             var encaissed = 0;
             angular.forEach($scope.plan, function(pi) {

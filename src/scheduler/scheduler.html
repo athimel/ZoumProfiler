@@ -45,7 +45,7 @@
                 <tr ng-repeat="pi in plan">
 
                     <td ng-if="!pi.troll">
-                        <select ng-model="pi.troll" ng-options="p.name+' ('+p.profile+')' for p in profiles" ng-change="trollSelected(pi)"></select>
+                        <select ng-model="pi.troll" ng-options="p|prettyName for p in profiles" ng-change="trollSelected(pi)"></select>
                     </td>
                     <td ng-if="pi.troll">{{pi.troll|prettyName}}</td>
 
@@ -72,7 +72,12 @@
                     </td>
 
                     <td class="col-xs-1">
-                        <button type="button" class="btn btn-xs btn-danger" ng-click="removePlanItem(pi)">
+                        <button type="button" class="btn btn-xs btn-primary" ng-click="duplicatePlanItem(pi)"
+                                title="Dupliquer" ng-disabled="!pi.fight">
+                            <span class="glyphicon glyphicon-share"></span>
+                        </button>
+                        <button type="button" class="btn btn-xs btn-danger" ng-click="removePlanItem(pi)"
+                                title="Supprimer">
                             <span class="glyphicon glyphicon-remove"></span>
                         </button>
                     </td>
