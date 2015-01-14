@@ -72,6 +72,13 @@ angular.module('ZoumProfiler')
             }
         };
 
+        $scope.resetBonus = function() {
+            angular.forEach(base.caracs, function(carac) {
+                $scope.profile.bm[carac.id] = 0;
+                $scope.profile.bp[carac.id] = 0;
+            });
+        };
+
     }]);
 
 
