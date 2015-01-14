@@ -71,5 +71,6 @@ TODO
 - Persistence ;
 - Conserver les infos fournies à l'import pour mise à jour (id+MDP spécifique) ;
 - Permettre une RAZ rapide des Bonus/Malus ;
+- Format plus court pour le partage par URL ;
 - ...
 
