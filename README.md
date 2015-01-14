@@ -69,5 +69,7 @@ TODO
 - Implémentation des modules/directives manquants ;
 - Continuer de remonter du code de base dans le "baseService" ;
 - Persistence ;
+- Conserver les infos fournies à l'import pour mise à jour (id+MDP spécifique) ;
+- Permettre une RAZ rapide des Bonus/Malus ;
 - ...
 
