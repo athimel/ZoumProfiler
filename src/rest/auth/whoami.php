@@ -10,11 +10,9 @@ if ($userId) {
 
     $usersColl = $db->users;
 
-    $users = $usersColl->find(array('_id' => $userId));
-    foreach ($users as $user) {
-        unset($user['password']);
-        echo ',"profile":'.json_encode($user);
-    }
+    $user = $usersColl->findOne(array('_id' => $userId));
+    unset($user['password']);
+    echo ',"user":'.json_encode($user);
 } else {
     echo "false";
 }

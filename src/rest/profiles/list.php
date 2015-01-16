@@ -8,8 +8,26 @@ $db = $m->zoumprofiler;
 
 $profilesColl = $db->profiles;
 
+$publicGroupFilter = array("_internal.shares.group" => "public");
+if ($userId) {
+    $usersColl = $db->users;
+
+    // Is owner   OR   Is shared with this user   OR   Is public
+    $or = array( array("_internal.owner" => $userId),  array("_internal.shares.user" => $userId), $publicGroupFilter);
+    $user = $usersColl->findOne(array('_id' => $userId));
+
+    //  OR   Is shared with group
+    foreach ($user['groups'] as $group) {
+        array_push($or, array("_internal.shares.group" => $group));
+    }
+
+    $filter = array('$or' => $or);
+} else {
+    $filter = $publicGroupFilter;
+}
+
 // find all profiles
-$profiles = $profilesColl->find();
+$profiles = $profilesColl->find($filter);
 
 ?>{
   "profiles":[
