@@ -9,7 +9,7 @@ $db = $m->zoumprofiler;
 
 $profilesColl = $db->profiles;
 
-// find all profiles
+// find distinct groups
 $groups = $profilesColl->distinct("_internal.shares.group");
 
 ?>{
