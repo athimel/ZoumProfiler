@@ -286,14 +286,20 @@ span.profile-category {
     margin-left: 5px;
 }
 
-.authenticationbar {
+.authentication-bar {
     padding: 8px 15px;
     position: fixed;
     bottom: 0;
     height: 46px;
 }
 
-.authenticationbar span {
+.authentication-bar span.auth-status {
     font-style: italic;
     color: dimgray;
+}
+
+.authentication-form {
+    padding: 8px 15px;
+    position: fixed;
+    bottom: 0;
 }

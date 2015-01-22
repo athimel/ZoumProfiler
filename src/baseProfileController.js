@@ -20,6 +20,8 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         $scope.importContext = { show : false };
         $scope.compareContext = { show : false, map : {} };
         $scope.schedulerContext = { show: false, target: {} };
+        $scope.authenticationContext = { show: false };
+        $scope.loginContext = { show: false };
         $scope.profile;
         $scope.computed;
         $scope.messages = { success:[], warnings:[], errors:[] };
@@ -483,6 +485,76 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         };
 
         /* ********************************************* */
+        /* **              Authentication             ** */
+        /* ********************************************* */
+
+        $scope._whoAmI = function() {
+            users.whoAmI().then(function(result) {
+                $scope.user = {};
+                if (result.data.connected) {
+                    $scope.user.remoteId = result.data.user['_id']['$id'];
+                    $scope.user.login = result.data.user.login;
+                    $scope.user.groups = result.data.user.groups;
+                }
+            });
+        };
+
+        $scope.logout = function() {
+            users.logout().then(function() {
+                delete $scope.user.remoteId;
+                delete $scope.user.login;
+                delete $scope.user.groups;
+                $scope.refreshRemote();
+            });
+        };
+
+        $scope._login = function(login, password) {
+            users.login(login, password).then(function(result) {
+                if (!result.data.authenticated) {
+                    $scope._addErrorMessage("Login/password incorrect")
+                }
+                $scope._whoAmI();
+                $scope.refreshRemote();
+                $scope.cancelAuthentication();
+            });
+        };
+
+        $scope.startRegistration = function() {
+            $scope.authenticationContext.type = "register";
+            $scope.authenticationContext.show = true;
+        };
+
+        $scope.startLogin = function() {
+            $scope.authenticationContext.type = "login";
+            $scope.authenticationContext.show = true;
+        };
+
+        $scope.cancelAuthentication = function() {
+            $scope.authenticationContext.show = false;
+            delete $scope.authenticationContext.password;
+        };
+
+        $scope.submitAuthentication = function() {
+            if (angular.isUndefined($scope.authenticationContext.login) || $scope.authenticationContext.login.length == 0) {
+                $scope._addErrorMessage("Login obligatoire");
+            } else if (angular.isUndefined($scope.authenticationContext.password) || $scope.authenticationContext.password.length == 0) {
+                $scope._addErrorMessage("Mot de passe obligatoire");
+            } else {
+                if ($scope.authenticationContext.type == "login") {
+                    $scope._login($scope.authenticationContext.login, $scope.authenticationContext.password);
+                } else {
+                    users.register($scope.authenticationContext.login, $scope.authenticationContext.password).then(function (result) {
+                        if (result.data.registered == false) {
+                            $scope._addErrorMessage(result.data.reason);
+                        } else {
+                            $scope._login($scope.authenticationContext.login, $scope.authenticationContext.password);
+                        }
+                    });
+                }
+            }
+        };
+
+        /* ********************************************* */
         /* **                 Startup                 ** */
         /* ********************************************* */
 
@@ -505,12 +577,6 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             $scope.selectProfile($scope.profiles[0]);
         }
 
-        users.whoAmI().then(function(result) {
-            $scope.user = {};
-            if (result.data.connected) {
-                $scope.user.remoteId = result.data.user['_id']['$id'];
-                $scope.user.login = result.data.user.login;
-                $scope.user.groups = result.data.user.groups;
-            }
-        });
+        $scope._whoAmI();
+
     }]);

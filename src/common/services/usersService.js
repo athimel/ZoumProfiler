@@ -6,5 +6,21 @@ angular.module('ZoumProfiler')
             return $http.get('rest/auth/whoami.php');
         };
 
+        users.logout = function() {
+            return $http.get('rest/auth/logout.php');
+        };
+
+        users.login = function(login, password) {
+            var data = "login=" + login;
+            data += "&password=" + password;
+            return $http.post('rest/auth/login.php', data);
+        };
+
+        users.register = function(login, password) {
+            var data = "login=" + login;
+            data += "&password=" + password;
+            return $http.post('rest/auth/register.php', data);
+        };
+
         return users;
     }]);

@@ -11,7 +11,7 @@ $usersColl = $db->users;
 $users = $usersColl->find(array('login' => $login));
 
 if ($users->count() > 0) {
-    echo '{"registered":false}';
+    echo '{"registered":false,"reason":"ALREADY_EXISTS"}';
 } else {
     $passwordHash = hash('sha256',$password);
     $usersColl->insert(array('login' => $login, 'password' => $passwordHash));

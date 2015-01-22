@@ -97,10 +97,36 @@
                         <span class="glyphicon glyphicon-cog"></span> Outil tactique
                     </button>
 
-                    <div class="authenticationbar" ng-if="user">
-                        <span ng-if="!user.remoteId">Vous n'êtes pas connecté</span>
-                        <span ng-if="user.remoteId">Connecté en tant que <b><abbr title="Groupes : {{user.groups|commaList}}">{{user.login}}</abbr></b></span>
+                    <div class="authentication-bar" ng-if="user && !authenticationContext.show">
+                        <span ng-if="!user.remoteId" class="auth-status">Vous n'êtes pas connecté</span>
+                        <button type="button" class="btn btn-xs btn-primary" ng-click="startLogin()" ng-if="!user.remoteId" title="Connexion">
+                            <span class="glyphicon glyphicon-log-in"></span>
+                        </button>
+                        <button type="button" class="btn btn-xs btn-default" ng-click="startRegistration()" ng-if="!user.remoteId" title="Créer un compte">
+                            <span class="glyphicon glyphicon-user"></span>
+                        </button>
+
+                        <span ng-if="user.remoteId" class="auth-status">Connecté en tant que <b><abbr title="Groupes : {{user.groups|commaList}}">{{user.login}}</abbr></b></span>
+                        <button type="button" class="btn btn-xs btn-danger" ng-click="logout()" ng-if="user.remoteId" title="Déconnexion">
+                            <span class="glyphicon glyphicon-log-out"></span>
+                        </button>
                     </div>
+                    <form class="authentication-form" ng-if="authenticationContext.show" role="form">
+                        <div class="form-group">
+                            <input class="form-control" type="text" placeholder="Login" ng-model="authenticationContext.login" ng-required/>
+                            <input class="form-control" type="password" placeholder="Mot de passe" ng-model="authenticationContext.password" ng-required/>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-sm btn-success" ng-click="submitAuthentication()">
+                                <span class="glyphicon glyphicon-save"></span> {{authenticationContext.type == "register" ? "Créer un compte" : "Connexion"}}
+                            </button>
+
+                            <button type="button" class="btn btn-sm btn-default" ng-click="cancelAuthentication()">
+                                <span class="glyphicon glyphicon-ban-cicle"></span> Annuler
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
