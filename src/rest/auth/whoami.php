@@ -1,3 +1,4 @@
+<?php header('Content-Type: application/json'); ?>
 {"connected":<?php
 session_start();
 $userId = $_SESSION['authenticatedUserId'];

@@ -1,3 +1,4 @@
+<?php header('Content-Type: application/json'); ?>
 {"result":<?php
 
 session_start();

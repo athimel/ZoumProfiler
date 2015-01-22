@@ -1,3 +1,4 @@
+<?php header('Content-Type: application/json'); ?>
 <?php
 $login = $_REQUEST["login"];
 $password = $_REQUEST["password"];

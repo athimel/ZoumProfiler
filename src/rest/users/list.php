@@ -1,3 +1,4 @@
+<?php header('Content-Type: application/json'); ?>
 {"users":<?php
 
     $m = new MongoClient();
