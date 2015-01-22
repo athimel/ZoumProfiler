@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
-    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', '$http', 'base',
-        function($scope, $window, $location, $timeout, $filter, $http, base) {
+    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', '$http', 'base', 'users',
+        function($scope, $window, $location, $timeout, $filter, $http, base, users) {
 
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
@@ -23,6 +23,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         $scope.profile;
         $scope.computed;
         $scope.messages = { success:[], warnings:[], errors:[] };
+        $scope.user;
 
         /* ********************************************* */
         /* **                 Profiles                ** */
@@ -504,4 +505,12 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             $scope.selectProfile($scope.profiles[0]);
         }
 
+        users.whoAmI().then(function(result) {
+            $scope.user = {};
+            if (result.data.connected) {
+                $scope.user.remoteId = result.data.user['_id']['$id'];
+                $scope.user.login = result.data.user.login;
+                $scope.user.groups = result.data.user.groups;
+            }
+        });
     }]);

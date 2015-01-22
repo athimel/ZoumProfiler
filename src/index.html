@@ -97,6 +97,10 @@
                         <span class="glyphicon glyphicon-cog"></span> Outil tactique
                     </button>
 
+                    <div class="authenticationbar" ng-if="user">
+                        <span ng-if="!user.remoteId">Vous n'êtes pas connecté</span>
+                        <span ng-if="user.remoteId">Connecté en tant que <b><abbr title="Groupes : {{user.groups|commaList}}">{{user.login}}</abbr></b></span>
+                    </div>
                 </div>
 
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">

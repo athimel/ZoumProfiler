@@ -285,3 +285,15 @@ span.profile-category {
     font-style: italic;
     margin-left: 5px;
 }
+
+.authenticationbar {
+    padding: 8px 15px;
+    position: fixed;
+    bottom: 0;
+    height: 46px;
+}
+
+.authenticationbar span {
+    font-style: italic;
+    color: dimgray;
+}
