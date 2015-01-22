@@ -20,6 +20,8 @@ if ($userId) {
             if ($existingProfile['_internal']['owner'] == $userId) {
                 $internal = $existingProfile['_internal'];
                 $profile = json_decode($profileJson, true);
+                unset($profile['$$hashKey']);
+                unset($profile['_id']);
                 $existingProfile = array_replace_recursive($existingProfile, $profile);
                 $existingProfile['_internal'] = $internal;
                 $profilesColl->update(array('_id' => new MongoId($profileId)), $existingProfile);
@@ -32,6 +34,7 @@ if ($userId) {
         }
     } else {
         $profile = json_decode($profileJson, true);
+        unset($profile['$$hashKey']);
         $profile['_internal'] = array();
         $profile['_internal']['owner'] = new MongoId($userId);
         $profilesColl->insert($profile);

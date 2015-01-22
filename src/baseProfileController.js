@@ -1,8 +1,10 @@
 'use strict';
 
 angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
-    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', 'base',
-        function($scope, $window, $location, $timeout, $filter, base) {
+    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', '$http', 'base',
+        function($scope, $window, $location, $timeout, $filter, $http, base) {
+
+        $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
         /* ********************************************* */
         /* **           Base stuff exposed            ** */
@@ -27,7 +29,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         /* ********************************************* */
 
         $scope.profiles = [];
-
+        $scope.profileTypes = ["local", "remote"];
 
         /* ********************************************* */
         /* **                 Messages                ** */
@@ -73,7 +75,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         /* **               Load & save               ** */
         /* ********************************************* */
 
-        $scope._loadFromStorage = function() {
+        $scope._loadAllFromLocalStorage = function() {
             var lsProfiles = localStorage.getItem("profiles");
             if(angular.isDefined(lsProfiles) && lsProfiles != null) {
                 $scope.profiles = angular.fromJson(lsProfiles);
@@ -86,7 +88,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 }
             });
 
-            // Because some profiles was created before I add "id"
+            // Because some profiles was created before I add "mouches"
             angular.forEach($scope.profiles, function(profile) {
                 if(angular.isUndefined(profile.mouches)) {
                     profile.mouches = {};
@@ -104,10 +106,97 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                     });
                 }
             });
+
+            // Mark each local profile as ... local !
+            angular.forEach($scope.profiles, function(profile) {
+                profile.type = "local";
+            });
+
         };
 
-        $scope._saveToStorage = function() {
-            localStorage.setItem("profiles", angular.toJson($scope.profiles));
+        $scope._loadAllFromServer = function() {
+            $http.get('rest/profiles/list.php')
+                .success(function(data) {
+                    if (!$scope.profiles) {
+                        $scope.profiles = [];
+                    }
+                    var remoteProfiles = data.profiles;
+                    angular.forEach(remoteProfiles, function(profile) {
+                        profile.type = "remote";
+                        $scope.profiles.push(profile);
+                    });
+                })
+                .error(function() {
+                    console.log("ERROR");
+                });
+        };
+
+        $scope._loadAllFromStorage = function() {
+            $scope.profiles = []; // reset list
+            $scope._loadAllFromLocalStorage();
+            $scope._loadAllFromServer();
+        };
+
+        $scope.refreshRemote = function() {
+            // TODO AThimel fetch only remote profiles and update local instances instead of replacing them
+            $scope._loadAllFromStorage();
+        };
+
+        $scope._saveAllToLocalStorage = function() {
+            var localProfiles = [];
+            angular.forEach($scope.profiles, function(profile) {
+                if (profile.type == "local") {
+                    localProfiles.push(profile);
+                }
+            });
+            localStorage.setItem("profiles", angular.toJson(localProfiles));
+        };
+
+        $scope._saveToServer = function(profile) {
+            profile.type = "remote";
+            var data = "profile=" + JSON.stringify(profile);
+            if (profile['_id'] && profile['_id']['$id']) {
+                data += "&profileId=" + profile['_id']['$id'];
+            }
+            $http.post('rest/profiles/save.php', data)
+                .success(function(data) {
+                    if (data.result == "CREATED" || data.result == "UPDATED") {
+                        profile['_id'] = data.profile['_id'];
+                    } else {
+                        $scope._addErrorMessage("Impossible d'enregistrer le profil : " + data.result);
+                    }
+                })
+                .error(function(error) {
+                    $scope._addErrorMessage("Impossible d'enregistrer le profil : " + error);
+                });
+        };
+
+        $scope._saveAllToServer = function() {
+            angular.forEach($scope.profiles, function(profile) {
+                if (profile.type == "remote") {
+                    $scope._saveToServer(profile);
+                }
+            });
+        };
+
+        $scope._save = function(profile) {
+            if (profile.type == "local") {
+                $scope._saveAllToLocalStorage();
+            } else {
+                $scope._saveToServer(profile);
+            }
+        };
+
+        $scope._saveAll = function() {
+            $scope._saveAllToLocalStorage();
+            $scope._saveAllToServer();
+        };
+
+        $scope.moveFromLocalToRemote = function() {
+            $scope.saveProfile(); // save to local storage
+            $scope.profile.type = "remote"; // set remote
+            $scope.saveProfile();
+            $scope._saveAllToLocalStorage(); // write to local storage
         };
 
         /* ********************************************* */
@@ -312,7 +401,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.addProfile = function() {
             $scope._reset();
-            var newProfile = { comps : {cdm1 : true}, id : $scope._randomId() };
+            var newProfile = { comps : {cdm1 : true}, id : $scope._randomId(), type : "local" };
             $scope.profiles.push(newProfile);
             $scope.selectProfile(newProfile);
         };
@@ -322,12 +411,13 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             var newProfile = angular.copy(profile);
             newProfile.profile = newProfile.profile + "-2";
             newProfile.id = $scope._randomId();
+            delete newProfile['_id']; // in case profile is already persisted remotely
             $scope.profiles.push(newProfile);
-            $scope._saveToStorage();
+            $scope._save(newProfile);
         };
 
         $scope.saveProfile = function() {
-            $scope._saveToStorage();
+            $scope._save($scope.profile);
             $scope.originalProfile = angular.copy($scope.profile);
         };
 
@@ -336,8 +426,9 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             var message = "Souhaitez-vous supprimer le profil " + $filter('prettyName')(profile) + " de manière définitive ?";
             if ($window.confirm(message)) {
                 $scope.profiles.splice($scope.profiles.indexOf(profile), 1);
-                $scope._saveToStorage();
+                $scope._saveAll();
                 delete $scope.compareContext.map[profile.id];
+                // TODO AThimel 22/01/2015 Implement proper delete (remote compatible)
             }
         };
 
@@ -394,7 +485,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         /* **                 Startup                 ** */
         /* ********************************************* */
 
-        $scope._loadFromStorage();
+        $scope._loadAllFromStorage();
 
         if ($location) {
             var value = $location.search();

@@ -279,3 +279,9 @@ tr:last-child td.versus {
 div.fight-box table.table thead tr td.versus {
     border-top: 1px dashed gray;
 }
+
+span.profile-category {
+    color: dimgray;
+    font-style: italic;
+    margin-left: 5px;
+}

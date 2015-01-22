@@ -91,7 +91,7 @@ angular.module('ZoumProfiler')
                 $scope._addWarningMessage("Un profil identique existe déjà dans votre liste de profils");
             } else {
                 $scope.profiles.push(newProfile);
-                $scope._saveToStorage();
+                $scope._save();
                 $scope._addSuccessMessage("Le profil <b>" + $filter('prettyName')(newProfile) + "</b> a bien été ajouté à votre liste de profils");
             }
             $scope._reset();

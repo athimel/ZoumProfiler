@@ -42,17 +42,18 @@
         <div class="container-fluid" ng-controller="BaseProfileController">
             <div class="row">
                 <div class="col-sm-3 col-md-2 sidebar">
-                    <div class="alert alert-warning">Attention, les profils que vous allez créer ne seront sauvegardés
-                        que quand vous cliquerez sur "Enregistrer le profil" ou quand vous sélectionnez un autre profil.
-                        <br>D'autre part, ils sont stockés (pour l'instant) dans votre navigateur uniquement, ce qui
-                        signifie que vous ne les retrouverez pas si vous utilisez un autre navigateur.
-                    </div>
                     <div class="alert alert-danger" ng-repeat="message in messages.errors" ng-bind-html="message" ng-click="removeMessage(message)"></div>
                     <div class="alert alert-warning" ng-repeat="message in messages.warnings" ng-bind-html="message" ng-click="removeMessage(message)"></div>
                     <div class="alert alert-success" ng-repeat="message in messages.success" ng-bind-html="message" ng-click="removeMessage(message)"></div>
 
-                    <ul class="nav nav-sidebar">
-                        <li ng-repeat="p in profiles | orderBy:['name','profile']"
+                    <ul class="nav nav-sidebar" ng-repeat="profileType in profileTypes">
+
+                        <span ng-if="profileType=='local'" class="profile-category">Profils stockés uniquement sur votre machine</span>
+                        <span ng-if="profileType=='remote'" class="profile-category">Profils stockés sur le serveur <button type="button" class="btn btn-sm btn-link" ng-click="refreshRemote()">
+                            <span class="glyphicon glyphicon-refresh"></span> refresh
+                        </button></span>
+
+                        <li ng-repeat="p in profiles | filter:{'type':profileType} | orderBy:['name','profile']"
                             ng-class="{true:'active', false:''}[profile == p]">
 
                             <input type="checkbox" value="" ng-model="compareContext.map[p.id]"/>
@@ -68,7 +69,7 @@
                                 </button>
 
                                 <button type="button" class="btn btn-xs btn-danger" ng-click="deleteProfile(p)"
-                                        title="Supprimer">
+                                        title="Supprimer" ng-disabled="p.type=='remote'">
                                     <span class="glyphicon glyphicon-trash"></span>
                                 </button>
                             </div>
@@ -93,7 +94,7 @@
 
                     <button type="button" class="btn btn-sm btn-primary" ng-click="startScheduler()"
                             ng-disabled="profiles.length == 0">
-                        <span class="glyphicon glyphicon-cog"></span> Simulateur
+                        <span class="glyphicon glyphicon-cog"></span> Outil tactique
                     </button>
 
                 </div>
@@ -148,6 +149,10 @@
 
                         <button type="button" class="btn btn-sm btn-default" ng-disabled="!hasModification()" ng-click="cancelModifications()">
                             <span class="glyphicon glyphicon-ban-circle"></span> Annuler les modifications
+                        </button>
+
+                        <button type="button" class="btn btn-sm btn-primary" ng-if="profile.type=='local'" ng-click="moveFromLocalToRemote()">
+                            <span class="glyphicon glyphicon-cloud-upload"></span> Transférer sur le serveur
                         </button>
                     </div>
 

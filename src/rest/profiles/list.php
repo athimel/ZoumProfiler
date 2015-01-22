@@ -35,7 +35,7 @@ $profiles = $profilesColl->find($filter);
 <?php
     // iterate through the results
     foreach ($profiles as $profile) {
-        unset($profile['_internal']);
+//        unset($profile['_internal']);
         echo "    ".json_encode($profile);
         if ($profiles->hasNext()) {
             echo ",";
