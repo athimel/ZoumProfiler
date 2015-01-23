@@ -190,10 +190,10 @@
 
                             <span class="title" ng-if="profile._internal.shares && profile._internal.shares.length > 0">Partages :</span>
                             <span ng-repeat="share in profile._internal.shares">
-                                <button type="button" class="btn btn-xs btn-default" ng-if="share.group && share.group == 'public'" ng-click="unshare(share)">
+                                <button type="button" class="btn btn-xs btn-default" ng-if="share.group && share.group == 'public'" ng-click="unshare(share)" title="Cliquez pour annuler ce partage">
                                     <span class="glyphicon glyphicon-globe"></span> Public
                                 </button>
-                                <button type="button" class="btn btn-xs btn-default" ng-if="share.group && share.group != 'public'" ng-click="unshare(share)">
+                                <button type="button" class="btn btn-xs btn-default" ng-if="share.group && share.group != 'public'" ng-click="unshare(share)" title="Cliquez pour annuler ce partage">
                                     <span class="glyphicon glyphicon-flag"></span> {{share.group}}
                                 </button>
                                 <button type="button" class="btn btn-xs btn-default" ng-if="share.user" ng-click="unshare(share)">
