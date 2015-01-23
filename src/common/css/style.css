@@ -89,10 +89,13 @@ thead tr td {
 
 .select-profile {
     cursor: pointer;
+    font-size: 13px;
 }
 
 .buttons {
     float: right;
+    margin-top: -5px;
+    margin-right: 3px;
 }
 .buttons > a {
     float:left;
@@ -104,7 +107,7 @@ thead tr td {
     bottom: 0;
     height: 46px;
     background-color: white;
-    width: 100%;
+    width: 80%;
     border-top: 1px solid #269abc;
 }
 
@@ -161,6 +164,7 @@ body {
 /* Hide for mobile, show later */
 .sidebar {
     display: none;
+    font-size: 12px;
 }
 @media (min-width: 768px) {
     .sidebar {
@@ -185,11 +189,10 @@ body {
     margin-left: -20px;
 }
 .nav-sidebar > li {
-    padding: 10px 15px;
+    padding: 5px 2px 5px 10px;
 }
 .nav-sidebar > li > a {
-    padding-right: 20px;
-    padding-left: 20px;
+    padding : 5px 60px 5px 5px;
     display: inline;
 }
 .nav-sidebar > .active,
@@ -278,4 +281,34 @@ tr:last-child td.versus {
 }
 div.fight-box table.table thead tr td.versus {
     border-top: 1px dashed gray;
+}
+
+span.profile-category {
+    color: dimgray;
+    font-style: italic;
+    margin-left: 5px;
+}
+
+.authentication-bar {
+    padding: 8px 15px;
+    position: fixed;
+    bottom: 0;
+    height: 46px;
+}
+
+.authentication-bar span.auth-status {
+    font-style: italic;
+    color: dimgray;
+}
+
+.authentication-form {
+    padding: 8px 15px;
+    position: fixed;
+    bottom: 0;
+}
+.shares {
+    float: right;
+}
+.shares .title {
+    font-style: italic;
 }

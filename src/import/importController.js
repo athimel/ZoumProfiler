@@ -90,8 +90,11 @@ angular.module('ZoumProfiler')
             if (profileAlreadyExists) {
                 $scope._addWarningMessage("Un profil identique existe déjà dans votre liste de profils");
             } else {
+                if (angular.isUndefined(newProfile.type)) {
+                    newProfile.type = "local";
+                }
                 $scope.profiles.push(newProfile);
-                $scope._saveToStorage();
+                $scope._save(newProfile);
                 $scope._addSuccessMessage("Le profil <b>" + $filter('prettyName')(newProfile) + "</b> a bien été ajouté à votre liste de profils");
             }
             $scope._reset();
@@ -125,7 +128,6 @@ angular.module('ZoumProfiler')
                 importDuringLast24h = (now - lastImport < 86400000);
                 $scope._addErrorMessage("Vous avez déjà fait un import de ce profil dans les dernières 24h.");
             }
-
 
             if (!importDuringLast24h) {
                 // FIXME AThimel 13/12/2014 This XHR success cascade is ugly, find a better way
