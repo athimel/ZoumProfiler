@@ -187,13 +187,13 @@
 
                         <span class="shares" ng-if="profile.type=='remote' && !shareContext.show">
 
-                            <span class="title" ng-if="!isOwner(profile)">Propriétaire :
+                            <span ng-if="!isOwner(profile)">
+                                <span class="title">Propriétaire :</span>
                                 <button type="button" class="btn btn-xs btn-default">
                                     <span class="glyphicon glyphicon-user"></span> {{usersIndex[profile._internal.owner['$id']].login}}
                                 </button>
+                                |
                             </span>
-
-                            |
 
                             <span class="title" ng-if="!profile._internal.shares || profile._internal.shares.length == 0">Non partagé</span>
 
