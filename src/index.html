@@ -208,7 +208,7 @@
                         <form class="shares form-inline" ng-if="profile.type=='remote' && shareContext.show" role="form">
                             <div class="form-group">
                                 <input class="form-control" type="text" id="share-user" ng-model="shareContext.user" placeholder="Nom d'utilisateur"/>
-                                <input class="form-control" type="text" id="share-group" ng-model="shareContext.group" placeholder="Groupe"/>
+                                <input class="form-control" type="text" id="share-group" ng-model="shareContext.group" placeholder='Nom du groupe ou "public"'/>
 
                                 <button type="button" class="btn btn-sm btn-success" ng-click="submitShare()">
                                     <span class="glyphicon glyphicon-share"></span> Partager

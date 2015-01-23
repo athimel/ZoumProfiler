@@ -79,21 +79,23 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         /* **               Load & save               ** */
         /* ********************************************* */
 
-        $scope._loadAllFromLocalStorage = function() {
-            var lsProfiles = localStorage.getItem("profiles");
-            if(angular.isDefined(lsProfiles) && lsProfiles != null) {
-                $scope.profiles = angular.fromJson(lsProfiles);
+        $scope._checkProfilesIntegrity = function(profiles) {
+            var profilesArray;
+            if (Array.isArray(profiles)) {
+                profilesArray = profiles;
+            } else {
+                profilesArray = [ profiles ];
             }
 
             // Because some profiles was created before I add "id"
-            angular.forEach($scope.profiles, function(profile) {
+            angular.forEach(profilesArray, function(profile) {
                 if(angular.isUndefined(profile.id)) {
                     profile.id = $scope._randomId();
                 }
             });
 
             // Because some profiles was created before I add "mouches"
-            angular.forEach($scope.profiles, function(profile) {
+            angular.forEach(profilesArray, function(profile) {
                 if(angular.isUndefined(profile.mouches)) {
                     profile.mouches = {};
                 }
@@ -102,7 +104,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             // Because some profiles was created when "de" was "de1"
             angular.forEach(base.comps, function(comp) {
                 if (comp.levels == 1) {
-                    angular.forEach($scope.profiles, function(profile) {
+                    angular.forEach(profilesArray, function(profile) {
                         if (profile.comps[comp.id + "1"] === true) {
                             delete profile.comps[comp.id + "1"];
                             profile.comps[comp.id] = true;
@@ -110,6 +112,26 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                     });
                 }
             });
+
+            // Check for '_internal' on remote profiles
+            angular.forEach(profilesArray, function(profile) {
+                if(angular.isUndefined(profile._internal)) {
+                    profile._internal = {};
+                }
+                if(angular.isUndefined(profile._internal.shares)) {
+                    profile._internal.shares = [];
+                }
+            });
+
+        };
+
+        $scope._loadAllFromLocalStorage = function() {
+            var lsProfiles = localStorage.getItem("profiles");
+            if(angular.isDefined(lsProfiles) && lsProfiles != null) {
+                $scope.profiles = angular.fromJson(lsProfiles);
+            }
+
+            $scope._checkProfilesIntegrity($scope.profiles);
 
             // Mark each local profile as ... local !
             angular.forEach($scope.profiles, function(profile) {
@@ -125,6 +147,9 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                         $scope.profiles = [];
                     }
                     var remoteProfiles = data.profiles;
+
+                    $scope._checkProfilesIntegrity(remoteProfiles);
+
                     angular.forEach(remoteProfiles, function(profile) {
                         profile.type = "remote";
                         $scope.profiles.push(profile);
@@ -166,6 +191,11 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 .success(function(data) {
                     if (data.result == "CREATED" || data.result == "UPDATED") {
                         profile['_id'] = data.profile['_id'];
+                        profile['_internal'] = data.profile['_internal'];
+
+                        $scope._checkProfilesIntegrity(profile);
+
+                        $scope._onProfileSaved(profile);
                     } else {
                         $scope._addErrorMessage("Impossible d'enregistrer le profil : " + data.result);
                     }
@@ -420,9 +450,15 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             $scope._save(newProfile);
         };
 
+        $scope._onProfileSaved = function(profile) {
+            if (!profile || profile == $scope.profile) {
+                $scope.originalProfile = angular.copy($scope.profile);
+            }
+        };
+
         $scope.saveProfile = function() {
             $scope._save($scope.profile);
-            $scope.originalProfile = angular.copy($scope.profile);
+            $scope._onProfileSaved();
         };
 
         $scope.deleteProfile = function(profile) {
