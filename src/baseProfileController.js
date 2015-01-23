@@ -591,12 +591,21 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             }
         };
 
+        $scope.isOwner = function(profile) {
+            if (profile.type != "remote" || angular.isUndefined(profile._internal.owner)) {
+                return false;
+            }
+            return $scope.user.remoteId == profile._internal.owner['$id'];
+        };
+
         /* ********************************************* */
         /* **                 Sharing                 ** */
         /* ********************************************* */
 
         $scope.startSharing = function() {
             $scope.shareContext.show = true;
+            delete $scope.shareContext.user;
+            delete $scope.shareContext.group;
         };
 
         $scope.submitShare = function() {
