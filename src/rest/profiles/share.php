@@ -9,7 +9,7 @@ if ($userId) {
     $m = new MongoClient();
     $db = $m->zoumprofiler;
 
-    $shareUser = $_REQUEST["user"];
+    $shareUser = $_REQUEST["login"];
     $shareGroup = $_REQUEST["group"];
     $profileId = $_REQUEST["profileId"];
 
@@ -28,7 +28,9 @@ if ($userId) {
                     array_push($shares, array('group' => $shareGroup));
                 }
                 if ($shareUser) {
-                    array_push($shares, array('user' => new MongoId($shareUser)));
+                    $usersColl = $db->users;
+                    $user = $usersColl->findOne(array('login' => $shareUser));
+                    array_push($shares, array('user' => $user['_id']));
                 }
                 $existingProfile['_internal']['shares'] = $shares;
                 $profilesColl->update(array('_id' => new MongoId($profileId)), $existingProfile);

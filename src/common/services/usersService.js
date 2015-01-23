@@ -22,5 +22,9 @@ angular.module('ZoumProfiler')
             return $http.post('rest/auth/register.php', data);
         };
 
+        users.list = function() {
+            return $http.get('rest/users/list.php');
+        };
+
         return users;
     }]);

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
-    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', '$http', 'base', 'users',
-        function($scope, $window, $location, $timeout, $filter, $http, base, users) {
+    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', '$http', 'base', 'users', 'sharing',
+        function($scope, $window, $location, $timeout, $filter, $http, base, users, sharing) {
 
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
@@ -21,7 +21,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         $scope.compareContext = { show : false, map : {} };
         $scope.schedulerContext = { show: false, target: {} };
         $scope.authenticationContext = { show: false };
-        $scope.loginContext = { show: false };
+        $scope.shareContext = { show: false };
         $scope.profile;
         $scope.computed;
         $scope.messages = { success:[], warnings:[], errors:[] };
@@ -33,6 +33,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.profiles = [];
         $scope.profileTypes = ["local", "remote"];
+        $scope.usersIndex = {};
 
         /* ********************************************* */
         /* **                 Messages                ** */
@@ -555,6 +556,40 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         };
 
         /* ********************************************* */
+        /* **                 Sharing                 ** */
+        /* ********************************************* */
+
+        $scope.startSharing = function() {
+            $scope.shareContext.show = true;
+        };
+
+        $scope.submitShare = function() {
+            sharing.share($scope.profile, $scope.shareContext.user, $scope.shareContext.group).then(function(result) {
+                var share = {};
+                if ($scope.shareContext.user && $scope.shareContext.user.length > 0) {
+                    share.user = {};
+                    $scope.usersIndex[$scope.shareContext.user] = { login:$scope.shareContext.user }; // FIXME Vieux hack !
+                    share.user['$id'] = $scope.shareContext.user;
+                }
+                if ($scope.shareContext.group && $scope.shareContext.group.length > 0) {
+                    share.group = $scope.shareContext.group;
+                }
+                $scope.profile._internal.shares.push(share);
+                $scope.cancelShare();
+            });
+        };
+
+        $scope.cancelShare = function() {
+            $scope.shareContext.show = false;
+        };
+
+        $scope.unshare = function(share) {
+            sharing.unshare($scope.profile, share.user, share.group).then(function(result) {
+                $scope.profile._internal.shares.splice($scope.profile._internal.shares.indexOf(share), 1);
+            });
+        };
+
+        /* ********************************************* */
         /* **                 Startup                 ** */
         /* ********************************************* */
 
@@ -579,4 +614,9 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
 
         $scope._whoAmI();
 
+        users.list().then(function(result) {
+            angular.forEach(result.data.users, function(user) {
+                $scope.usersIndex[user['_id']['$id']] = user;
+            });
+        });
     }]);

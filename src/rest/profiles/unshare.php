@@ -9,7 +9,7 @@ if ($userId) {
     $m = new MongoClient();
     $db = $m->zoumprofiler;
 
-    $shareUser = $_REQUEST["user"];
+    $shareUser = $_REQUEST["userId"];
     $shareGroup = $_REQUEST["group"];
     $profileId = $_REQUEST["profileId"];
 

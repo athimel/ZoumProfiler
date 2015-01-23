@@ -104,7 +104,7 @@ thead tr td {
     bottom: 0;
     height: 46px;
     background-color: white;
-    width: 100%;
+    width: 80%;
     border-top: 1px solid #269abc;
 }
 
@@ -302,4 +302,10 @@ span.profile-category {
     padding: 8px 15px;
     position: fixed;
     bottom: 0;
+}
+.shares {
+    float: right;
+}
+.shares .title {
+    font-style: italic;
 }
