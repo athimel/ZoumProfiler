@@ -24,6 +24,8 @@ angular.module('ZoumProfiler')
                 "Geck'oo majestueux":40,
                 Glouton:20,
                 Gnu:1,
+                "Gnu Sauvage":1,
+                "Gnu Domestique":1,
                 Gowap:1,
                 "Gowap Apprivoisé":1,
                 "Gowap Sauvage":1,
@@ -61,7 +63,9 @@ angular.module('ZoumProfiler')
                 Fantôme:24,
                 Goule:4,
                 Liche:50,
+                Mohrg:35,
                 Momie:4,
+                "Nâ-Hàniym-Hééé":0,
                 Nécrochore:37,
                 Nécromant:39,
                 Nécrophage:8,
@@ -76,6 +80,7 @@ angular.module('ZoumProfiler')
                 "Anaconda des Catacombes":8,
                 Basilisk:11,
                 Behir:14,
+                Beholder:50,
                 Bondin:9,
                 "Bouj'Dla":19,
                 "Bouj'Dla Placide":37,
@@ -91,6 +96,7 @@ angular.module('ZoumProfiler')
                 Djinn:29,
                 Effrit:27,
                 "Esprit-Follet":16,
+                Familier:1,
                 "Feu Follet":20,
                 "Fungus Géant":9,
                 "Fungus Violet":4,
@@ -99,12 +105,15 @@ angular.module('ZoumProfiler')
                 Grouilleux:4,
                 Grylle:31,
                 Harpie:4,
+                Hydre:50,
                 "Lézard Géant":5,
                 Manticore:9,
                 Mimique:6,
                 "Monstre Rouilleur":3,
                 "Mouch'oo":14,
+                "Mouch'oo Sauvage":14,
                 "Mouch'oo Majestueux":33,
+                "Mouch'oo Majestueux Sauvage":33,
                 Naga:10,
                 "Ombre de Roches":13,
                 Phoenix:32,
@@ -122,16 +131,23 @@ angular.module('ZoumProfiler')
                 "Abishaii Noir":10,
                 "Abishaii Rouge":23,
                 "Abishaii Vert":15,
+                Balrog:50,
                 Barghest:36,
                 Behemoth:34,
                 Daemonite:27,
                 Diablotin:5,
                 "Elementaire d'Air":23,
+                "Elémentaire d'Air":23,
                 "Elementaire d'Eau":17,
+                "Elémentaire d'Eau":17,
                 "Elementaire de Feu":21,
+                "Elémentaire de Feu":21,
                 "Elementaire de Terre":21,
+                "Elémentaire de Terre":21,
                 "Elementaire du Chaos":26,
+                "Elémentaire du Chaos":26,
                 "Elementaire Magmatique":0,
+                "Elémentaire Magmatique":0,
                 Erinyes:7,
                 Fumeux:22,
                 Gritche:39,
@@ -158,6 +174,10 @@ angular.module('ZoumProfiler')
                 Gnoll:5,
                 Goblin:4,
                 Goblours:4,
+                "Golem de cuir":1,
+                "Golem de mithril":1,
+                "Golem de métal":1,
+                "Golem de papier":1,
                 "Golem d'Argile":15,
                 "Golem de Chair":8,
                 "Golem de Fer":31,
@@ -181,6 +201,8 @@ angular.module('ZoumProfiler')
                 Sphinx:30,
                 "Tigre-Garou":12,
                 Titan:26,
+                "Veskan du Chaos":14,
+                "Veskan Du Chaos":14,
                 Yéti:8,
                 "Yuan-ti":15
             }
@@ -256,18 +278,25 @@ angular.module('ZoumProfiler')
         $scope.templates = {
             Alchimiste:0,
             Agressif:1,
+            Agressive:1,
             Alpha:11,
-            Archaique:-1,
+            Archaïque:-1,
             Archiatre:2,
             Attentionné:2,
+            Attentionnée:2,
             Barbare:1,
             Berserker:3,
             Champion:4,
+            Championne:4,
             Cogneur:2,
+            Cogneuse:2,
             Colossal:7,
+            Colossale:7,
             Coriace:1,
             Corrompu:1,
+            Corrompue:1,
             Cracheur:2,
+            Cracheuse:2,
             "de Premier Cercle":-1,
             "de Second Cercle":0,
             "de Troisième Cercle":2,
@@ -275,37 +304,49 @@ angular.module('ZoumProfiler')
             "de Cinquième Cercle":5,
             "des Abysses":3,
             Effrayé:-1,
+            Effrayée:-1,
             Enragé:3,
+            Enragée:3,
             Esculape:2,
             Ethéré:3,
             Fanatique:2,
             Fou:1,
             Fouisseur:0,
+            Fouisseuse:0,
             Frénétique:3,
             Frondeur:2,
             Fustigateur:2,
+            Fustigatrice:2,
             Gardien:20,
             Gargantuesque:3,
             Gigantesque:1,
             "Grand Frondeur":4,
             Gros:0,
+            Grosse:0,
             Guérisseur:2,
+            Guérisseuse:2,
             Guerrier:1,
+            Guerrière:1,
             Héros:5,
             Homochrome:0,
             Homomorphe:0,
             Implacable:3,
             Invocateur:5,
+            Invocatrice:5,
             Maitre:8,
             Maître:8,
+            Maîtresse:8,
             Lobotomisateur:2,
             Malade:-1,
             Médicastre:2,
             Mentat:2,
             Morticole:2,
             Mutant:2,
+            Mutante:2,
             Nécromant:5,
+            Nécromante:5,
             Ouvrier:0,
+            Ouvrière:0,
             Paysan:-1,
             Petit:-1,
             Petite:-1,
@@ -315,14 +356,20 @@ angular.module('ZoumProfiler')
             Psychophage:2,
             Reine:11,
             Ronfleur:2,
+            Ronfleuse:2,
             Scout:2,
             Shaman:0,
             Soldat:2,
             Sorcier:0,
+            Sorcière:0,
             Spectral:0,
+            Spectrale:0,
             Strident:3,
+            Stridente:3,
             Traqueur:1,
+            Traqueuse:1,
             Voleur:2,
+            Voleuse:2,
             Vorace:1
         };
         //+0	Bébé			Initial		Nouveau	Larve		Nouveau		Naissant
@@ -373,14 +420,31 @@ angular.module('ZoumProfiler')
 
         $scope._extractTemplate = function(monster) {
             var name = monster.baseName.trim() + " ";
-            var templatesNames = Object.keys($scope.templates);
-            for (var i=0; i<templatesNames.length; i++) {
-                var template = templatesNames[i];
-                var index = name.indexOf(template + " "); // +" " Pour s'assurer que le mot est complet
-                if (index >= 0) {
-                    monster.template = template;
-                    monster.baseName = (name.substr(0, index) + name.substr(index + monster.template.length)).trim();
-                    break;
+            if (name.substr(0, 6) == "Archi-") {
+                monster.template = name.substr(6).trim();
+                monster.baseName = name.substr(6).trim();
+            } else {
+                var templatesNames = Object.keys($scope.templates);
+                for (var i = 0; i < templatesNames.length; i++) {
+                    var template = templatesNames[i];
+                    var index = name.indexOf(template + " "); // +" " Pour s'assurer que le mot est complet
+                    if (index >= 0) {
+                        monster.template = template;
+                        monster.baseName = (name.substr(0, index) + name.substr(index + monster.template.length)).trim();
+
+                        // Cas particulier du Nécromant (template et nom de monstre)
+                        if (monster.baseName.length == 0) {
+                            delete monster.template;
+                            monster.baseName = name.trim();
+                        }
+
+                        // Cas particulier du Frondeur vs Grand Frondeur
+                        if (monster.template == "Frondeur" && monster.baseName.substr(0, 5) == "Grand") {
+                            monster.template = "Grand Frondeur";
+                            monster.baseName = name.substr(14).trim();
+                        }
+                        break;
+                    }
                 }
             }
         };
