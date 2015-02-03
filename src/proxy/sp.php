@@ -1,3 +1,4 @@
+<?php header('Content-Type: text/plain; charset=utf-8'); ?>
 <?php
 $trollId = $_REQUEST["trollId"];
 $trollPassword = $_REQUEST["trollPassword"];
@@ -41,6 +42,35 @@ echo $data;
 //            "S;28;67;0;1";
 //} else if ($script == "SP_ProfilPublic2.php") {
 //    $data = "104259;DevelZimZoum;Kastar;43;2011-01-21 14:07:48;;http://zoumbox.org/mh/syndikhd/104259_300.png;49;539;12;1900;20;0";
+//} else if ($script == "SP_Vue2.php") {
+//    $data = "#DEBUT TROLLS\n".
+//               "49604;81;-40;-86\n".
+//               "86133;81;-40;-86\n".
+//               "95636;80;-40;-86\n".
+//               "100160;81;-40;-86\n".
+//               "104259;82;-39;-86\n".
+//               "105395;81;-40;-86\n".
+//               "89138;82;-38;-85\n".
+//               "90568;79;-41;-85\n".
+//               "#FIN TROLLS\n".
+//               "#DEBUT MONSTRES\n".
+//               "5285246;Petit Foudroyeur [Larve];79;-41;-85\n".
+//               "5231059;Nécrochore Nécromant [Vénérable];81;-40;-86\n".
+//               "5265205;Petite Ame-en-peine [Ancienne];81;-37;-86\n".
+//               "5290176;Fantôme Corrompu [Naissant];81;-36;-86\n".
+//               "5279870;Spectre Corrompu [Naissant];81;-36;-86\n".
+//               "5280914;Ame-en-peine [Naissante];81;-36;-86\n".
+//               "5285516;Ame-en-peine [Naissante];81;-36;-86\n".
+//               "5288135;Ombre [Naissante];81;-36;-86\n".
+//               "5274669;Goule [Récente];81;-35;-86\n".
+//               "5182595;Effrit Colossal [Doyen];82;-41;-86\n".
+//               "5286997;Fantôme [Naissant];82;-37;-85\n".
+//               "5292767;Goule [Naissante];84;-35;-85\n".
+//               "5284419;Maître Ectoplasme [Naissant];84;-34;-85\n".
+//               "#FIN MONSTRES\n".
+//               "#DEBUT ORIGINE\n".
+//               "5;82;-39;-86\n".
+//               "#FIN ORIGINE";
 //} else {
 //    $data = "WTF ? ".$script;
 //}
