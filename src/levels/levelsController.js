@@ -444,6 +444,7 @@ angular.module('ZoumProfiler')
                         var view = $scope._parseView($scope.newViewContext.spTrollId, data);
                         $scope.views.push(view);
                         $scope.selectView(view);
+                        $scope._saveViewToServer(view);
                     }
 
                 }).
@@ -452,6 +453,38 @@ angular.module('ZoumProfiler')
                 });
 
         };
+
+
+
+        $scope._loadAllViewsFromServer = function() {
+            $http.get('rest/views/list.php')
+                .success(function(data) {
+
+                    $scope.views = data.views;
+
+                })
+                .error(function() {
+                    console.log("ERROR");
+                });
+        };
+
+        $scope._saveViewToServer = function(view) {
+            var data = "view=" + JSON.stringify(view);
+            $http.post('rest/views/save.php', data)
+                .success(function(data) {
+                    console.log(data);
+                    if (data.result != "CREATED") {
+                        $scope._addErrorMessage("Impossible d'enregistrer la vue : " + data.result);
+                    }
+                })
+                .error(function(error) {
+                    $scope._addErrorMessage("Impossible d'enregistrer la vue : " + error);
+                });
+        };
+
+        $scope._loadAllViewsFromServer();
+
+
 
     }]);
 
