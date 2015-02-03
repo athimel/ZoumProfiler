@@ -13,7 +13,7 @@ angular.module('ZoumProfiler')
 
         $scope.selectedView;
         $scope.views = [];
-        $scope.levelContext = { minLevel:0, maxLevel:99 };
+        $scope.levelContext = { minLevel:0, maxLevel:99, includeGowap:false };
 
         $scope.monsters = {
             Animal: {
@@ -25,6 +25,8 @@ angular.module('ZoumProfiler')
                 Glouton:20,
                 Gnu:1,
                 Gowap:1,
+                "Gowap Apprivoisé":1,
+                "Gowap Sauvage":1,
                 "Lapin Blanc":1,
                 "Rat Géant":2,
                 Sagouin:3,
@@ -308,6 +310,7 @@ angular.module('ZoumProfiler')
             Petit:-1,
             Petite:-1,
             Planque:0,
+            Planqué:0,
             Prince:8,
             Psychophage:2,
             Reine:11,
@@ -363,7 +366,8 @@ angular.module('ZoumProfiler')
         $scope._extractAge = function(monster) {
             var name = monster.name.trim();
             var index = name.indexOf("[");
-            monster.age = name.substr(index + 1, name.length - index - 2).trim();
+            var endIndex = name.indexOf("]", index);
+            monster.age = name.substr(index + 1, endIndex - index - 1).trim();
             monster.baseName = name.substr(0, index).trim();
         };
 
@@ -392,6 +396,9 @@ angular.module('ZoumProfiler')
                     monster.baseNival = $scope.monsters[family][name];
                     break;
                 }
+            }
+            if (!monster.family) {
+                console.error(monster);
             }
         };
 

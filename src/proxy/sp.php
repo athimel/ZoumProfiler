@@ -1,5 +1,5 @@
-<?php header('Content-Type: text/plain; charset=utf-8'); ?>
-<?php
+<?php header('Content-Type: text/plain; charset=windows-1252'); ?>
+<?php //header('Content-Type: text/plain; charset=utf-8');
 $trollId = $_REQUEST["trollId"];
 $trollPassword = $_REQUEST["trollPassword"];
 $script = $_REQUEST["script"];
