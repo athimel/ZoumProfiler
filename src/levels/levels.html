@@ -44,12 +44,17 @@
 
             <div class="form-group">
 
-                <label for="includeGowap" class="col-sm-2 control-label">Gowap ?</label>
+                <label for="maxDistance" class="col-sm-1 control-label">Distance</label>
+                <div class="col-xs-1">
+                    <input type="number" id="maxDistance" ng-model="levelContext.maxDistance" class="carac" min="0"/>
+                </div>
+
+                <label for="includeGowap" class="col-sm-1 control-label">Gowap ?</label>
                 <div class="col-xs-1">
                     <input type="checkbox" id="includeGowap" ng-model="levelContext.includeGowap"/>
                 </div>
 
-                <label for="minLevel" class="col-sm-2 control-label">Nival min.</label>
+                <label for="minLevel" class="col-sm-1 control-label">Nival min.</label>
                 <div class="col-xs-1">
                     <input type="number" id="minLevel" ng-model="levelContext.minLevel" class="carac" min="0" max="99"
                            ng-change="minLevelChanged()"/>

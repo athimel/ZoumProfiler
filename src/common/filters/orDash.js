@@ -2,7 +2,7 @@ angular.module('ZoumProfiler')
     .filter('orDash', function() {
         return function(input) {
             var result;
-            if (input) {
+            if (angular.isDefined(input)) {
                 result = input;
             } else {
                 result = '-';

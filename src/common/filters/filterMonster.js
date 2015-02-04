@@ -5,14 +5,17 @@ angular.module('ZoumProfiler')
             var includeGowap = levelContext.includeGowap;
             var lvlMin = levelContext.minLevel;
             var lvlMax = levelContext.maxLevel;
+            var maxDistance = levelContext.maxDistance;
             angular.forEach(monsters, function(monster) {
-                if (!monster.nival || ((!lvlMin || monster.nival >= lvlMin) && (!lvlMax || monster.nival <= lvlMax))) {
-                    var isAGowap = monster.baseName.substr(0, 5) == "Gowap";
-                    //console.log(monster.baseName + " -> nival : " + monster.nival);
-                    //console.log("isAGowap?" + isAGowap);
-                    //console.log("includeGowap?" + includeGowap);
-                    if (!isAGowap || includeGowap) {
-                        result.push(monster);
+                if (!monster.distance || monster.distance <= maxDistance) {
+                    if (angular.isUndefined(monster.nival) || ((angular.isUndefined(lvlMin) || monster.nival >= lvlMin) && (angular.isUndefined(lvlMax) || monster.nival <= lvlMax))) {
+                        var isAGowap = monster.baseName.substr(0, 5) == "Gowap";
+                        //console.log(monster.baseName + " -> nival : " + monster.nival);
+                        //console.log("isAGowap?" + isAGowap);
+                        //console.log("includeGowap?" + includeGowap);
+                        if (!isAGowap || includeGowap) {
+                            result.push(monster);
+                        }
                     }
                 }
             });

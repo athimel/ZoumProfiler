@@ -13,7 +13,7 @@ angular.module('ZoumProfiler')
 
         $scope.selectedView;
         $scope.views = [];
-        $scope.levelContext = { minLevel:10, maxLevel:99, includeGowap:false };
+        $scope.levelContext = { minLevel:10, maxLevel:99, includeGowap:false, maxDistance: 20 };
 
         $scope.monsters = {
             Animal: {
@@ -425,6 +425,8 @@ angular.module('ZoumProfiler')
         };
 
         $scope._extractTemplate = function(monster) {
+            delete monster.template;
+
             var name = monster.baseName.trim() + " ";
             if (name.substr(0, 6) == "Archi-") {
                 monster.template = name.substr(6).trim();
@@ -456,6 +458,10 @@ angular.module('ZoumProfiler')
         };
 
         $scope._extractFamilyAndBaseNival = function(monster) {
+            delete monster.family;
+            delete monster.baseNival;
+            delete monster.nival;
+
             var name = monster.baseName.trim();
 
             var familyNames = Object.keys($scope.monsters);
@@ -473,6 +479,9 @@ angular.module('ZoumProfiler')
         };
 
         $scope._computeMonsterDetails = function(origin, monster) {
+
+            delete monster.templateBonus;
+            delete monster.ageBonus;
 
             $scope._extractAge(monster);
             $scope._extractTemplate(monster);
@@ -498,6 +507,10 @@ angular.module('ZoumProfiler')
                 monster.horizontalDistance = Math.max(xDistance, yDistance);
                 monster.verticalDistance = nDistance;
                 monster.distance = Math.max(monster.horizontalDistance, monster.verticalDistance);
+            }
+
+            if (angular.isUndefined(monster.nival) || angular.isUndefined(monster.ageBonus)) {
+                console.error(monster);
             }
         };
 
@@ -532,19 +545,19 @@ angular.module('ZoumProfiler')
 
                         var cells = line.split(';');
 
-                        var monster = {};
-
-                        monster.id = cells[0];
-                        monster.name = cells[1];
-                        monster.posX = parseInt(cells[2]);
-                        monster.posY = parseInt(cells[3]);
-                        monster.posN = parseInt(cells[4]);
+                        var monster = {
+                            id: parseInt(cells[0]),
+                            name: cells[1],
+                            posX: parseInt(cells[2]),
+                            posY: parseInt(cells[3]),
+                            posN: parseInt(cells[4])
+                        };
 
                         result.monsters.push(monster);
                     } else if (inOriginPart) {
                         var cells = line.split(';');
 
-                        result.distance = cells[0];
+                        result.distance = parseInt(cells[0]);
                         result.origin = {
                             x: parseInt(cells[1]),
                             y: parseInt(cells[2]),
@@ -591,6 +604,9 @@ angular.module('ZoumProfiler')
                 .success(function(data) {
 
                     $scope.views = data.views;
+                    angular.forEach($scope.views, function(view) {
+                        view.refreshed = false;
+                    });
 
                 })
                 .error(function() {
