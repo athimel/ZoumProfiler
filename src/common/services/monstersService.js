@@ -2,6 +2,7 @@ angular.module('ZoumProfiler')
     .factory('monsters', function () {
         var monsters = {};
 
+        // Nivals des monstres, catégorisés par famille
         monsters.families = {
             Animal: {
                 "Chauve-Souris":3,
@@ -208,73 +209,7 @@ angular.module('ZoumProfiler')
             }
         };
 
-        //Alchimiste
-        //Agressif				+1
-        //Alpha				+11
-        //Archaique			-1
-        //Archiatre			+2
-        //Attentionné			+2
-        //Barbare				+1
-        //Berserker			+3
-        //Champion			+4
-        //Cogneur			+2
-        //Colossal			+7
-        //Coriace				+1
-        //Corrompu			+1
-        //Cracheur			+2
-        //de Premier Cercle	-1
-        //de Second Cercle	+0
-        //de Troisième Cercle	+2
-        //de Quatrième Cercle	+4
-        //de Cinquième Cercle	+5
-        //des Abysses			+3
-        //Effrayé				-1
-        //Enragé				+3
-        //Esculape			+2
-        //Ethéré				+3
-        //Fanatique			+2
-        //Fou					+1
-        //Fouisseur			+0
-        //Frénétique			+3
-        //Frondeur			+2
-        //Fustigateur			+2
-        //Gardien				+20
-        //Gargantuesque		+3
-        //Gigantesque			+1
-        //Grand Frondeur		+4
-        //Gros				+0
-        //Guérisseur			+2
-        //Guerrier				+1
-        //Héros				+5
-        //Homochrome	 	+0
-        //Homomorphe	 	+0
-        //Implacable			+3
-        //Invocateur			+5	(avant +3)
-        //Maitre				+8
-        //Lobotomisateur		+2
-        //Malade				-1
-        //Médicastre			+2
-        //Mentat				+2
-        //Morticole			+2
-        //Mutant				+2
-        //Nécromant			+5
-        //Ouvrier				+0
-        //Paysan				-1
-        //Petit				-1
-        //Planque	 			+0
-        //Prince				+8
-        //Psychophage		+2
-        //Reine				+11
-        //Ronfleur				+2
-        //Scout				+2 (avant +1)
-        //Shaman				+0
-        //Soldat				+2 (avant +3)
-        //Sorcier				+0
-        //Spectral	 			+0
-        //Strident				+3
-        //Traqueur			+1
-        //Voleur				+2
-        //Vorace				+1
+        // Templates et bonus par template
         monsters.templates = {
             Alchimiste:0,
             Agressif:1,
@@ -377,22 +312,91 @@ angular.module('ZoumProfiler')
             Voleuse:2,
             Vorace:1
         };
-        //+0	Bébé			Initial		Nouveau	Larve		Nouveau		Naissant
-        //+1	Enfançon		Novice		Jeune		Immature	Jeune		Récent
-        //+2	Jeune			Mineur		Adulte		Juvénile		Adulte		Ancien
-        //+3	Adulte			Favori		Vétéran		Imago		Vétéran		Vénérable
-        //+4	Mature			Majeur		Briscard		Développé	Briscard		Séculaire
-        //+5	Chef de Harde	Supérieur	Doyen		Mûr			Doyen		Antique
-        //+6	Ancien			Suprême	Légendaire	Accompli	Légendaire	Ancestral
-        //+7	Ancêtre			Ultime		Mythique	Achevé		Mythique	Antédiluvien
 
+        // Âge des monstres et bonus par âge (catégorisé par famille)
         monsters.ages = {
-            Animal: {Bébé:0, Enfançon:1, Jeune:2, Adulte:3, Mature:4, "Chef de Harde":5, "Chef de harde":5, Ancien:6, Ancienne:6, Ancêtre:7},
-            Démon: {Initial:0, Initiale:0, Novice:1, Mineur:2, Mineure:2, Favori:3, Favorite:3, Majeur:4, Majeure:4, Supérieur:5, Supérieure:5, Suprême:6, Ultime:7},
-            Humanoïde: {Nouveau:0, Nouvelle:0, Jeune:1, Adulte:2, Vétéran:3, Briscard:4, Briscarde:4, Doyen:5, Doyenne:5, Légendaire:6, Mythique:7},
-            Insecte: {Larve:0, Immature:1, Juvénile:2, Imago:3, Développé:4, Développée:4, Mûr:5, Mûre:5, Accompli:6, Accomplie:6, Achevé:7, Achevée:7},
-            Monstre: {Nouveau:0, Nouvelle:0, Jeune:1, Adulte:2, Vétéran:3, Briscard:4, Briscarde:4, Doyen:5, Doyenne:5, Légendaire:6, Mythique:7},
-            "Mort-Vivant": {Naissant:0, Naissante:0, Récent:1, Récente:1, Ancien:2, Ancienne:2, Vénérable:3, Séculaire:4, Antique:5, Ancestral:6, Ancestrale:6, Antédiluvien:7, Antédiluvienne:7}
+            Animal: {
+                Bébé:0,
+                Enfançon:1,
+                Jeune:2,
+                Adulte:3,
+                Mature:4,
+                "Chef de Harde":5,
+                "Chef de harde":5,
+                Ancien:6,
+                Ancienne:6,
+                Ancêtre:7
+            },
+            Démon: {
+                Initial:0,
+                Initiale:0,
+                Novice:1,
+                Mineur:2,
+                Mineure:2,
+                Favori:3,
+                Favorite:3,
+                Majeur:4,
+                Majeure:4,
+                Supérieur:5,
+                Supérieure:5,
+                Suprême:6,
+                Ultime:7
+            },
+            Humanoïde: {
+                Nouveau:0,
+                Nouvelle:0,
+                Jeune:1,
+                Adulte:2,
+                Vétéran:3,
+                Briscard:4,
+                Briscarde:4,
+                Doyen:5,
+                Doyenne:5,
+                Légendaire:6,
+                Mythique:7
+            },
+            Insecte: {
+                Larve:0,
+                Immature:1,
+                Juvénile:2,
+                Imago:3,
+                Développé:4,
+                Développée:4,
+                Mûr:5,
+                Mûre:5,
+                Accompli:6,
+                Accomplie:6,
+                Achevé:7,
+                Achevée:7
+            },
+            Monstre: {
+                Nouveau:0,
+                Nouvelle:0,
+                Jeune:1,
+                Adulte:2,
+                Vétéran:3,
+                Briscard:4,
+                Briscarde:4,
+                Doyen:5,
+                Doyenne:5,
+                Légendaire:6,
+                Mythique:7
+            },
+            "Mort-Vivant": {
+                Naissant:0,
+                Naissante:0,
+                Récent:1,
+                Récente:1,
+                Ancien:2,
+                Ancienne:2,
+                Vénérable:3,
+                Séculaire:4,
+                Antique:5,
+                Ancestral:6,
+                Ancestrale:6,
+                Antédiluvien:7,
+                Antédiluvienne:7
+            }
         };
 
         return monsters;
