@@ -1,7 +1,10 @@
 angular.module('ZoumProfiler')
-    .filter('checkMonster', function() {
-        return function(monsters, lvlMin, lvlMax, includeGowap) {
+    .filter('filterMonster', function() {
+        return function(monsters, levelContext) {
             var result = [];
+            var includeGowap = levelContext.includeGowap;
+            var lvlMin = levelContext.minLevel;
+            var lvlMax = levelContext.maxLevel;
             angular.forEach(monsters, function(monster) {
                 if (!monster.nival || ((!lvlMin || monster.nival >= lvlMin) && (!lvlMax || monster.nival <= lvlMax))) {
                     var isAGowap = monster.baseName.substr(0, 5) == "Gowap";

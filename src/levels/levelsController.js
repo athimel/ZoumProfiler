@@ -13,7 +13,7 @@ angular.module('ZoumProfiler')
 
         $scope.selectedView;
         $scope.views = [];
-        $scope.levelContext = { minLevel:0, maxLevel:99, includeGowap:false };
+        $scope.levelContext = { minLevel:10, maxLevel:99, includeGowap:false };
 
         $scope.monsters = {
             Animal: {

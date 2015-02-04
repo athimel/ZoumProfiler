@@ -77,7 +77,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="m in selectedView.monsters|checkMonster:levelContext.minLevel:levelContext.maxLevel:levelContext.includeGowap">
+                <tr ng-repeat="m in selectedView.monsters|filterMonster:levelContext">
                     <td>{{m.id}}</td>
                     <td>{{m.name}}</td>
                     <td>X={{m.posX}}|Y={{m.posY}}|N={{m.posN}}</td>
@@ -85,7 +85,7 @@
                     <td>{{m.baseName}} ({{m.baseNival}})</td>
                     <td>{{m.template|orDash}} <span ng-if="m.template">({{m.templateBonus|addSign}})</span></td>
                     <td>{{m.age}} ({{m.ageBonus|addSign}})</td>
-                    <td>{{m.nival}}</td>
+                    <td>{{m.nival|orDash}}</td>
                 </tr>
                 </tbody>
             </table>
