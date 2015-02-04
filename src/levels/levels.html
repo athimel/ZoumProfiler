@@ -92,7 +92,6 @@
                     <td>Id</td>
                     <td>Nom</td>
                     <td>Position</td>
-                    <td>Famille</td>
                     <td>Nom de base</td>
                     <td>Template</td>
                     <td>Âge</td>
@@ -100,17 +99,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="m in selectedView.monsters|filterMonster:levelContext|orderBy:'distance'">
+                <tr ng-repeat="m in selectedView.monsters|filterMonster:levelContext|orderBy:'distance'" class="{{m.nival >= 50 ? 'best':''}}">
                     <td ng-if="selectedView.origin">{{m.distance}}</td>
                     <td>{{m.id}}</td>
                     <td>{{m.name}}</td>
                     <td>X={{m.posX}}|Y={{m.posY}}|N={{m.posN}}</td>
-                    <td>{{m.family}}</td>
-                    <td>{{m.baseName}} ({{m.baseNival}})</td>
+                    <td><abbr title="{{m.family}}">{{m.baseName}}</abbr> ({{m.baseNival}})</td>
                     <td>{{m.template|orDash}} <span ng-if="m.template">({{m.templateBonus|addSign}})</span></td>
                     <td>{{m.age}} ({{m.ageBonus|addSign}})</td>
                     <td>{{m.nival|orDash}}</td>
                 </tr>
+                <tr ng-if="levelContext.filteredMonstersCount == 0" class="empty"><td colspan="8">Aucun monstre ne correspond à vos filtres</td></tr>
                 </tbody>
             </table>
             <!--<ul>-->

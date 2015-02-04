@@ -41,7 +41,7 @@ textarea.export-small {
 input.carac {
     width: 50px;
 }
-td.best {
+td.best, tr.best td {
     font-weight: bold;
 }
 th.compare-title {
