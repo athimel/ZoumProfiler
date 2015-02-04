@@ -11,6 +11,11 @@
                         <button type="button" class="btn btn-xs btn-link" ng-click="selectView(v)">
                             {{v.trollId}} ({{v.date|date:'dd/MM/yyyy à HH:mm:ss'}})
                         </button>
+
+                        <button type="button" class="btn btn-xs btn-danger" ng-click="deleteView(v)"
+                                title="Supprimer" ng-disabled="!v['_id']['$id']">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
                     </li>
                 </ul>
             </div>

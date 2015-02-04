@@ -260,6 +260,21 @@ angular.module('ZoumProfiler')
                 });
         };
 
+        $scope.deleteView = function(view) {
+            var data = "viewId=" + view['_id']['$id'];
+            $http.post('rest/views/remove.php', data)
+                .success(function(data) {
+                    var index = $scope.views.indexOf(view);
+                    $scope.views.splice(index, 1);
+                    if (angular.equals(view, $scope.selectedView)) {
+                        delete $scope.selectedView;
+                    }
+                })
+                .error(function(error) {
+                    $scope._addErrorMessage("Impossible de supprimer la vue : " + error);
+                });
+        };
+
         $scope._loadAllViewsFromServer();
 
 
