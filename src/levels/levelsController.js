@@ -407,6 +407,10 @@ angular.module('ZoumProfiler')
         };
 
         $scope.selectView = function(view) {
+            if (!view.refreshed) {
+                angular.forEach(view.monsters, $scope._computeMonsterDetails);
+                view.refreshed = true;
+            }
             $scope.selectedView = view;
         };
 
@@ -466,18 +470,55 @@ angular.module('ZoumProfiler')
             }
         };
 
+        $scope._computeMonsterDetails = function(monster) {
+
+            $scope._extractAge(monster);
+            $scope._extractTemplate(monster);
+            $scope._extractFamilyAndBaseNival(monster);
+
+            monster.templateBonus = $scope.templates[monster.template];
+            if (monster.family) {
+                monster.ageBonus = $scope.ages[monster.family][monster.age];
+            }
+
+            monster.nival = monster.baseNival;
+            if (monster.ageBonus) {
+                monster.nival += monster.ageBonus;
+            }
+            if (monster.templateBonus) {
+                monster.nival += monster.templateBonus;
+            }
+
+        };
+
         $scope._parseView = function(trollId, data) {
 
-            var result = { trollId: trollId, date: new Date(), monsters: [] };
+            var result = {
+                trollId: trollId,
+                date: new Date(),
+                monsters: [],
+                refreshed: true
+            };
+
             var viewLines = data.split('\n');
-            var inMonsterPart = false;
+            var inTrollsPart = false;
+            var inMonstersPart = false;
+            var inOriginPart = false;
             angular.forEach(viewLines, function (line) {
-                if (line == "#DEBUT MONSTRES") {
-                    inMonsterPart = true;
+                if (line == "#DEBUT TROLLS") {
+                    inTrollsPart = true;
+                } else if (line == "#FIN TROLLS") {
+                    inTrollsPart = false;
+                } else if (line == "#DEBUT MONSTRES") {
+                    inMonstersPart = true;
                 } else if (line == "#FIN MONSTRES") {
-                    inMonsterPart = false;
+                    inMonstersPart = false;
+                } else if (line == "#DEBUT ORIGINE") {
+                    inOriginPart = true;
+                } else if (line == "#FIN ORIGINE") {
+                    inOriginPart = false;
                 } else {
-                    if (inMonsterPart) {
+                    if (inMonstersPart) {
 
                         var cells = line.split(';');
 
@@ -489,22 +530,7 @@ angular.module('ZoumProfiler')
                         monster.posY = cells[3];
                         monster.posN = cells[4];
 
-                        $scope._extractAge(monster);
-                        $scope._extractTemplate(monster);
-                        $scope._extractFamilyAndBaseNival(monster);
-
-                        monster.templateBonus = $scope.templates[monster.template];
-                        if (monster.family) {
-                            monster.ageBonus = $scope.ages[monster.family][monster.age];
-                        }
-
-                        monster.nival = monster.baseNival;
-                        if (monster.ageBonus) {
-                            monster.nival += monster.ageBonus;
-                        }
-                        if (monster.templateBonus) {
-                            monster.nival += monster.templateBonus;
-                        }
+                        $scope._computeMonsterDetails(monster);
 
                         result.monsters.push(monster);
                     }

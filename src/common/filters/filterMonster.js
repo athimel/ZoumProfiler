@@ -16,6 +16,7 @@ angular.module('ZoumProfiler')
                     }
                 }
             });
+            levelContext.filteredMonstersCount = result.length;
             return result;
         };
     });

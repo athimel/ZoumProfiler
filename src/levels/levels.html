@@ -61,6 +61,8 @@
                            ng-change="maxLevelChanged()"/>
                 </div>
 
+                <label for="monstersCount" class="col-sm-2 control-label">Monstres affichés</label>
+                <span id="monstersCount"> {{levelContext.filteredMonstersCount}}/{{selectedView.monsters.length}}</span>
             </div>
 
             <table class="table table-striped table-hover table-condensed">
