@@ -408,7 +408,9 @@ angular.module('ZoumProfiler')
 
         $scope.selectView = function(view) {
             if (!view.refreshed) {
-                angular.forEach(view.monsters, $scope._computeMonsterDetails);
+                angular.forEach(view.monsters, function(monster) {
+                    $scope._computeMonsterDetails(view.origin, monster);
+                });
                 view.refreshed = true;
             }
             $scope.selectedView = view;
@@ -470,7 +472,7 @@ angular.module('ZoumProfiler')
             }
         };
 
-        $scope._computeMonsterDetails = function(monster) {
+        $scope._computeMonsterDetails = function(origin, monster) {
 
             $scope._extractAge(monster);
             $scope._extractTemplate(monster);
@@ -489,6 +491,14 @@ angular.module('ZoumProfiler')
                 monster.nival += monster.templateBonus;
             }
 
+            if (origin) {
+                var xDistance = Math.abs(origin.x - monster.posX);
+                var yDistance = Math.abs(origin.y - monster.posY);
+                var nDistance = Math.abs(origin.n - monster.posN);
+                monster.horizontalDistance = Math.max(xDistance, yDistance);
+                monster.verticalDistance = nDistance;
+                monster.distance = Math.max(monster.horizontalDistance, monster.verticalDistance);
+            }
         };
 
         $scope._parseView = function(trollId, data) {
@@ -526,15 +536,26 @@ angular.module('ZoumProfiler')
 
                         monster.id = cells[0];
                         monster.name = cells[1];
-                        monster.posX = cells[2];
-                        monster.posY = cells[3];
-                        monster.posN = cells[4];
-
-                        $scope._computeMonsterDetails(monster);
+                        monster.posX = parseInt(cells[2]);
+                        monster.posY = parseInt(cells[3]);
+                        monster.posN = parseInt(cells[4]);
 
                         result.monsters.push(monster);
+                    } else if (inOriginPart) {
+                        var cells = line.split(';');
+
+                        result.distance = cells[0];
+                        result.origin = {
+                            x: parseInt(cells[1]),
+                            y: parseInt(cells[2]),
+                            n: parseInt(cells[3])
+                        };
                     }
                 }
+            });
+
+            angular.forEach(result.monsters, function(monster) {
+                $scope._computeMonsterDetails(result.origin, monster);
             });
 
             return result;

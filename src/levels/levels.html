@@ -68,6 +68,7 @@
             <table class="table table-striped table-hover table-condensed">
                 <thead>
                 <tr>
+                    <td ng-if="selectedView.origin">Distance</td>
                     <td>Id</td>
                     <td>Nom</td>
                     <td>Position</td>
@@ -79,7 +80,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="m in selectedView.monsters|filterMonster:levelContext">
+                <tr ng-repeat="m in selectedView.monsters|filterMonster:levelContext|orderBy:'distance'">
+                    <td ng-if="selectedView.origin">{{m.distance}}</td>
                     <td>{{m.id}}</td>
                     <td>{{m.name}}</td>
                     <td>X={{m.posX}}|Y={{m.posY}}|N={{m.posN}}</td>
