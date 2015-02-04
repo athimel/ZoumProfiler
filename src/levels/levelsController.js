@@ -13,7 +13,7 @@ angular.module('ZoumProfiler')
 
         $scope.selectedView;
         $scope.views = [];
-        $scope.levelContext = { minLevel:10, maxLevel:99, includeGowap:false, maxDistance: 20 };
+        $scope.levelContext = { minLevel:10, maxLevel:99, includeGowap:false, includeZombi:false, maxDistance: 20 };
 
         /* ********************************************* */
         /* **          Controller's methods           ** */
@@ -189,7 +189,7 @@ angular.module('ZoumProfiler')
                     } else if (inOriginPart) {
                         var cells = line.split(';');
 
-                        result.distance = parseInt(cells[0]);
+                        result.scope = parseInt(cells[0]);
                         result.origin = {
                             x: parseInt(cells[1]),
                             y: parseInt(cells[2]),
