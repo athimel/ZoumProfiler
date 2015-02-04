@@ -97,6 +97,10 @@
                         <span class="glyphicon glyphicon-cog"></span> Outil tactique
                     </button>
 
+                    <button type="button" class="btn btn-sm btn-primary" ng-click="startLevels()">
+                        <span class="glyphicon glyphicon-search"></span> Recherche de monstres
+                    </button>
+
                     <div class="authentication-bar" ng-if="user && !authenticationContext.show">
                         <span ng-if="!user.remoteId" class="auth-status">Pas connecté</span>
                         <button type="button" class="btn btn-xs btn-primary" ng-click="startLogin()" ng-if="!user.remoteId" title="Connexion">
@@ -171,6 +175,8 @@
                     <compare></compare>
 
                     <scheduler></scheduler>
+
+                    <levels></levels>
 
                     <div class="row actionbar" ng-if="profile">
                         <button type="button" class="btn btn-sm btn-success" ng-disabled="!hasModification()" ng-click="saveProfile()">

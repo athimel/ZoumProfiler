@@ -22,6 +22,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         $scope.schedulerContext = { show: false, target: {} };
         $scope.authenticationContext = { show: false };
         $scope.shareContext = { show: false };
+        $scope.levelsContext = { show: false };
         $scope.profile;
         $scope.computed;
         $scope.messages = { success:[], warnings:[], errors:[] };
@@ -482,6 +483,11 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             $scope.schedulerContext.show = true;
         };
 
+        $scope.startLevels = function() {
+            $scope._reset();
+            $scope.levelsContext.show = true;
+        };
+
         $scope._reset = function() {
 
             if (angular.isDefined($scope.profile) && $scope.hasModification()) {
@@ -500,6 +506,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             $scope.importContext.show = false;
             $scope.compareContext.show = false;
             $scope.schedulerContext.show = false;
+            $scope.levelsContext.show = false;
         };
 
         $scope.getCompareIds = function() {
