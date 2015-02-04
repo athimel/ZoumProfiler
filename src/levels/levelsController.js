@@ -17,9 +17,11 @@ angular.module('ZoumProfiler')
 
         $scope.monsters = {
             Animal: {
+                "Chauve-Souris":3,
                 "Chauve-Souris Géante":4,
                 "Cheval à Dents de Sabre":23,
                 Dindon:1,
+                "Dindon du Chaos":1,
                 "Geck'oo":15,
                 "Geck'oo majestueux":40,
                 Glouton:20,
@@ -30,6 +32,7 @@ angular.module('ZoumProfiler')
                 "Gowap Apprivoisé":1,
                 "Gowap Sauvage":1,
                 "Lapin Blanc":1,
+                "Rat":1,
                 "Rat Géant":2,
                 Sagouin:3,
                 "Tubercule Tueur":14
@@ -37,6 +40,7 @@ angular.module('ZoumProfiler')
             Insecte: {
                 Ankheg: 10,
                 "Anoploure Purpurin":36,
+                "Araignée":1,
                 "Araignée Géante":2,
                 Coccicruelle:22,
                 "Essaim Cratérien":30,
@@ -45,10 +49,12 @@ angular.module('ZoumProfiler')
                 Labeilleux:26,
                 "Limace Géante":10,
                 "Mante Fulcreuse":30,
+                "Mille-Pattes":13,
                 "Mille-Pattes Géant":14,
                 "Nuage d'Insectes":7,
                 "Nuée de Vermine":13,
                 Pititabeille:0,
+                "Scarabée":3,
                 "Scarabée Géant":4,
                 "Scorpion Géant":10,
                 Strige:2,
@@ -76,6 +82,7 @@ angular.module('ZoumProfiler')
                 Zombie:2
             },
             Monstre: {
+                "Amibe":8,
                 "Amibe Géante":9,
                 "Anaconda des Catacombes":8,
                 Basilisk:11,
@@ -98,6 +105,7 @@ angular.module('ZoumProfiler')
                 "Esprit-Follet":16,
                 Familier:1,
                 "Feu Follet":20,
+                Fungus:8,
                 "Fungus Géant":9,
                 "Fungus Violet":4,
                 Gargouille:3,
@@ -106,6 +114,7 @@ angular.module('ZoumProfiler')
                 Grylle:31,
                 Harpie:4,
                 Hydre:50,
+                "Lézard":4,
                 "Lézard Géant":5,
                 Manticore:9,
                 Mimique:6,
@@ -122,6 +131,7 @@ angular.module('ZoumProfiler')
                 "Tertre Errant":20,
                 Trancheur:35,
                 Tutoki:4,
+                "Ver Carnivore":11,
                 "Ver Carnivore Géant":12,
                 Vouivre:33,
                 Worg:5
@@ -134,6 +144,7 @@ angular.module('ZoumProfiler')
                 Balrog:50,
                 Barghest:36,
                 Behemoth:34,
+                "Chevalier du Chaos":20,
                 Daemonite:27,
                 Diablotin:5,
                 "Elementaire d'Air":23,
@@ -149,6 +160,7 @@ angular.module('ZoumProfiler')
                 "Elementaire Magmatique":0,
                 "Elémentaire Magmatique":0,
                 Erinyes:7,
+                "Grosse Erinyes":8,
                 Fumeux:22,
                 Gritche:39,
                 Hellrot:18,
@@ -286,6 +298,7 @@ angular.module('ZoumProfiler')
             Attentionnée:2,
             Barbare:1,
             Berserker:3,
+            Berserkere:3,
             Champion:4,
             Championne:4,
             Cogneur:2,
@@ -315,6 +328,7 @@ angular.module('ZoumProfiler')
             Fouisseuse:0,
             Frénétique:3,
             Frondeur:2,
+            Frondeuse:2,
             Fustigateur:2,
             Fustigatrice:2,
             Gardien:20,
@@ -337,6 +351,7 @@ angular.module('ZoumProfiler')
             Maître:8,
             Maîtresse:8,
             Lobotomisateur:2,
+            Lobotomisatrice:2,
             Malade:-1,
             Médicastre:2,
             Mentat:2,
@@ -353,6 +368,7 @@ angular.module('ZoumProfiler')
             Planque:0,
             Planqué:0,
             Prince:8,
+            Princesse:8,
             Psychophage:2,
             Reine:11,
             Ronfleur:2,
@@ -382,10 +398,10 @@ angular.module('ZoumProfiler')
         //+7	Ancêtre			Ultime		Mythique	Achevé		Mythique	Antédiluvien
 
         $scope.ages = {
-            Animal: {Bébé:0, Enfançon:1, Jeune:2, Adulte:3, Mature:4, "Chef de Harde":5, Ancien:6, Ancienne:6, Ancêtre:7},
-            Démon: {Initial:0, Novice:1, Mineur:2, Mineure:2, Favori:3, Favorie:3, Majeur:4, Majeure:4, Supérieur:5, Supérieure:5, Suprême:6, Ultime:7},
+            Animal: {Bébé:0, Enfançon:1, Jeune:2, Adulte:3, Mature:4, "Chef de Harde":5, "Chef de harde":5, Ancien:6, Ancienne:6, Ancêtre:7},
+            Démon: {Initial:0, Initiale:0, Novice:1, Mineur:2, Mineure:2, Favori:3, Favorite:3, Majeur:4, Majeure:4, Supérieur:5, Supérieure:5, Suprême:6, Ultime:7},
             Humanoïde: {Nouveau:0, Nouvelle:0, Jeune:1, Adulte:2, Vétéran:3, Briscard:4, Briscarde:4, Doyen:5, Doyenne:5, Légendaire:6, Mythique:7},
-            Insecte: {Larve:0, Immature:1, Juvénile:2, Imago:3, Développé:4, Développée:4, Mûr:5, Accompli:6, Accomplie:6, Achevé:7, Achevée:7},
+            Insecte: {Larve:0, Immature:1, Juvénile:2, Imago:3, Développé:4, Développée:4, Mûr:5, Mûre:5, Accompli:6, Accomplie:6, Achevé:7, Achevée:7},
             Monstre: {Nouveau:0, Nouvelle:0, Jeune:1, Adulte:2, Vétéran:3, Briscard:4, Briscarde:4, Doyen:5, Doyenne:5, Légendaire:6, Mythique:7},
             "Mort-Vivant": {Naissant:0, Naissante:0, Récent:1, Récente:1, Ancien:2, Ancienne:2, Vénérable:3, Séculaire:4, Antique:5, Ancestral:6, Ancestrale:6, Antédiluvien:7, Antédiluvienne:7}
         };
@@ -440,10 +456,17 @@ angular.module('ZoumProfiler')
                         monster.template = template;
                         monster.baseName = (name.substr(0, index) + name.substr(index + monster.template.length)).trim();
 
-                        // Cas particulier du Nécromant (template et nom de monstre)
+                        // Cas particulier du Nécromant/Sorcière (template et nom de monstre)
                         if (monster.baseName.length == 0) {
                             delete monster.template;
                             monster.baseName = name.trim();
+                        }
+
+                        // Car particulier de la "Voleuse Sorcière" (template avant le nom)
+                        if ((monster.template == "Sorcière" || monster.template == "Nécromant") && angular.isDefined($scope.templates[monster.baseName])) {
+                            var tmp = monster.baseName;
+                            monster.baseName = monster.template;
+                            monster.template = tmp;
                         }
 
                         // Cas particulier du Frondeur vs Grand Frondeur
