@@ -312,3 +312,42 @@ span.profile-category {
 .shares .title {
     font-style: italic;
 }
+
+.around-monster-title {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.around-monster-position {
+    font-style: italic;
+    color: #7f7f7f;
+}
+
+table.around-monster tbody tr td {
+    font-size: 10px;
+    width: 29px;
+    padding: 2px;
+}
+
+table.around-monster tbody tr td.center {
+    background-color: #dddddd;
+}
+
+table.around-monster tbody tr td.out-of-scope {
+    background-color: #fbd1ce;
+}
+
+table.around-monster tbody tr td ul {
+    padding-left: 0;
+    width: 23px;
+    margin: 0;
+}
+
+table.around-monster tbody tr td ul li {
+    list-style-type: none;
+    width: 23px;
+}
+
+table.around-monster tbody tr td ul li a.target-level {
+    color: #2e7f26;
+}

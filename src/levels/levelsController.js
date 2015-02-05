@@ -5,7 +5,7 @@ angular.module('ZoumProfiler')
             templateUrl: 'levels/levels.html'
         };
     })
-    .controller('LevelsController', ['$scope', '$http', 'monsters', function ($scope, $http, monsters) {
+    .controller('LevelsController', ['$scope', '$http', '$modal', 'monsters', function ($scope, $http, $modal, monsters) {
 
         /* ********************************************* */
         /* **             Contextual data             ** */
@@ -38,6 +38,7 @@ angular.module('ZoumProfiler')
                 });
                 view.refreshed = true;
             }
+            delete $scope._viewGrid;
             $scope.selectedView = view;
         };
 
@@ -250,7 +251,6 @@ angular.module('ZoumProfiler')
             var data = "view=" + JSON.stringify(view);
             $http.post('rest/views/save.php', data)
                 .success(function(data) {
-                    console.log(data);
                     if (data.result != "CREATED") {
                         $scope._addErrorMessage("Impossible d'enregistrer la vue : " + data.result);
                     }
@@ -275,10 +275,109 @@ angular.module('ZoumProfiler')
                 });
         };
 
+        $scope.viewAroundMonster = function(targetMonster) {
+
+            if (!$scope._viewGrid) {
+                $scope._viewGrid = {};
+                angular.forEach($scope.selectedView.monsters, function(monster) {
+                    var xDim = $scope._viewGrid[monster.posX];
+                    if (!xDim) {
+                        xDim = {};
+                        $scope._viewGrid[monster.posX] = xDim;
+                    }
+
+                    var yDim = xDim[monster.posY];
+                    if (!yDim) {
+                        yDim = {};
+                        xDim[monster.posY] = yDim;
+                    }
+
+                    var nDim = yDim[monster.posN];
+                    if (!nDim) {
+                        nDim = [];
+                        yDim[monster.posN] = nDim;
+                    }
+
+                    nDim.push(monster);
+                });
+            }
+
+            var modalInstance = $modal.open({
+                templateUrl: 'aroundMonster.html',
+                controller: 'AroundMonsterController',
+                size: 'lg',
+                resolve: {
+                    viewGrid: function () {
+                        return $scope._viewGrid;
+                    },
+                    targetMonster: function () {
+                        return targetMonster;
+                    },
+                    limits: function () {
+                        var origin = $scope.selectedView.origin;
+                        var scope = $scope.selectedView.scope ? $scope.selectedView.scope : parseInt($scope.selectedView.distance);
+                        return {
+                            lowerX: origin.x - scope,
+                            upperX: origin.x + scope,
+                            lowerY: origin.y - scope,
+                            upperY: origin.y + scope
+                        };
+                    }
+                }
+            });
+        };
+
         $scope._loadAllViewsFromServer();
-
-
 
     }]);
 
 
+angular.module('ZoumProfiler')
+    .controller('AroundMonsterController', ['$scope', '$modalInstance', 'targetMonster', 'viewGrid', 'limits', function ($scope, $modalInstance, targetMonster, viewGrid, limits) {
+
+        $scope.targetMonster = targetMonster;
+        $scope.limits = limits;
+
+        var size = 9;
+
+        var xRange = [];
+        for (var x4r = $scope.targetMonster.posX - size ; x4r <= $scope.targetMonster.posX + size ; x4r++) {
+            xRange.push(x4r);
+        }
+        $scope.xRange = xRange;
+
+        var yRange = [];
+        for (var y4r = $scope.targetMonster.posY - size ; y4r <= $scope.targetMonster.posY + size ; y4r++) {
+            yRange.push(y4r);
+        }
+        $scope.yRange = yRange;
+
+        $scope.aroundMonstersGrid = {};
+        for (var y = $scope.targetMonster.posY - size; y <= $scope.targetMonster.posY + size; y++) {
+            var subGrid = {};
+            $scope.aroundMonstersGrid[y] = subGrid;
+            for (var x = $scope.targetMonster.posX - size ; x <= $scope.targetMonster.posX + size ; x++) {
+                var subSubGrid = {};
+                subGrid[x] = subSubGrid;
+                if (viewGrid[x] && viewGrid[x][y]) {
+                    for (var n = $scope.targetMonster.posN - size; n <= $scope.targetMonster.posN + Math.floor(size/2); n++) {
+                        var monsters = viewGrid[x][y][n];
+                        if (monsters) {
+                            var cavMonsters = subSubGrid[n];
+                            if (!cavMonsters) {
+                                cavMonsters = [];
+                                subSubGrid[n] = cavMonsters;
+                            }
+                            angular.forEach(monsters, function(monster){
+                                cavMonsters.push(monster);
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        $scope.closeAroundMonster = function() {
+            $modalInstance.dismiss('cancel');
+        };
+    }]);

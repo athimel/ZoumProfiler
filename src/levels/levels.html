@@ -90,6 +90,45 @@
 
             </div>
 
+            <script type="text/ng-template" id="aroundMonster.html">
+                <div class="modal-header">
+                    <span class="around-monster-title">Aux alentours de : {{targetMonster.name}} - N°{{targetMonster.id}}</span>
+                    <span class="around-monster-position">X={{targetMonster.posX}}|Y={{targetMonster.posY}}|N={{targetMonster.posN}}</span>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-condensed table-hover around-monster">
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td ng-repeat="x in xRange">{{x}}</td>
+                            <td></td>
+                        </tr>
+                        <tr ng-repeat="y in yRange">
+                            <td>{{y}}</td>
+                            <td ng-repeat="(x, subSubGrid) in aroundMonstersGrid[y]"
+                                class="{{((x==targetMonster.posX && y==targetMonster.posY) ? 'center':((x<limits.lowerX || x>limits.upperX || y<limits.lowerY || y>limits.upperY) ? 'out-of-scope':''))}}">
+                                <ul>
+                                    <li ng-repeat="(n, monsters) in subSubGrid" >
+                                        <a class="{{(x==targetMonster.posX && y==targetMonster.posY && n==targetMonster.posN) ? 'target-level':''}}"
+                                           href="#" title="{{monsters|monstersList}}">{{n}}:{{monsters.length}}</a>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td>{{y}}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td ng-repeat="x in xRange">{{x}}</td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" ng-click="closeAroundMonster()">OK</button>
+                </div>
+            </script>
+
             <table class="table table-striped table-hover table-condensed">
                 <thead>
                 <tr>
@@ -107,7 +146,7 @@
                 <tr ng-repeat="m in selectedView.monsters|filterMonster:levelContext|orderBy:'distance'" class="{{m.nival >= 50 ? 'best':''}}">
                     <td ng-if="selectedView.origin">{{m.distance}}</td>
                     <td>{{m.id}}</td>
-                    <td>{{m.name}}</td>
+                    <td ng-click="viewAroundMonster(m)">{{m.name}}</td>
                     <td>X={{m.posX}}|Y={{m.posY}}|N={{m.posN}}</td>
                     <td><abbr title="{{m.family}}">{{m.baseName}}</abbr> ({{m.baseNival}})</td>
                     <td>{{m.template|orDash}} <span ng-if="m.template">({{m.templateBonus|addSign}})</span></td>
