@@ -146,13 +146,13 @@
                 <tr ng-repeat="m in selectedView.monsters|filterMonster:levelContext|orderBy:'distance'" class="{{m.nival >= 50 ? 'best':''}}">
                     <td ng-if="selectedView.origin">{{m.distance}}</td>
                     <td>{{m.id}}</td>
-                    <td>{{m.name}}</td>
                     <td>
-                        <button type="button" class="btn btn-xs btn-primary" ng-click="viewAroundMonster(m)" title="Voir les alentours">
+                        {{m.name}}
+                        <button type="button" class="btn btn-xs btn-link" ng-click="viewAroundMonster(m)" title="Voir les alentours">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button>
-                        X={{m.posX}}|Y={{m.posY}}|N={{m.posN}}
                     </td>
+                    <td>X={{m.posX}}|Y={{m.posY}}|N={{m.posN}}</td>
                     <td><abbr title="{{m.family}}">{{m.baseName}}</abbr> ({{m.baseNival}})</td>
                     <td>{{m.template|orDash}} <span ng-if="m.template">({{m.templateBonus|addSign}})</span></td>
                     <td>{{m.age}} ({{m.ageBonus|addSign}})</td>
