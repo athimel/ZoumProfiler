@@ -156,7 +156,12 @@
                     <td><abbr title="{{m.family}}">{{m.baseName}}</abbr> ({{m.baseNival}})</td>
                     <td>{{m.template|orDash}} <span ng-if="m.template">({{m.templateBonus|addSign}})</span></td>
                     <td>{{m.age}} ({{m.ageBonus|addSign}})</td>
-                    <td>{{m.nival|orDash}}</td>
+                    <td>
+                        {{m.nival|orDash}}
+                        <button type="button" class="btn btn-xs btn-warning" ng-if="m.id < 4000000" title="Le niveau de ce monstre est approximatif car le monstre est antérieur à la réforme">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        </button>
+                    </td>
                 </tr>
                 <tr ng-if="levelContext.filteredMonstersCount == 0" class="empty"><td colspan="8">Aucun monstre ne correspond à vos filtres</td></tr>
                 </tbody>
