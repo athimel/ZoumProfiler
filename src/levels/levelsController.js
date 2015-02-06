@@ -350,7 +350,7 @@ angular.module('ZoumProfiler')
                 posN = parseInt(posN);
             }
 
-            var size = 9;
+            var size = 10;
 
             var xRange = [];
             for (var x4r = posX - size ; x4r <= posX + size ; x4r++) {
@@ -359,7 +359,7 @@ angular.module('ZoumProfiler')
             $scope.xRange = xRange;
 
             var yRange = [];
-            for (var y4r = posY - size ; y4r <= posY + size ; y4r++) {
+            for (var y4r = posY + size ; y4r >= posY - size ; y4r--) {
                 yRange.push(y4r);
             }
             $scope.yRange = yRange;
