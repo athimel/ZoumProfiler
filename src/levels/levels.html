@@ -96,6 +96,8 @@
                     <span class="around-monster-position">X={{targetMonster.posX}}|Y={{targetMonster.posY}}|N={{targetMonster.posN}}</span>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-warning" ng-if="minN <= 0 && minN > limits.lowerN">Attention, la portée de la vue ne permet pas de voir ce qu'il y a plus haut que N={{limits.lowerN}}.</div>
+                    <div class="alert alert-warning" ng-if="maxN < limits.upperN">Attention, la portée de la vue ne permet pas de voir ce qu'il y a plus profond que N={{limits.upperN}}.</div>
                     <table class="table table-bordered table-condensed table-hover around-monster">
                         <tbody>
                         <tr>

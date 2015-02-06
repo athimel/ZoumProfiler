@@ -316,11 +316,14 @@ angular.module('ZoumProfiler')
                     limits: function () {
                         var origin = $scope.selectedView.origin;
                         var scope = $scope.selectedView.scope ? $scope.selectedView.scope : parseInt($scope.selectedView.distance);
+                        var nScope = Math.floor((scope+1)/2);
                         return {
                             lowerX: origin.x - scope,
                             upperX: origin.x + scope,
                             lowerY: origin.y - scope,
-                            upperY: origin.y + scope
+                            upperY: origin.y + scope,
+                            lowerN: origin.n + nScope,
+                            upperN: origin.n - nScope
                         };
                     }
                 }
@@ -351,18 +354,7 @@ angular.module('ZoumProfiler')
             }
 
             var size = 10;
-
-            var xRange = [];
-            for (var x4r = posX - size ; x4r <= posX + size ; x4r++) {
-                xRange.push(x4r);
-            }
-            $scope.xRange = xRange;
-
-            var yRange = [];
-            for (var y4r = posY + size ; y4r >= posY - size ; y4r--) {
-                yRange.push(y4r);
-            }
-            $scope.yRange = yRange;
+            var nSize = Math.floor((size+1)/2);
 
             $scope.aroundMonstersGrid = {};
             for (var y = posY - size; y <= posY + size; y++) {
@@ -372,7 +364,7 @@ angular.module('ZoumProfiler')
                     var subSubGrid = {};
                     subGrid[x] = subSubGrid;
                     if (viewGrid[x] && viewGrid[x][y]) {
-                        for (var n = posN - size; n <= posN + Math.floor(size/2); n++) {
+                        for (var n = posN - size; n <= posN + nSize; n++) {
                             var monsters = viewGrid[x][y][n];
                             if (monsters) {
                                 var cavMonsters = subSubGrid[n];
@@ -388,6 +380,22 @@ angular.module('ZoumProfiler')
                     }
                 }
             }
+
+            var xRange = [];
+            for (var x4r = posX - size ; x4r <= posX + size ; x4r++) {
+                xRange.push(x4r);
+            }
+            $scope.xRange = xRange;
+
+            var yRange = [];
+            for (var y4r = posY + size ; y4r >= posY - size ; y4r--) {
+                yRange.push(y4r);
+            }
+            $scope.yRange = yRange;
+
+            $scope.minN = posN + nSize;
+            $scope.maxN = posN - nSize;
+
         };
 
 
