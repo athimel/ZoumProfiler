@@ -338,46 +338,67 @@ angular.module('ZoumProfiler')
         $scope.targetMonster = targetMonster;
         $scope.limits = limits;
 
-        var size = 9;
+        $scope._computeGrid = function(posX, posY, posN) {
 
-        var xRange = [];
-        for (var x4r = $scope.targetMonster.posX - size ; x4r <= $scope.targetMonster.posX + size ; x4r++) {
-            xRange.push(x4r);
-        }
-        $scope.xRange = xRange;
+            if (typeof posX == "string") {
+                posX = parseInt(posX);
+            }
+            if (typeof posY == "string") {
+                posY = parseInt(posY);
+            }
+            if (typeof posN == "string") {
+                posN = parseInt(posN);
+            }
 
-        var yRange = [];
-        for (var y4r = $scope.targetMonster.posY - size ; y4r <= $scope.targetMonster.posY + size ; y4r++) {
-            yRange.push(y4r);
-        }
-        $scope.yRange = yRange;
+            var size = 9;
 
-        $scope.aroundMonstersGrid = {};
-        for (var y = $scope.targetMonster.posY - size; y <= $scope.targetMonster.posY + size; y++) {
-            var subGrid = {};
-            $scope.aroundMonstersGrid[y] = subGrid;
-            for (var x = $scope.targetMonster.posX - size ; x <= $scope.targetMonster.posX + size ; x++) {
-                var subSubGrid = {};
-                subGrid[x] = subSubGrid;
-                if (viewGrid[x] && viewGrid[x][y]) {
-                    for (var n = $scope.targetMonster.posN - size; n <= $scope.targetMonster.posN + Math.floor(size/2); n++) {
-                        var monsters = viewGrid[x][y][n];
-                        if (monsters) {
-                            var cavMonsters = subSubGrid[n];
-                            if (!cavMonsters) {
-                                cavMonsters = [];
-                                subSubGrid[n] = cavMonsters;
+            var xRange = [];
+            for (var x4r = posX - size ; x4r <= posX + size ; x4r++) {
+                xRange.push(x4r);
+            }
+            $scope.xRange = xRange;
+
+            var yRange = [];
+            for (var y4r = posY - size ; y4r <= posY + size ; y4r++) {
+                yRange.push(y4r);
+            }
+            $scope.yRange = yRange;
+
+            $scope.aroundMonstersGrid = {};
+            for (var y = posY - size; y <= posY + size; y++) {
+                var subGrid = {};
+                $scope.aroundMonstersGrid[y] = subGrid;
+                for (var x = posX - size ; x <= posX + size ; x++) {
+                    var subSubGrid = {};
+                    subGrid[x] = subSubGrid;
+                    if (viewGrid[x] && viewGrid[x][y]) {
+                        for (var n = posN - size; n <= posN + Math.floor(size/2); n++) {
+                            var monsters = viewGrid[x][y][n];
+                            if (monsters) {
+                                var cavMonsters = subSubGrid[n];
+                                if (!cavMonsters) {
+                                    cavMonsters = [];
+                                    subSubGrid[n] = cavMonsters;
+                                }
+                                angular.forEach(monsters, function(monster){
+                                    cavMonsters.push(monster);
+                                });
                             }
-                            angular.forEach(monsters, function(monster){
-                                cavMonsters.push(monster);
-                            });
                         }
                     }
                 }
             }
-        }
+        };
+
 
         $scope.closeAroundMonster = function() {
             $modalInstance.dismiss('cancel');
         };
+
+        $scope.centerView = function(posX, posY, posN) {
+            $scope._computeGrid(posX, posY, posN);
+        };
+
+        $scope._computeGrid($scope.targetMonster.posX, $scope.targetMonster.posY, $scope.targetMonster.posN);
+
     }]);

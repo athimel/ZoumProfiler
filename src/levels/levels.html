@@ -110,7 +110,7 @@
                                 <ul>
                                     <li ng-repeat="(n, monsters) in aroundMonstersGrid[y][x]" >
                                         <a class="{{(x==targetMonster.posX && y==targetMonster.posY && n==targetMonster.posN) ? 'target-level':''}}"
-                                           href="#" title="{{monsters|monstersList}}">{{n}}:{{monsters.length}}</a>
+                                           href="#" title="{{monsters|monstersList}}" ng-click="centerView(x, y, n)">{{n}}:{{monsters.length}}</a>
                                     </li>
                                 </ul>
                             </td>
