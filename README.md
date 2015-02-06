@@ -62,15 +62,32 @@ Attention : pour pouvoir utiliser la fonction d'import depuis MountyHall, il fau
 Le PHP sert à exposer un proxy permettant de contourner les problèmes de CORS.
 
 
-TODO
-----
+TODO ZoumProfiler
+-----------------
 
 - Sticky bloc *propre* pour les aptitudes au combat ;
 - Implémentation des modules/directives manquants ;
 - Continuer de remonter du code de base dans le "baseService" ;
-- Persistence ;
-- Conserver les infos fournies à l'import pour mise à jour (id+MDP spécifique) ;
+- Rejoindre/quitter un groupe ;
+- Conserver les infos fournies à l'import depuis les SP pour mise à jour (id+MDP spécifique) ;
 - Format plus court pour le partage par URL ;
+- ...
+
+TODO Outil tactique
+-------------------
+
 - Dans le simulateur, proposer des listes d'attaques par groupes de DEG ;
+- Permettre d'avoir plusieurs plans ;
+- Partager les plans ;
+- Persister les plans ;
+- ...
+
+TODO Recherche de monstres
+--------------------------
+
+- Charger les vues à la demande uniquement ;
+- Afficher les trolls et lieux dans la preview ;
+- Gestion des autorisations (owner+partage) ;
+- Permettre la mise à jour d'une vue ;
 - ...
 
