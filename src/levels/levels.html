@@ -110,9 +110,13 @@
                             <td ng-repeat="x in xRange"
                                 class="{{((x==targetMonster.posX && y==targetMonster.posY) ? 'center':((x<limits.lowerX || x>limits.upperX || y<limits.lowerY || y>limits.upperY) ? 'out-of-scope':''))}}">
                                 <ul>
-                                    <li ng-repeat="(n, monsters) in aroundMonstersGrid[y][x]" >
+                                    <li ng-repeat="(n, cav) in aroundMonstersGrid[y][x]" >
                                         <a class="{{(x==targetMonster.posX && y==targetMonster.posY && n==targetMonster.posN) ? 'target-level':''}}"
-                                           href="#" title="{{monsters|monstersList}}" ng-click="centerView(x, y, n)">{{n}}:{{monsters.length}}</a>
+                                           href="#" title="{{cav|cavList}}" ng-click="centerView(x, y, n)">{{n}}:<span
+                                                ng-if="cav.monsters.length > 0 && cav.trolls.length > 0">{{cav.monsters.length}}/{{cav.trolls.length}}</span><span
+                                                ng-if="cav.monsters.length > 0 && cav.trolls.length == 0">{{cav.monsters.length}}M</span><span
+                                                ng-if="cav.monsters.length == 0 && cav.trolls.length > 0">{{cav.trolls.length}}T</span>
+                                        </a>
                                     </li>
                                 </ul>
                             </td>

@@ -31,15 +31,19 @@ angular.module('ZoumProfiler')
             }
         };
 
+        $scope._refreshView = function(view) {
+            angular.forEach(view.monsters, function (monster) {
+                $scope._computeMonsterDetails(view.origin, monster);
+            });
+            view.refreshed = true;
+        };
+
         $scope.selectView = function(view) {
             if (!view.fetched) {
                 $scope._fetchViewFromServer(view);
             } else {
                 if (!view.refreshed) {
-                    angular.forEach(view.monsters, function (monster) {
-                        $scope._computeMonsterDetails(view.origin, monster);
-                    });
-                    view.refreshed = true;
+                    $scope._refreshView(view);
                 }
                 delete $scope._viewGrid;
                 $scope.selectedView = view;
@@ -137,18 +141,30 @@ angular.module('ZoumProfiler')
                 monster.nival += monster.templateBonus;
             }
 
-            if (origin) {
-                var xDistance = Math.abs(origin.x - monster.posX);
-                var yDistance = Math.abs(origin.y - monster.posY);
-                var nDistance = Math.abs(origin.n - monster.posN);
-                monster.horizontalDistance = Math.max(xDistance, yDistance);
-                monster.verticalDistance = nDistance;
-                monster.distance = Math.max(monster.horizontalDistance, monster.verticalDistance);
-            }
+            $scope._computeDistance(origin, monster);
 
             if (angular.isUndefined(monster.nival) || angular.isUndefined(monster.ageBonus)) {
                 console.error(monster);
             }
+        };
+
+        $scope._computeDistance = function(origin, elem) {
+
+            if (origin) {
+                var xDistance = Math.abs(origin.x - elem.posX);
+                var yDistance = Math.abs(origin.y - elem.posY);
+                var nDistance = Math.abs(origin.n - elem.posN);
+                elem.horizontalDistance = Math.max(xDistance, yDistance);
+                elem.verticalDistance = nDistance;
+                elem.distance = Math.max(elem.horizontalDistance, elem.verticalDistance);
+            }
+
+        };
+
+        $scope._computeTrollDetails = function(origin, troll) {
+
+            //$scope._computeDistance(origin, troll); // AThimel 20150211 No need to compute distance so far
+
         };
 
         $scope._parseView = function(trollId, data) {
@@ -156,8 +172,10 @@ angular.module('ZoumProfiler')
             var result = {
                 trollId: trollId,
                 date: new Date(),
+                trolls: [],
                 monsters: [],
-                refreshed: true
+                refreshed: true,
+                fetched: true
             };
 
             var viewLines = data.split('\n');
@@ -200,12 +218,28 @@ angular.module('ZoumProfiler')
                             y: parseInt(cells[2]),
                             n: parseInt(cells[3])
                         };
+                    } else if (inTrollsPart) {
+
+                        var cells = line.split(';');
+
+                        var troll = {
+                            id: parseInt(cells[0]),
+                            posX: parseInt(cells[1]),
+                            posY: parseInt(cells[2]),
+                            posN: parseInt(cells[3])
+                        };
+
+                        result.trolls.push(troll);
                     }
                 }
             });
 
             angular.forEach(result.monsters, function(monster) {
                 $scope._computeMonsterDetails(result.origin, monster);
+            });
+
+            angular.forEach(result.trolls, function(troll) {
+                $scope._computeTrollDetails(result.origin, troll);
             });
 
             return result;
@@ -297,30 +331,40 @@ angular.module('ZoumProfiler')
                 });
         };
 
+        $scope._getNDim = function(grid, elem) {
+            var xDim = grid[elem.posX];
+            if (!xDim) {
+                xDim = {};
+                grid[elem.posX] = xDim;
+            }
+
+            var yDim = xDim[elem.posY];
+            if (!yDim) {
+                yDim = {};
+                xDim[elem.posY] = yDim;
+            }
+
+            var nDim = yDim[elem.posN];
+            if (!nDim) {
+                nDim = { monsters:[], trolls:[] };
+                yDim[elem.posN] = nDim;
+            }
+            return nDim;
+        };
+
         $scope.viewAroundMonster = function(targetMonster) {
 
             if (!$scope._viewGrid) {
                 $scope._viewGrid = {};
+
                 angular.forEach($scope.selectedView.monsters, function(monster) {
-                    var xDim = $scope._viewGrid[monster.posX];
-                    if (!xDim) {
-                        xDim = {};
-                        $scope._viewGrid[monster.posX] = xDim;
-                    }
+                    var nDim = $scope._getNDim($scope._viewGrid, monster);
+                    nDim.monsters.push(monster);
+                });
 
-                    var yDim = xDim[monster.posY];
-                    if (!yDim) {
-                        yDim = {};
-                        xDim[monster.posY] = yDim;
-                    }
-
-                    var nDim = yDim[monster.posN];
-                    if (!nDim) {
-                        nDim = [];
-                        yDim[monster.posN] = nDim;
-                    }
-
-                    nDim.push(monster);
+                angular.forEach($scope.selectedView.trolls, function(troll) {
+                    var nDim = $scope._getNDim($scope._viewGrid, troll);
+                    nDim.trolls.push(troll);
                 });
             }
 
@@ -387,15 +431,18 @@ angular.module('ZoumProfiler')
                     subGrid[x] = subSubGrid;
                     if (viewGrid[x] && viewGrid[x][y]) {
                         for (var n = posN - size; n <= posN + nSize; n++) {
-                            var monsters = viewGrid[x][y][n];
-                            if (monsters) {
-                                var cavMonsters = subSubGrid[n];
-                                if (!cavMonsters) {
-                                    cavMonsters = [];
-                                    subSubGrid[n] = cavMonsters;
+                            var viewCav = viewGrid[x][y][n];
+                            if (viewCav) {
+                                var cav = subSubGrid[n];
+                                if (!cav) {
+                                    cav = { monsters:[], trolls:[] };
+                                    subSubGrid[n] = cav;
                                 }
-                                angular.forEach(monsters, function(monster){
-                                    cavMonsters.push(monster);
+                                angular.forEach(viewCav.monsters, function(monster){
+                                    cav.monsters.push(monster);
+                                });
+                                angular.forEach(viewCav.trolls, function(troll){
+                                    cav.trolls.push(troll);
                                 });
                             }
                         }
