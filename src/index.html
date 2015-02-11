@@ -53,28 +53,36 @@
                             <span class="glyphicon glyphicon-refresh"></span> refresh
                         </button></span>
 
-                        <li ng-repeat="p in profiles | filter:{'type':profileType} | orderBy:['name','profile']"
-                            ng-class="{true:'active', false:''}[profile == p]">
+                        <table class="profiles">
+                            <tbody>
+                                <tr ng-repeat="p in profiles | filter:{'type':profileType} | orderBy:['name','profile']"
+                                    ng-class="{true:'active', false:''}[profile == p]">
 
-                            <input type="checkbox" value="" ng-model="compareContext.map[p.id]"/>
+                                    <td>
+                                        <input type="checkbox" value="" ng-model="compareContext.map[p.id]"/>
+                                    </td>
 
-                            <a ng-click="selectProfile(p)" class="select-profile">
-                                {{p.name}} <span ng-if="p.profile" class="profile">({{p.profile}})</span>
-                            </a>
+                                    <td ng-click="selectProfile(p)">
+                                        <a class="select-profile">
+                                            {{p.name}} <span ng-if="p.profile" class="profile">({{p.profile}})</span>
+                                        </a>
+                                    </td>
 
-                            <div class="buttons">
-                                <button type="button" class="btn btn-xs btn-primary" ng-click="copyProfile(p)"
-                                        title="Dupliquer">
-                                    <span class="glyphicon glyphicon-share"></span>
-                                </button>
+                                    <td class="buttons">
+                                        <button type="button" class="btn btn-xs btn-primary" ng-click="copyProfile(p)"
+                                                title="Dupliquer">
+                                            <span class="glyphicon glyphicon-share"></span>
+                                        </button>
 
-                                <button type="button" class="btn btn-xs btn-danger" ng-click="deleteProfile(p)"
-                                        title="Supprimer" ng-disabled="p.type=='remote'">
-                                    <span class="glyphicon glyphicon-trash"></span>
-                                </button>
-                            </div>
+                                        <button type="button" class="btn btn-xs btn-danger" ng-click="deleteProfile(p)"
+                                                title="Supprimer" ng-disabled="p.type=='remote'">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </td>
 
-                        </li>
+                                </tr>
+                            </tbody>
+                        </table>
                     </ul>
 
                     <button type="button" class="btn btn-sm btn-primary" ng-disabled="getCompareIds().length < 2"

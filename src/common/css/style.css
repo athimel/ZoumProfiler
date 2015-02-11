@@ -195,10 +195,10 @@ body {
     padding : 5px 60px 5px 5px;
     display: inline;
 }
-.nav-sidebar > .active,
-.nav-sidebar > .active > a,
-.nav-sidebar > .active > a:hover,
-.nav-sidebar > .active > a:focus {
+.nav-sidebar .active,
+.nav-sidebar .active a,
+.nav-sidebar .active a:hover,
+.nav-sidebar .active a:focus {
     color: #fff;
     background-color: #428bca;
 }
@@ -350,4 +350,16 @@ table.around-monster tbody tr td ul li {
 
 table.around-monster tbody tr td ul li a.target-level {
     color: #2e7f26;
+}
+
+.profiles {
+    width: 100%;
+}
+
+table.profiles tbody tr td:first-child {
+    padding-left: 8px;
+    width: 26px;
+}
+table.profiles tbody tr td:nth-child(2) {
+    cursor: pointer;
 }
