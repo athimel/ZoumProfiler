@@ -1,38 +1,39 @@
 angular.module('ZoumProfiler')
     .filter('cavList', function() {
         return function(input) {
-            var result = "";
 
             // Monstres
-            if (input.monsters && input.monsters.length > 0) {
-                result += "Monstres:";
-            }
+            var monsters = "";
             angular.forEach(input.monsters, function(monster) {
-                if (result.length > 0) {
-                    result += "\n";
+                if (monsters.length > 0) {
+                    monsters += "\n";
                 }
-                result += monster.id + " - " + monster.name + " " + monster.nival;
+                monsters += monster.id + " - " + monster.name + " " + monster.nival;
             });
 
             // Trolls
-            if (input.trolls && input.trolls.length > 0) {
-                if (result.length > 0) {
-                    result += "\n";
-                }
-                result += "Trolls:";
-            }
+            var trolls = "";
             angular.forEach(input.trolls, function(troll) {
+                if (trolls.length > 0) {
+                    trolls += ",";
+                }
+                trolls += troll.id;
+            });
+
+            var result = "";
+            if (monsters.length > 0) {
+                result += "Monstres:\n";
+                result += monsters;
+            }
+
+            if (trolls.length > 0) {
                 if (result.length > 0) {
                     result += "\n";
                 }
-                result += troll.id;
-                if (troll.name) {
-                    result += " - " + troll.name;
-                }
-                if (troll.nival) {
-                    result += " " + troll.nival;
-                }
-            });
+                result += "Trolls:\n";
+                result += trolls;
+            }
+
             return result;
         };
     });
