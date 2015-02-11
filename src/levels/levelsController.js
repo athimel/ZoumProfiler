@@ -32,14 +32,18 @@ angular.module('ZoumProfiler')
         };
 
         $scope.selectView = function(view) {
-            if (!view.refreshed) {
-                angular.forEach(view.monsters, function(monster) {
-                    $scope._computeMonsterDetails(view.origin, monster);
-                });
-                view.refreshed = true;
+            if (!view.fetched) {
+                $scope._fetchViewFromServer(view);
+            } else {
+                if (!view.refreshed) {
+                    angular.forEach(view.monsters, function (monster) {
+                        $scope._computeMonsterDetails(view.origin, monster);
+                    });
+                    view.refreshed = true;
+                }
+                delete $scope._viewGrid;
+                $scope.selectedView = view;
             }
-            delete $scope._viewGrid;
-            $scope.selectedView = view;
         };
 
         $scope._extractAge = function(monster) {
@@ -233,14 +237,32 @@ angular.module('ZoumProfiler')
 
 
         $scope._loadAllViewsFromServer = function() {
-            $http.get('rest/views/list.php')
+            $http.get('rest/views/listExtracts.php')
                 .success(function(data) {
 
                     $scope.views = data.views;
                     angular.forEach($scope.views, function(view) {
                         view.refreshed = false;
+                        view.fetched = false;
                     });
 
+                })
+                .error(function() {
+                    console.log("ERROR");
+                });
+        };
+
+        $scope._fetchViewFromServer = function(view) {
+            var viewId = view["_id"]["$id"];
+            $http.get('rest/views/get.php?viewId=' + viewId)
+                .success(function(data) {
+
+                    angular.copy(data, view);
+
+                    view.fetched = true;
+                    view.refreshed = false;
+
+                    $scope.selectView(view);
                 })
                 .error(function() {
                     console.log("ERROR");
