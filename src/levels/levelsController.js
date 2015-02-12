@@ -407,6 +407,10 @@ angular.module('ZoumProfiler')
         $scope.targetMonster = targetMonster;
         $scope.limits = limits;
 
+        $scope.showCavDetails = function(cav) {
+            $scope.highlightedCav = cav;
+        };
+
         $scope._computeGrid = function(posX, posY, posN) {
 
             if (typeof posX == "string") {
@@ -418,6 +422,12 @@ angular.module('ZoumProfiler')
             if (typeof posN == "string") {
                 posN = parseInt(posN);
             }
+
+            $scope.viewCenter = {
+                posX: posX,
+                posY: posY,
+                posN: posN
+            };
 
             var size = 10;
             var nSize = Math.floor((size+1)/2);
@@ -435,7 +445,13 @@ angular.module('ZoumProfiler')
                             if (viewCav) {
                                 var cav = subSubGrid[n];
                                 if (!cav) {
-                                    cav = { monsters:[], trolls:[] };
+                                    cav = {
+                                        posX: x,
+                                        posY: y,
+                                        posN: n,
+                                        monsters:[],
+                                        trolls:[]
+                                    };
                                     subSubGrid[n] = cav;
                                 }
                                 angular.forEach(viewCav.monsters, function(monster){

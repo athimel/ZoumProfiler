@@ -367,3 +367,42 @@ table.profiles tbody tr td:nth-child(2) {
 span.out-of-scope {
     font-weight: bold;
 }
+
+div.modal-body div.details,
+div.modal-body div.details-right {
+    margin: 5px;
+    padding: 7px;
+    z-index: 999;
+    position: absolute;
+    background-color: #EFE6D4;
+    font-size: 0.75em;
+    border: #66AFE9;
+    outline: 0px none;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 16px rgba(102, 175, 233, 0.8);
+    border-radius: 2%;
+}
+
+div.modal-body div.details ul,
+div.modal-body div.details-right ul {
+    padding-left: 20px;
+}
+
+div.modal-body div.details div span.details-category,
+div.modal-body div.details-right div span.details-category {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+div.modal-body div.details span.position,
+div.modal-body div.details-right span.position {
+    font-style: italic;
+    padding-left: 35px;
+}
+
+div.modal-body div.details {
+    /*left: 20px;*/
+}
+
+div.modal-body div.details-right {
+    right: 15px;
+}

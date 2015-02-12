@@ -103,6 +103,23 @@
                                 ng-if="maxN < limits.upperN" class="out-of-scope">plus profond que N={{limits.upperN}}</span>.
                     </div>
                     <div class="alert alert-warning" ng-if="">Attention, la portée de la vue ne permet pas de voir ce qu'il y a .</div>
+                    <div ng-class="{true:'details-right', false:'details'}[highlightedCav.posX < viewCenter.posX]" ng-if="highlightedCav">
+                        <span class="position">X={{highlightedCav.posX}}|Y={{highlightedCav.posY}}|N={{highlightedCav.posN}}</span>
+                        <div ng-if="highlightedCav.monsters.length > 0">
+                            <span class="details-category">Monstres :</span>
+                            <ul>
+                                <li ng-repeat="m in highlightedCav.monsters">
+                                    <a href="http://games.mountyhall.com/mountyhall/View/MonsterView.php?ai_IDPJ={{m.id}}" target="_blank">{{m.id}}</a> - {{m.name}} {{m.nival}}</li>
+                            </ul>
+                        </div>
+                        <div ng-if="highlightedCav.trolls.length > 0">
+                            <span class="details-category">Trolls :</span>
+                            <ul >
+                                <li ng-repeat="t in highlightedCav.trolls"><a href="http://games.mountyhall.com/mountyhall/View/PJView.php?ai_IDPJ={{t.id}}" target="_blank">{{t.id}}</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
                     <table class="table table-bordered table-condensed table-hover around-monster">
                         <tbody>
                         <tr>
@@ -117,7 +134,7 @@
                                 <ul>
                                     <li ng-repeat="(n, cav) in aroundMonstersGrid[y][x]" >
                                         <a class="{{(x==targetMonster.posX && y==targetMonster.posY && n==targetMonster.posN) ? 'target-level':''}}"
-                                           href="#" title="{{cav|cavList}}" ng-click="centerView(x, y, n)">{{n}}:<span
+                                           href="#" ng-click="centerView(x,y,n)" ng-mouseenter="showCavDetails(cav)">{{n}}:<span
                                                 ng-if="cav.monsters.length > 0 && cav.trolls.length > 0">{{cav.monsters.length}}/{{cav.trolls.length}}</span><span
                                                 ng-if="cav.monsters.length > 0 && cav.trolls.length == 0">{{cav.monsters.length}}M</span><span
                                                 ng-if="cav.monsters.length == 0 && cav.trolls.length > 0">{{cav.trolls.length}}T</span>
