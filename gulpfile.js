@@ -33,7 +33,7 @@ var paths = {
     styles  : ['**/*.css'],
     images  : ['**/*.png'],
     fonts   : ['common/fonts/*'],
-    libs    : ['angular/angular.min.js', 'angular-sanitize/angular-sanitize.min.js',
+    libs    : ['angular/angular.min.js', 'angular-sanitize/angular-sanitize.min.js', 'angular-i18n/angular-locale_fr-fr.js',
         'angular-ui-bootstrap-bower/ui-bootstrap.min.js', 'angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js',
         'bootstrap/dist/js/bootstrap.min.js', 'jquery/dist/jquery.min.js', 'underscore/underscore.js']
 };
