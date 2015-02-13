@@ -423,10 +423,12 @@ angular.module('ZoumProfiler')
                 posN = parseInt(posN);
             }
 
-            $scope.viewCenter = {
+            $scope.viewMeta = {
                 posX: posX,
                 posY: posY,
-                posN: posN
+                posN: posN,
+                monstersCount: 0,
+                trollsCount: 0
             };
 
             var size = 10;
@@ -456,9 +458,11 @@ angular.module('ZoumProfiler')
                                 }
                                 angular.forEach(viewCav.monsters, function(monster){
                                     cav.monsters.push(monster);
+                                    $scope.viewMeta.monstersCount++;
                                 });
                                 angular.forEach(viewCav.trolls, function(troll){
                                     cav.trolls.push(troll);
+                                    $scope.viewMeta.trollsCount++;
                                 });
                             }
                         }

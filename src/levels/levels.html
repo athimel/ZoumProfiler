@@ -103,7 +103,7 @@
                                 ng-if="maxN < limits.upperN" class="out-of-scope">plus profond que N={{limits.upperN}}</span>.
                     </div>
                     <div class="alert alert-warning" ng-if="">Attention, la portée de la vue ne permet pas de voir ce qu'il y a .</div>
-                    <div ng-class="{true:'details-right', false:'details'}[highlightedCav.posX < viewCenter.posX]" ng-if="highlightedCav">
+                    <div ng-class="{true:'details-right', false:'details'}[highlightedCav.posX < viewMeta.posX]" ng-if="highlightedCav">
                         <span class="position">X={{highlightedCav.posX}}|Y={{highlightedCav.posY}}|N={{highlightedCav.posN}}</span>
                         <div ng-if="highlightedCav.monsters.length > 0">
                             <span class="details-category">Monstres :</span>
@@ -113,7 +113,7 @@
                             </ul>
                         </div>
                         <div ng-if="highlightedCav.trolls.length > 0">
-                            <span class="details-category">Trolls :</span>
+                            <span class="details-category">Trõlls :</span>
                             <ul >
                                 <li ng-repeat="t in highlightedCav.trolls"><a href="http://games.mountyhall.com/mountyhall/View/PJView.php?ai_IDPJ={{t.id}}" target="_blank">{{t.id}}</a></li>
 
@@ -150,6 +150,11 @@
                             <td></td>
                         </tr>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="23">Vue centrée en X={{viewMeta.posX}}|Y={{viewMeta.posY}}|N={{viewMeta.posN}} - {{viewMeta.monstersCount}} monstres / {{viewMeta.trollsCount}} trõlls</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <div class="modal-footer">

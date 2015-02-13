@@ -329,6 +329,20 @@ table.around-monster tbody tr td {
     padding: 2px;
 }
 
+table.around-monster {
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+}
+
+table.around-monster tfoot tr td {
+    font-size: 11px;
+    font-style: italic;
+    color: #7f7f7f;
+    text-align: center;
+    border: 0;
+}
+
 table.around-monster tbody tr td.center {
     background-color: #dddddd;
 }
