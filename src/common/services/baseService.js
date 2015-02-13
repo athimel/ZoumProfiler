@@ -59,18 +59,55 @@ angular.module('ZoumProfiler')
             { id: 'golem_papier', levels: 1, cost: 150, name: "Golémologie de papier", type: "Artisanat" },
 
             { id: 'am', levels: 1, cost: 0, name: 'Accélération du Métabolisme', reservedFor: base.races[2], type: "Utile", short: "AM" },
-            { id: 'bs', levels: 1, cost: 0, name: 'Botte Secrète', reservedFor: base.races[4], type: "Attaque", short: "BS" },
+            { id: 'bs', levels: 1, cost: 0, name: 'Botte Secrète', reservedFor: base.races[4], type: "Combat", short: "BS" },
             { id: 'balayage', levels: 1, cost: 0, name: 'Balayage', reservedFor: base.races[0], type: "Combat" },
             { id: 'camou', levels: 1, cost: 0, name: 'Camouflage', reservedFor: base.races[5], type: "Utile" },
             { id: 'ra', levels: 1, cost: 0, name: 'Régénération Accrue', reservedFor: base.races[1], type: "Utile", short: "RA" }
         ];
 
         base.sorts = [
-            { id: 'vampi', name: 'Vampirisme', reservedFor: base.races[2], short: "Vampi" },
-            { id: 'rp', name: 'Rafale Psychique', reservedFor: base.races[1], short: "RP" },
-            { id: 'projo', name: 'Projectile Magique', reservedFor: base.races[5], short: "Projo" },
-            { id: 'hypno', name: 'Hypnotisme', reservedFor: base.races[4], short: "Hypno" },
-            { id: 'siphon', name: 'Siphon des âmes', reservedFor: base.races[0] }
+            { id: 'aa', name: 'Analyse Anatomique', type: "Utile", short: "AA" },
+
+            { id: 'ae', name: 'Armure Ethérée', type: "Augmentation", short: "AE" },
+            { id: 'ada', name: 'Augmentation de l´Attaque', type: "Augmentation", short: "AdA" },
+            { id: 'ade', name: 'Augmentation de l´Esquive', type: "Augmentation", short: "AdE" },
+            { id: 'add', name: 'Augmentation des Dégats', type: "Augmentation", short: "AdD" },
+            { id: 'bam', name: 'Bulle Anti-Magie', type: "Augmentation", short: "BaM" },
+            { id: 'bum', name: 'Bulle Magique', type: "Augmentation", short: "BuM" },
+
+            { id: 'explo', name: 'Explosion', type: "Combat", short: "Explo" },
+            { id: 'fp', name: 'Faiblesse Passagère', type: "Combat", short: "FP" },
+            { id: 'fa', name: 'Flash Aveuglant', type: "Combat", short: "FA" },
+	    { id: 'glue', name: 'Glue', type: "Combat", short: "Glue" },
+            { id: 'gds', name: 'Griffe du Sorcier', type: "Combat", short: "GdS" },
+
+            { id: 'idt', name: 'Identification des trésors', type: "Utile", short: "IdT" },
+
+            { id: 'invi', name: 'Invisibilité', type: "Combat", short: "Invi" },
+
+            { id: 'levitation', name: 'Lévitation', type: "Utile", short: "Lévitation" },
+            { id: 'projection', name: 'Projection', type: "Utile", short: "Projection" },
+            
+            { id: 'prem', name: 'Précision magique', type: "Augmentation", short: "Prem" },
+            { id: 'pum', name: 'Puissance magique', type: "Augmentation", short: "Pum" },
+
+            { id: 'sacro', name: 'Sacrifice', type: "Utile", short: "Sacro" },
+            { id: 'telek', name: 'Télékinésie', type: "Utile", short: "Télek" },
+
+            { id: 'tp', name: 'Téléportation', type: "Utile", short: "TP" },
+
+            { id: 'va', name: 'Vision Accrue', type: "Augmentation", short: "VA" },
+
+            { id: 'vl', name: 'Vision Lointaine', type: "Utile", short: "VL" },
+            { id: 'vlc', name: 'Voir le Caché', type: "Utile", short: "VlC" },
+
+            { id: 'vt', name: 'Vue Troublée', type: "Combat", short: "VT" },
+
+            { id: 'vampi', name: 'Vampirisme', type: "Combat", reservedFor: base.races[2], short: "Vampi" },
+            { id: 'rp', name: 'Rafale Psychique', type: "Combat", reservedFor: base.races[1], short: "RP" },
+            { id: 'projo', name: 'Projectile Magique', type: "Combat", reservedFor: base.races[5], short: "Projo" },
+            { id: 'hypno', name: 'Hypnotisme', type: "Combat", reservedFor: base.races[4], short: "Hypno" },
+            { id: 'siphon', name: 'Siphon des âmes', type: "Combat", reservedFor: base.races[0] }
         ];
 
         base.mouches = [
@@ -124,7 +161,7 @@ angular.module('ZoumProfiler')
             // comps
             ca: true, ap: true, charger: true, cdb: true, rotobaffe: true, frene: true, bs: true, piege_feu: true,
             // sorts
-            vampi: true, rp: true, projo: true, siphon: true
+            vampi: true, rp: true, projo: true, siphon: true, explo : true, gds : true
         };
 
         base.levels = {};
