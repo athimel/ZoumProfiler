@@ -115,7 +115,8 @@ thead tr td {
     font-weight: normal;
 }
 
-.comp-box > div > label {
+.comp-box > div > label,
+.sort-box > div > label {
     padding-top: 10px;
 }
 

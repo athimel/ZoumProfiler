@@ -103,6 +103,8 @@ angular.module('ZoumProfiler')
 
             { id: 'vt', name: 'Vue Troublée', type: "Combat", short: "VT" },
 
+            { id: 'obsi', name: 'Sortilège d´Obsidienne', type: "Malédiction", short: "Obsi" },
+
             { id: 'vampi', name: 'Vampirisme', type: "Combat", reservedFor: base.races[2], short: "Vampi" },
             { id: 'rp', name: 'Rafale Psychique', type: "Combat", reservedFor: base.races[1], short: "RP" },
             { id: 'projo', name: 'Projectile Magique', type: "Combat", reservedFor: base.races[5], short: "Projo" },
