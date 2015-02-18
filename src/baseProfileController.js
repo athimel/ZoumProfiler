@@ -124,6 +124,13 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 }
             });
 
+            // Check for 'p.sorts' on profiles
+            angular.forEach(profilesArray, function(profile) {
+                if(angular.isUndefined(profile.sorts)) {
+                    profile.sorts = {idt : true};
+                }
+            });
+
         };
 
         $scope._loadAllFromLocalStorage = function() {
@@ -436,7 +443,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
 
         $scope.addProfile = function() {
             $scope._reset();
-            var newProfile = { comps : {cdm1 : true}, id : $scope._randomId(), type : "local" };
+            var newProfile = { comps : {cdm1 : true}, sorts : {idt : true}, id : $scope._randomId(), type : "local" };
             $scope.profiles.push(newProfile);
             $scope.selectProfile(newProfile);
         };

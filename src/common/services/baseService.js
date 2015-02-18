@@ -78,7 +78,7 @@ angular.module('ZoumProfiler')
             { id: 'explo', name: 'Explosion', type: "Combat", short: "Explo" },
             { id: 'fp', name: 'Faiblesse Passagère', type: "Combat", short: "FP" },
             { id: 'fa', name: 'Flash Aveuglant', type: "Combat", short: "FA" },
-	    { id: 'glue', name: 'Glue', type: "Combat", short: "Glue" },
+            { id: 'glue', name: 'Glue', type: "Combat", short: "Glue" },
             { id: 'gds', name: 'Griffe du Sorcier', type: "Combat", short: "GdS" },
 
             { id: 'idt', name: 'Identification des trésors', type: "Utile", short: "IdT" },
