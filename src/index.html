@@ -86,29 +86,39 @@
                         </table>
                     </ul>
 
-                    <button type="button" class="btn btn-sm btn-primary" ng-disabled="getCompareIds().length < 2"
-                            ng-click="startCompareUseCase()">
-                        <span class="glyphicon glyphicon-stats"></span> Comparer les profils
+                    <button type="button" class="btn btn-sm btn-link compare" ng-disabled="getCompareIds().length < 2"
+                            ng-click="startCompareUseCase()" ng-if="profiles.length >= 2">
+                        ↳ Comparer les profils
                     </button>
 
-                    <br/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-sm btn-primary col-md-12" ng-click="addProfile()">
+                                <span class="glyphicon glyphicon-plus"></span> Ajouter un profil
+                            </button>
+                        </div>
 
-                    <button type="button" class="btn btn-sm btn-primary" ng-click="addProfile()">
-                        <span class="glyphicon glyphicon-plus"></span> Ajouter un profil
-                    </button>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-sm btn-primary col-md-12" ng-click="startImport()">
+                                <span class="glyphicon glyphicon-import"></span> Importer un profil
+                            </button>
+                        </div>
+                    </div>
 
-                    <button type="button" class="btn btn-sm btn-primary" ng-click="startImport()">
-                        <span class="glyphicon glyphicon-import"></span> Importer un profil
-                    </button>
+                    <div class="row alternative-tools-bar">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-sm btn-default col-md-12" ng-click="startScheduler()"
+                                    ng-disabled="profiles.length == 0">
+                                <span class="glyphicon glyphicon-cog"></span> Outil tactique (ß)
+                            </button>
+                        </div>
 
-                    <button type="button" class="btn btn-sm btn-primary" ng-click="startScheduler()"
-                            ng-disabled="profiles.length == 0">
-                        <span class="glyphicon glyphicon-cog"></span> Outil tactique
-                    </button>
-
-                    <button type="button" class="btn btn-sm btn-primary" ng-click="startLevels()">
-                        <span class="glyphicon glyphicon-search"></span> Recherche de monstres
-                    </button>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-sm btn-default col-md-12" ng-click="startLevels()">
+                                <span class="glyphicon glyphicon-search"></span> Monstr'Ô finder
+                            </button>
+                        </div>
+                    </div>
 
                     <div class="authentication-bar" ng-if="user && !authenticationContext.show">
                         <span ng-if="!user.remoteId" class="auth-status">Pas connecté</span>
