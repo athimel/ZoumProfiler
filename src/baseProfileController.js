@@ -287,6 +287,14 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             $scope._saveAllToLocalStorage(); // write to local storage
         };
 
+        $scope._loadRemoteUsers = function() {
+            users.list().then(function(result) {
+                angular.forEach(result.data.users, function(user) {
+                    $scope.usersIndex[user['_id']['$id']] = user;
+                });
+            });
+        };
+
         /* ********************************************* */
         /* **                Use cases                ** */
         /* ********************************************* */
@@ -608,11 +616,23 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             });
         };
 
+        $scope._loadLastUsedLoginFromLocalStorage = function() {
+            var login = localStorage.getItem("lastUsedLogin");
+            if (angular.isDefined(login) && login != null) {
+                $scope.authenticationContext.login = login;
+            }
+        };
+
+        $scope._saveLastUsedLoginToLocalStorage = function(login) {
+            localStorage.setItem("lastUsedLogin", login);
+        };
+
         $scope._login = function(login, password) {
             users.login(login, password).then(function(result) {
                 if (!result.data.authenticated) {
                     $scope._addErrorMessage("Login/password incorrect")
                 }
+                $scope._saveLastUsedLoginToLocalStorage(login);
                 $scope._whoAmI();
                 $scope.refreshRemote();
                 $scope.cancelAuthentication();
@@ -730,15 +750,14 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             }
         }
 
-        if($scope.profiles && $scope.profiles.length == 1) {
+        if ($scope.profiles && $scope.profiles.length == 1) {
             $scope.selectProfile($scope.profiles[0]);
         }
 
         $scope._whoAmI();
 
-        users.list().then(function(result) {
-            angular.forEach(result.data.users, function(user) {
-                $scope.usersIndex[user['_id']['$id']] = user;
-            });
-        });
+        $scope._loadRemoteUsers();
+
+        $scope._loadLastUsedLoginFromLocalStorage();
+
     }]);
