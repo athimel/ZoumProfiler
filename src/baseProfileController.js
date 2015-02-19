@@ -630,7 +630,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         $scope._login = function(login, password) {
             users.login(login, password).then(function(result) {
                 if (!result.data.authenticated) {
-                    $scope._addErrorMessage("Login/password incorrect")
+                    $scope._addErrorMessage("Login / mot de passe incorrect")
                 }
                 $scope._saveLastUsedLoginToLocalStorage(login);
                 $scope._whoAmI();

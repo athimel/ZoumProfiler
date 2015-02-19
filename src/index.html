@@ -109,7 +109,7 @@
                         <div class="col-md-6">
                             <button type="button" class="btn btn-sm btn-default col-md-12" ng-click="startScheduler()"
                                     ng-disabled="profiles.length == 0">
-                                <span class="glyphicon glyphicon-cog"></span> Outil tactique (ß)
+                                <span class="glyphicon glyphicon-cog"></span> Outil tactique (ßeta)
                             </button>
                         </div>
 
@@ -120,8 +120,8 @@
                         </div>
                     </div>
 
-                    <div class="authentication-bar" ng-if="user && !authenticationContext.show">
-                        <span ng-if="!user.remoteId" class="auth-status">Pas connecté</span>
+                    <div class="row authentication-bar" ng-if="user && !authenticationContext.show">
+                        <span ng-if="!user.remoteId" class="auth-status col-md-8">Pas connecté</span>
                         <button type="button" class="btn btn-xs btn-primary" ng-click="startLogin()" ng-if="!user.remoteId" title="Connexion">
                             <span class="glyphicon glyphicon-log-in"></span>
                         </button>
@@ -129,12 +129,12 @@
                             <span class="glyphicon glyphicon-user"></span>
                         </button>
 
-                        <span ng-if="user.remoteId" class="auth-status"><b><abbr title="Groupes : {{user.groups|commaList}}">{{user.login}}</abbr></b></span>
+                        <span ng-if="user.remoteId" class="auth-status col-md-8"><b><abbr title="Groupes : {{user.groups|commaList}}">{{user.login}}</abbr></b></span>
                         <button type="button" class="btn btn-xs btn-danger" ng-click="logout()" ng-if="user.remoteId" title="Déconnexion">
                             <span class="glyphicon glyphicon-log-out"></span>
                         </button>
                     </div>
-                    <form class="authentication-form" ng-if="authenticationContext.show" role="form">
+                    <form class="row authentication-form" ng-if="authenticationContext.show" role="form">
                         <div class="form-group">
                             <input class="form-control" type="text" placeholder="Login" ng-model="authenticationContext.login" ng-required/>
                             <input class="form-control" type="password" placeholder="Mot de passe" ng-model="authenticationContext.password" ng-required/>

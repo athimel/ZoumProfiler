@@ -96,7 +96,9 @@ div.sidebar button.compare {
 }
 
 
-div.alternative-tools-bar {
+div.alternative-tools-bar,
+div.authentication-bar,
+form.authentication-form {
     margin-top: 15px;
     padding-top: 10px;
     border-top: 1px solid rgba(202, 204, 210, 0.4);
@@ -305,23 +307,24 @@ span.profile-category {
     margin-left: 5px;
 }
 
-.authentication-bar {
-    padding: 8px 15px;
-    position: fixed;
-    bottom: 0;
-    height: 46px;
-}
+/*.authentication-bar {*/
+    /*padding: 8px 15px;*/
+    /*position: fixed;*/
+    /*bottom: 0;*/
+    /*height: 46px;*/
+/*}*/
 
 .authentication-bar span.auth-status {
     font-style: italic;
     color: dimgray;
+    text-align: center;
 }
 
-.authentication-form {
-    padding: 8px 15px;
-    position: fixed;
-    bottom: 0;
-}
+/*.authentication-form {*/
+    /*padding: 8px 15px;*/
+    /*position: fixed;*/
+    /*bottom: 0;*/
+/*}*/
 .shares {
     float: right;
 }
