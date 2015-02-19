@@ -148,20 +148,24 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
 
         };
 
-        $scope._loadAllFromServer = function() {
+        $scope._loadAllFromServer = function(callback) {
             $http.get('rest/profiles/list.php')
                 .success(function(data) {
-                    if (!$scope.profiles) {
-                        $scope.profiles = [];
+                    if (!callback) {
+                        if (!$scope.profiles) {
+                            $scope.profiles = [];
+                        }
+                        var remoteProfiles = data.profiles;
+
+                        $scope._checkProfilesIntegrity(remoteProfiles);
+
+                        angular.forEach(remoteProfiles, function (profile) {
+                            profile.type = "remote";
+                            $scope.profiles.push(profile);
+                        });
+                    } else {
+                        callback(data.profiles);
                     }
-                    var remoteProfiles = data.profiles;
-
-                    $scope._checkProfilesIntegrity(remoteProfiles);
-
-                    angular.forEach(remoteProfiles, function(profile) {
-                        profile.type = "remote";
-                        $scope.profiles.push(profile);
-                    });
                 })
                 .error(function() {
                     console.log("ERROR");
@@ -175,8 +179,36 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         };
 
         $scope.refreshRemote = function() {
-            // TODO AThimel fetch only remote profiles and update local instances instead of replacing them
-            $scope._loadAllFromStorage();
+            $scope._loadAllFromServer(function(remoteProfiles) {
+                if (remoteProfiles) {
+                    var newProfiles = [];
+                    // Copy only local profiles
+                    angular.forEach($scope.profiles, function(profile) {
+                        if (profile.type == "local") {
+                            newProfiles.push(profile);
+                        }
+                    });
+                    angular.forEach(remoteProfiles, function(remoteProfile) {
+                        var found = false;
+                        $scope._checkProfilesIntegrity(remoteProfile);
+                        angular.forEach($scope.profiles, function(profile) {
+                            if (profile.type=="remote") {
+                                if (remoteProfile['_id']['$id'] == profile['_id']['$id']) {
+                                    found = true;
+                                    if (profile != $scope.profile) { // Do not update currently selected profile
+                                        angular.copy(remoteProfile, profile);
+                                    }
+                                    newProfiles.push(profile);
+                                }
+                            }
+                        });
+                        if (!found) {
+                            newProfiles.push(remoteProfile);
+                        }
+                    });
+                    $scope.profiles = newProfiles;
+                }
+            });
         };
 
         $scope._saveAllToLocalStorage = function() {
