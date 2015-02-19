@@ -85,8 +85,6 @@ TODO Outil tactique
 TODO Recherche de monstres
 --------------------------
 
-- Charger les vues à la demande uniquement ;
-- Afficher les trolls et lieux dans la preview ;
 - Gestion des autorisations (owner+partage) ;
 - Permettre la mise à jour d'une vue ;
 - ...
