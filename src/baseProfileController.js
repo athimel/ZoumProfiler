@@ -636,6 +636,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 $scope._whoAmI();
                 $scope.refreshRemote();
                 $scope.cancelAuthentication();
+                $scope._addSuccessMessage("Vous êtes connecté !")
             });
         };
 
