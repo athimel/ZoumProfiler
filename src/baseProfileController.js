@@ -221,6 +221,20 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             });
         };
 
+        $scope._deleteProfileOnServer = function(profile) {
+
+            var data = "profileId=" + profile['_id']['$id'];
+            $http.post('rest/profiles/delete.php', data)
+                .success(function(data) {
+                    if (data.result != "DELETED") {
+                        $scope._addErrorMessage("Impossible de supprimer le profil : " + data.result);
+                    }
+                })
+                .error(function(error) {
+                    $scope._addErrorMessage("Impossible de supprimer le profil : " + error);
+                });
+        };
+
         $scope._save = function(profile) {
             if (profile.type == "local") {
                 $scope._saveAllToLocalStorage();
@@ -474,9 +488,12 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             var message = "Souhaitez-vous supprimer le profil " + $filter('prettyName')(profile) + " de manière définitive ?";
             if ($window.confirm(message)) {
                 $scope.profiles.splice($scope.profiles.indexOf(profile), 1);
-                $scope._saveAll();
                 delete $scope.compareContext.map[profile.id];
-                // TODO AThimel 22/01/2015 Implement proper delete (remote compatible)
+                if (profile.type == "local") {
+                    $scope._saveAllToLocalStorage();
+                } else {
+                    $scope._deleteProfileOnServer(profile);
+                }
             }
         };
 
@@ -610,6 +627,12 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 return false;
             }
             return $scope.user.remoteId == profile._internal.owner['$id'];
+        };
+
+        $scope.isAuthenticated = function() {
+            return angular.isDefined($scope.user)
+                && angular.isDefined($scope.user.remoteId)
+                && angular.isDefined($scope.user.login);
         };
 
         /* ********************************************* */
