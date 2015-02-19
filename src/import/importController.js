@@ -141,7 +141,7 @@ angular.module('ZoumProfiler')
 
         $scope.importProfileFromSp = function() {
 
-            var newProfile = { comps : {cdm1 : true}, id : $scope._randomId() };
+            var newProfile = { comps : {cdm1 : true}, sorts : {idt : true}, id : $scope._randomId() };
             $scope._checkCaracMin(newProfile);
             $scope._checkBonus(newProfile);
 
@@ -228,7 +228,11 @@ angular.module('ZoumProfiler')
                                                         newProfile.comps[comp.id] = true;
                                                         break;
                                                     case "S":
-                                                        // TODO AThimel Implement sortileges
+                                                        var mhBaseSortId = cells[1];
+                                                        var baseSortId = $scope._mhToZoumprofilerSortsIndex[mhBaseSortId];
+                                                        var sortId = baseSortId;
+                                                        var sort = base.getCompOrSort(sortId);
+                                                        newProfile.sorts[sort.id] = true;
                                                         break;
                                                 }
                                             }
