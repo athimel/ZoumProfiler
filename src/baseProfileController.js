@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
-    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', '$http', 'base', 'users', 'sharing',
-        function($scope, $window, $location, $timeout, $filter, $http, base, users, sharing) {
+    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', '$http', '$interval', 'base', 'users', 'sharing',
+        function($scope, $window, $location, $timeout, $filter, $http, $interval, base, users, sharing) {
 
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
@@ -596,13 +596,16 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         /* **              Authentication             ** */
         /* ********************************************* */
 
-        $scope._whoAmI = function() {
+        $scope._whoAmI = function(callback) {
             users.whoAmI().then(function(result) {
                 $scope.user = {};
                 if (result.data.connected) {
                     $scope.user.remoteId = result.data.user['_id']['$id'];
                     $scope.user.login = result.data.user.login;
                     $scope.user.groups = result.data.user.groups;
+                }
+                if (callback) {
+                    callback();
                 }
             });
         };
@@ -638,6 +641,17 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 $scope.cancelAuthentication();
                 $scope._addSuccessMessage("Vous êtes connecté !")
             });
+        };
+
+        $scope._checkForRemoteSession = function() {
+            var remoteIdBeforeWhoAmI = $scope.user ? $scope.user.remoteId : "none";
+            var callback = function() {
+                var remoteIdAfterWhoAmI = $scope.user ? $scope.user.remoteId : "none";
+                if (!angular.equals(remoteIdBeforeWhoAmI, remoteIdAfterWhoAmI)) {
+                    $scope.refreshRemote();
+                }
+            };
+            $scope._whoAmI(callback)
         };
 
         $scope.startRegistration = function() {
@@ -760,5 +774,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
         $scope._loadRemoteUsers();
 
         $scope._loadLastUsedLoginFromLocalStorage();
+
+        $interval($scope._checkForRemoteSession, 840000); // 840000 ms = 14 min
 
     }]);
