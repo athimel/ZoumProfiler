@@ -53,11 +53,37 @@ angular.module('ZoumProfiler')
             '46': 'painthure'
         };
         $scope._mhToZoumprofilerSortsIndex = {
+             '1': 'projo',
+             '2': 'hypno',
              '3': 'vampi',
+             '4': 'rp',
+             '5': 'add',
              '6': 'ada',
+             '7': 'ade',
+             '8': 'explo',
+             '9': 'vl',
             '10': 'idt',
+            '11': 'vt',
+            '12': 'fp',
+            '13': 'tp',
+            '14': 'siphon',
+            '15': 'invi',
+            '16': 'ae',
+            '17': 'sacro',
+            '18': 'glue',
+            '19': 'fa',
+            '20': 'aa',
+            '21': 'projection',
+            '22': 'va',
+            '23': 'vlc',
+            '24': 'telek',
             '27': 'bam',
-            '28': 'gds'
+            '28': 'gds',
+            '29': 'bum',
+            '33': 'levitation',
+            '34': 'prem',
+            '35': 'pum',
+            '36': 'obsi'
         };
 
         /* ********************************************* */
@@ -115,7 +141,7 @@ angular.module('ZoumProfiler')
 
         $scope.importProfileFromSp = function() {
 
-            var newProfile = { comps : {cdm1 : true}, id : $scope._randomId() };
+            var newProfile = { comps : {cdm1 : true}, sorts : {idt : true}, id : $scope._randomId() };
             $scope._checkCaracMin(newProfile);
             $scope._checkBonus(newProfile);
 
@@ -202,7 +228,11 @@ angular.module('ZoumProfiler')
                                                         newProfile.comps[comp.id] = true;
                                                         break;
                                                     case "S":
-                                                        // TODO AThimel Implement sortileges
+                                                        var mhBaseSortId = cells[1];
+                                                        var baseSortId = $scope._mhToZoumprofilerSortsIndex[mhBaseSortId];
+                                                        var sortId = baseSortId;
+                                                        var sort = base.getCompOrSort(sortId);
+                                                        newProfile.sorts[sort.id] = true;
                                                         break;
                                                 }
                                             }

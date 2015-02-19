@@ -42,6 +42,7 @@ angular.module('ZoumProfiler')
                 // sorts
                 case 'vampi':
                 case 'rp':
+                case 'gds':
                 case 'projo':
                     result = armM;
                     break;
@@ -58,6 +59,7 @@ angular.module('ZoumProfiler')
 
                 // No ARM
                 case 'siphon':
+                case 'explo':
                 case 'piege_feu':
                     result = 0;
                     break;
@@ -105,6 +107,12 @@ angular.module('ZoumProfiler')
                         d6AttVampi++;
                     }
                     result.ATT = d6AttVampi * 3.5 + profile.bm['ATT'];
+                    break;
+                case 'gds':
+                    result.ATT = profile.caracs['ATT'] * 3.5 + profile.bm['ATT'];
+                    break;
+                case 'explo':
+                    result.ATT = '-';
                     break;
 
                 default:
@@ -157,6 +165,16 @@ angular.module('ZoumProfiler')
                     result.DEG_RESIST = Math.floor(result.DEG / 2);
                     result.DEG_RESIST_CRITIQ = Math.floor(result.DEG_CRITIQ / 2);
                     break;
+                case 'gds':
+                    result.DEG = Math.floor(profile.caracs['DEG'] / 2) * 2 + profile.bm['DEG'];
+                    result.DEG_CRITIQ = Math.floor(profile.caracs['DEG'] / 2) * 3 + profile.bm['DEG'];
+                    result.DEG_RESIST = Math.floor(result.DEG / 2);
+                    result.DEG_RESIST_CRITIQ = Math.floor(result.DEG_CRITIQ / 2);
+                    break;
+                case 'explo':
+                    result.DEG = Math.floor((profile.caracs['DEG'] + profile.caracs['PV']/10) / 2) * 2;
+                    result.DEG_RESIST = Math.floor(result.DEG / 2);
+                    break;
 
                 default:
                     result.DEG = profile.caracs['DEG'] * 2 + profile.bp['DEG'] + profile.bm['DEG'];
@@ -173,7 +191,7 @@ angular.module('ZoumProfiler')
             var anComputed = fight.computeFightCapabilities(base, profile, base.an, base.an);
             result.push(anComputed);
 
-            // Compétences
+            // Sortilèges
             angular.forEach(base.sorts, function(sort) {
                 if (base.combatCompsSortsMap[sort.id]) {
                     if (sort.reservedFor) {
@@ -182,12 +200,15 @@ angular.module('ZoumProfiler')
                             result.push(sortComputed);
                         }
                     } else {
-// TODO AThimel 25/10/2014 Include users owned sorts
+                        if (profile.sorts[sort.id] === true) {
+                            var sortComputed = fight.computeFightCapabilities(base, profile, sort, sort);
+                            result.push(sortComputed);
+                        }
                     }
                 }
             });
 
-            // Sortilèges
+            // Compétences
             angular.forEach(base.comps, function(comp) {
                 if (base.combatCompsSortsMap[comp.id]) {
                     if (comp.reservedFor) {
