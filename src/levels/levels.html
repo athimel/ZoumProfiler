@@ -25,6 +25,10 @@
                     L'utilisation des scripts publics (SP) est soumise à quotas, évitez de faire trop d'appels.
                 </div>
 
+                <div class="alert alert-warning" ng-if="!isAuthenticated()">
+                    Comme vous n'êtes pas connecté, la vue que vous allez importer sera publique !
+                </div>
+
                 <!--<div class="alert alert-info">-->
                     <!--Vous pouvez entrer ici votre identifiant de troll ainsi qu'un mot de passe spécifique généré via-->
                     <!--MountyHall. Pour cela allez dans "Option" &gt; "Options Trõll" &gt; "Générer/Révoquer un code-->

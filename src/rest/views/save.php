@@ -1,6 +1,9 @@
 <?php header('Content-Type: application/json'); ?>
 {"result":<?php
 
+session_start();
+$userId = $_SESSION['authenticatedUserId'];
+
 $m = new MongoClient();
 $db = $m->zoumprofiler;
 
@@ -10,6 +13,15 @@ $viewsColl = $db->views;
 
 $view = json_decode($viewJson, true);
 unset($view['$$hashKey']);
+
+$view['_internal'] = array();
+if ($userId) {
+    $view['_internal']['owner'] = new MongoId($userId);
+} else {
+    $view['_internal']['shares'] = array();
+    array_push($view['_internal']['shares'], array('group' => "public"));
+}
+
 $viewsColl->insert($view);
 echo '"CREATED","view":'.json_encode($view);
 

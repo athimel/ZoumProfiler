@@ -318,7 +318,7 @@ angular.module('ZoumProfiler')
 
         $scope.deleteView = function(view) {
             var data = "viewId=" + view['_id']['$id'];
-            $http.post('rest/views/remove.php', data)
+            $http.post('rest/views/delete.php', data)
                 .success(function(data) {
                     var index = $scope.views.indexOf(view);
                     $scope.views.splice(index, 1);
