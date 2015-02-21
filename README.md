@@ -86,6 +86,5 @@ TODO Recherche de monstres
 --------------------------
 
 - Partage des vues (mise en commun avec le code existant pour les profils) ;
-- Rafraichir les vues sur changement au niveau de l'authentification (idem profils) ;
 - Permettre la mise à jour d'une vue ;
 - ...

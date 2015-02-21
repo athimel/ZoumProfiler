@@ -398,6 +398,10 @@ angular.module('ZoumProfiler')
 
         $scope._loadAllViewsFromServer();
 
+        $scope.$on('authenticatedUserHasChanged', function() {
+            $scope._loadAllViewsFromServer();
+        });
+
     }]);
 
 

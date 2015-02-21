@@ -615,7 +615,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 delete $scope.user.remoteId;
                 delete $scope.user.login;
                 delete $scope.user.groups;
-                $scope.refreshRemote();
+                $scope._authenticatedUserHasChanged();
             });
         };
 
@@ -630,6 +630,11 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             localStorage.setItem("lastUsedLogin", login);
         };
 
+        $scope._authenticatedUserHasChanged = function() {
+            $scope.refreshRemote();
+            $scope.$broadcast('authenticatedUserHasChanged');
+        };
+
         $scope._login = function(login, password) {
             users.login(login, password).then(function(result) {
                 if (!result.data.authenticated) {
@@ -637,7 +642,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 }
                 $scope._saveLastUsedLoginToLocalStorage(login);
                 $scope._whoAmI();
-                $scope.refreshRemote();
+                $scope._authenticatedUserHasChanged();
                 $scope.cancelAuthentication();
                 $scope._addSuccessMessage("Vous êtes connecté !")
             });
@@ -648,7 +653,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             var callback = function() {
                 var remoteIdAfterWhoAmI = $scope.user ? $scope.user.remoteId : "none";
                 if (!angular.equals(remoteIdBeforeWhoAmI, remoteIdAfterWhoAmI)) {
-                    $scope.refreshRemote();
+                    $scope._authenticatedUserHasChanged();
                 }
             };
             $scope._whoAmI(callback)
