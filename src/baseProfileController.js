@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
-    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', '$http', '$interval', 'base', 'users', 'sharing',
-        function ($scope, $window, $location, $timeout, $filter, $http, $interval, base, users, sharing) {
+    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', '$http', '$interval', 'base', 'users',
+        function ($scope, $window, $location, $timeout, $filter, $http, $interval, base, users) {
 
             $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
@@ -21,7 +21,6 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             $scope.compareContext = {show: false, map: {}};
             $scope.schedulerContext = {show: false, target: {}};
             $scope.authenticationContext = {show: false};
-            $scope.shareContext = {show: false};
             $scope.levelsContext = {show: false};
             $scope.profile;
             $scope.computed;
@@ -583,8 +582,19 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 return result;
             };
 
+            $scope._withoutInternal = function(o) {
+                var result = o;
+                if (result['_internal']) {
+                    result = angular.copy(result);
+                    delete result['_internal'];
+                }
+                return result;
+            };
+
             $scope.hasModification = function () {
-                return !angular.equals($scope.profile, $scope.originalProfile);
+                var o1 = $scope._withoutInternal($scope.profile);
+                var o2 = $scope._withoutInternal($scope.originalProfile);
+                return !angular.equals(o1, o2);
             };
 
             $scope.cancelModifications = function () {
@@ -637,14 +647,15 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
 
             $scope._login = function (login, password) {
                 users.login(login, password).then(function (result) {
-                    if (!result.data.authenticated) {
+                    if (result.data.authenticated) {
+                        $scope._addSuccessMessage("Vous êtes connecté !");
+                        $scope.cancelAuthentication();
+                    } else {
                         $scope._addErrorMessage("Login / mot de passe incorrect")
                     }
                     $scope._saveLastUsedLoginToLocalStorage(login);
                     $scope._whoAmI();
                     $scope._authenticatedUserHasChanged();
-                    $scope.cancelAuthentication();
-                    $scope._addSuccessMessage("Vous êtes connecté !")
                 });
             };
 
@@ -705,50 +716,6 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                     return false;
                 }
                 return $scope.isAuthenticated() && ($scope.user.remoteId == profile._internal.owner['$id']);
-            };
-
-            /* ********************************************* */
-            /* **                 Sharing                 ** */
-            /* ********************************************* */
-
-            $scope.startSharing = function () {
-                $scope.shareContext.show = true;
-                delete $scope.shareContext.user;
-                delete $scope.shareContext.group;
-            };
-
-            $scope.submitShare = function () {
-                sharing.share($scope.profile, $scope.shareContext.user, $scope.shareContext.group).then(function (result) {
-                    if (result.data.result == "SHARED") {
-                        var share = {};
-                        if ($scope.shareContext.user && $scope.shareContext.user.length > 0) {
-                            share.user = {};
-                            $scope.usersIndex[$scope.shareContext.user] = {login: $scope.shareContext.user}; // FIXME Vieux hack !
-                            share.user['$id'] = $scope.shareContext.user;
-                        }
-                        if ($scope.shareContext.group && $scope.shareContext.group.length > 0) {
-                            share.group = $scope.shareContext.group;
-                        }
-                        $scope.profile._internal.shares.push(share);
-                        $scope.cancelShare();
-                    } else {
-                        $scope._addErrorMessage("Échec : " + result.data.result);
-                    }
-                });
-            };
-
-            $scope.cancelShare = function () {
-                $scope.shareContext.show = false;
-            };
-
-            $scope.unshare = function (share) {
-                sharing.unshare($scope.profile, share.user, share.group).then(function (result) {
-                    if (result.data.result == "UNSHARED") {
-                        $scope.profile._internal.shares.splice($scope.profile._internal.shares.indexOf(share), 1);
-                    } else {
-                        $scope._addErrorMessage("Échec : " + result.data.result);
-                    }
-                });
             };
 
             /* ********************************************* */

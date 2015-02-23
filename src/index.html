@@ -187,6 +187,25 @@
                             </tab>
                         </tabset>
 
+                        <div class="row actionbar">
+                            <button type="button" class="btn btn-sm btn-success" ng-disabled="!hasModification()"
+                                    ng-click="saveProfile()">
+                                <span class="glyphicon glyphicon-save"></span> Enregistrer le profil
+                            </button>
+
+                            <button type="button" class="btn btn-sm btn-default" ng-disabled="!hasModification()"
+                                    ng-click="cancelModifications()">
+                                <span class="glyphicon glyphicon-ban-circle"></span> Annuler les modifications
+                            </button>
+
+                            <button type="button" class="btn btn-sm btn-primary" ng-if="profile.type=='local'"
+                                    ng-click="moveFromLocalToRemote()" ng-disabled="!isAuthenticated()">
+                                <span class="glyphicon glyphicon-cloud-upload"></span> Transférer sur le serveur
+                            </button>
+
+                            <share></share>
+                        </div>
+
                     </form>
 
                     <import></import>
@@ -196,67 +215,6 @@
                     <scheduler></scheduler>
 
                     <levels></levels>
-
-                    <div class="row actionbar" ng-if="profile">
-                        <button type="button" class="btn btn-sm btn-success" ng-disabled="!hasModification()"
-                                ng-click="saveProfile()">
-                            <span class="glyphicon glyphicon-save"></span> Enregistrer le profil
-                        </button>
-
-                        <button type="button" class="btn btn-sm btn-default" ng-disabled="!hasModification()"
-                                ng-click="cancelModifications()">
-                            <span class="glyphicon glyphicon-ban-circle"></span> Annuler les modifications
-                        </button>
-
-                        <button type="button" class="btn btn-sm btn-primary" ng-if="profile.type=='local'"
-                                ng-click="moveFromLocalToRemote()" ng-disabled="!isAuthenticated()">
-                            <span class="glyphicon glyphicon-cloud-upload"></span> Transférer sur le serveur
-                        </button>
-
-                        <span class="shares" ng-if="profile.type=='remote' && !shareContext.show">
-
-                            <span ng-if="!isOwner(profile)">
-                                <span class="title">Propriétaire :</span>
-                                <button type="button" class="btn btn-xs btn-default">
-                                    <span class="glyphicon glyphicon-user"></span> {{usersIndex[profile._internal.owner['$id']].login}}
-                                </button>
-                                |
-                            </span>
-
-                            <span class="title" ng-if="!profile._internal.shares || profile._internal.shares.length == 0">Non partagé</span>
-
-                            <span class="title" ng-if="profile._internal.shares && profile._internal.shares.length > 0">Partages :</span>
-                            <span ng-repeat="share in profile._internal.shares">
-                                <button type="button" class="btn btn-xs btn-default" ng-if="share.group && share.group == 'public'" ng-click="unshare(share)" title="Cliquez pour annuler ce partage">
-                                    <span class="glyphicon glyphicon-globe"></span> Public
-                                </button>
-                                <button type="button" class="btn btn-xs btn-default" ng-if="share.group && share.group != 'public'" ng-click="unshare(share)" title="Cliquez pour annuler ce partage">
-                                    <span class="glyphicon glyphicon-flag"></span> {{share.group}}
-                                </button>
-                                <button type="button" class="btn btn-xs btn-default" ng-if="share.user" ng-click="unshare(share)">
-                                    <span class="glyphicon glyphicon-user"></span> {{usersIndex[share.user['$id']].login}}
-                                </button>
-                            </span>
-
-                            | <button type="button" class="btn btn-sm btn-primary" ng-click="startSharing()"
-                                      ng-disabled="!isOwner(profile)">
-                                <span class="glyphicon glyphicon-share"></span> Partager
-                            </button>
-                        </span>
-                        <form class="shares form-inline" ng-if="profile.type=='remote' && shareContext.show" role="form">
-                            <div class="form-group">
-                                <input class="form-control" type="text" id="share-user" ng-model="shareContext.user" placeholder="Nom d'utilisateur"/>
-                                <input class="form-control" type="text" id="share-group" ng-model="shareContext.group" placeholder='Nom du groupe ou "public"'/>
-
-                                <button type="button" class="btn btn-sm btn-success" ng-click="submitShare()">
-                                    <span class="glyphicon glyphicon-share"></span> Partager
-                                </button>
-                                <button type="button" class="btn btn-sm btn-default" ng-click="cancelShare()">
-                                    <span class="glyphicon glyphicon-ban-cicle"></span> Annuler
-                                </button>
-                            </div>
-                        </form>
-                    </div>
 
                 </div>
 
