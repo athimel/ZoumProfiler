@@ -712,10 +712,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             };
 
             $scope.isOwner = function (profile) {
-                if (profile.type != "remote" || angular.isUndefined(profile._internal.owner)) {
-                    return false;
-                }
-                return $scope.isAuthenticated() && ($scope.user.remoteId == profile._internal.owner['$id']);
+                return sharing.isOwner(profile, $scope.user ? $scope.user.remoteId : undefined);
             };
 
             /* ********************************************* */

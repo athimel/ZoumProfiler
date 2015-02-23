@@ -154,18 +154,17 @@
 
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
-                    <br/>
-                    <div ng-if="computed.totalPi > config.maxPi" class="alert alert-danger">Ce profil dépasse la limite de <b>{{config.maxPi}}
-                        PI</b>. Il vous manque <b>{{computed.totalPi - config.maxPi}} PI</b>.
-                    </div>
-
                     <form ng-if="profile" class="form-horizontal" role="form">
+
+                        <div ng-if="computed.totalPi > config.maxPi" class="alert alert-danger">Ce profil dépasse la limite de <b>{{config.maxPi}}
+                            PI</b>. Il vous manque <b>{{computed.totalPi - config.maxPi}} PI</b>.
+                        </div>
 
                         <header></header>
 
                         <fight></fight>
 
-                        <tabset ng-if="profile">
+                        <tabset>
 
                             <tab heading="Caractéristiques">
                                 <caracteristiques></caracteristiques>

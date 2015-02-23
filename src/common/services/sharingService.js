@@ -24,5 +24,12 @@ angular.module('ZoumProfiler')
             return $http.post('rest/profiles/unshare.php', data);
         };
 
+        sharing.isOwner = function(sharable, remoteUserId) {
+            if (sharable.type != "remote" || angular.isUndefined(sharable._internal.owner)) {
+                return false;
+            }
+            return angular.isDefined(remoteUserId) && (remoteUserId == sharable._internal.owner['$id']);
+        };
+
         return sharing;
     }]);
