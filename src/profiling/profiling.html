@@ -1,0 +1,54 @@
+<div ng-controller="ProfilingController">
+    <form ng-if="profile" class="form-horizontal" role="form">
+
+        <div ng-if="computed.totalPi > config.maxPi" class="alert alert-danger">Ce profil dépasse la limite de <b>{{config.maxPi}}
+            PI</b>. Il vous manque <b>{{computed.totalPi - config.maxPi}} PI</b>.
+        </div>
+
+        <header></header>
+
+        <fight></fight>
+
+        <tabset>
+
+            <tab heading="Caractéristiques">
+                <caracteristiques></caracteristiques>
+            </tab>
+            <tab heading="Compétences">
+                <competences></competences>
+            </tab>
+            <tab heading="Sortilèges">
+                <sortileges></sortileges>
+            </tab>
+            <tab heading="Mouches">
+                <mouches></mouches>
+            </tab>
+            <tab heading="Équipement">
+                <equipement></equipement>
+            </tab>
+            <tab heading="Export">
+                <export></export>
+            </tab>
+        </tabset>
+
+        <div class="row actionbar">
+            <button type="button" class="btn btn-sm btn-success" ng-disabled="!hasModification()"
+                    ng-click="saveProfile()">
+                <span class="glyphicon glyphicon-save"></span> Enregistrer le profil
+            </button>
+
+            <button type="button" class="btn btn-sm btn-default" ng-disabled="!hasModification()"
+                    ng-click="cancelModifications()">
+                <span class="glyphicon glyphicon-ban-circle"></span> Annuler les modifications
+            </button>
+
+            <button type="button" class="btn btn-sm btn-primary" ng-if="profile.type=='local'"
+                    ng-click="moveFromLocalToRemote()" ng-disabled="!isAuthenticated()">
+                <span class="glyphicon glyphicon-cloud-upload"></span> Transférer sur le serveur
+            </button>
+
+            <share></share>
+        </div>
+
+    </form>
+</div>

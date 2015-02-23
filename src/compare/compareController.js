@@ -77,7 +77,6 @@ angular.module('ZoumProfiler')
                 angular.forEach($scope.profiles, function(profile) {
                     if(profile.id == id) {
                         $scope.compareProfiles.push(profile);
-                        $scope._checkBonus(profile); // In case this is an old profile without bp/bm
                         angular.forEach(Object.keys(profile.comps), function(compId) {
                             if(profile.comps[compId] === true && angular.isUndefined(compsAdded[compId])) {
                                 $scope.compareComps.push(base.compsMap[compId]);
@@ -88,7 +87,6 @@ angular.module('ZoumProfiler')
                 });
             });
             $scope.compareBest = $scope._computeBest($scope.compareProfiles);
-            $scope.compareContext.show = true;
         };
 
         $scope.$on('startCompareUseCase', function() {

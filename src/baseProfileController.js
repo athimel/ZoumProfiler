@@ -1,29 +1,19 @@
 'use strict';
 
 angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
-    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', '$http', '$interval', 'base', 'users',
-        function ($scope, $window, $location, $timeout, $filter, $http, $interval, base, users) {
+    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', '$http', '$interval', 'base', 'users', 'sharing',
+        function ($scope, $window, $location, $timeout, $filter, $http, $interval, base, users, sharing) {
 
             $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-
-            /* ********************************************* */
-            /* **           Base stuff exposed            ** */
-            /* ********************************************* */
-
-            $scope.races = base.races;
-            $scope.config = base.config;
 
             /* ********************************************* */
             /* **             Contextual data             ** */
             /* ********************************************* */
 
-            $scope.importContext = {show: false};
-            $scope.compareContext = {show: false, map: {}};
-            $scope.schedulerContext = {show: false, target: {}};
-            $scope.authenticationContext = {show: false};
-            $scope.levelsContext = {show: false};
-            $scope.profile;
-            $scope.computed;
+            $scope.display = { panel: "none" };
+            $scope.importContext = { };
+            $scope.compareContext = { map: {} };
+            $scope.authenticationContext = { show: false };
             $scope.messages = {success: [], warnings: [], errors: []};
             $scope.user;
 
@@ -32,6 +22,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             /* ********************************************* */
 
             $scope.profiles = [];
+            $scope.selectedProfile = undefined;
             $scope.profileTypes = ["local", "remote"];
             $scope.usersIndex = {};
 
@@ -194,7 +185,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                                 if (profile.type == "remote") {
                                     if (remoteProfile['_id']['$id'] == profile['_id']['$id']) {
                                         found = true;
-                                        if (profile != $scope.profile) { // Do not update currently selected profile
+                                        if (profile != $scope.selectedProfile) { // Do not update currently selected profile
                                             angular.copy(remoteProfile, profile);
                                         }
                                         newProfiles.push(profile);
@@ -234,7 +225,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
 
                             $scope._checkProfilesIntegrity(profile);
 
-                            $scope._onProfileSaved(profile);
+                            $scope.$broadcast("onProfileSaved", profile);
                         } else {
                             $scope._addErrorMessage("Impossible d'enregistrer le profil : " + data.result);
                         }
@@ -279,13 +270,6 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 $scope._saveAllToServer();
             };
 
-            $scope.moveFromLocalToRemote = function () {
-                $scope.saveProfile(); // save to local storage
-                $scope.profile.type = "remote"; // set remote
-                $scope.saveProfile();
-                $scope._saveAllToLocalStorage(); // write to local storage
-            };
-
             $scope._loadRemoteUsers = function () {
                 users.list().then(function (result) {
                     angular.forEach(result.data.users, function (user) {
@@ -303,6 +287,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             };
 
             $scope.startCompareUseCase = function () {
+                $scope._selectPanel("compare");
                 $scope.$broadcast('startCompareUseCase');
             };
 
@@ -316,178 +301,14 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 return result;
             };
 
-            $scope._checkBonus = function (profile) {
-                angular.forEach(base.caracs, function (carac) {
-                    if (!profile.bp) {
-                        profile.bp = {};
-                    }
-                    if (!profile.bm) {
-                        profile.bm = {};
-                    }
-                    if (!profile.bp[carac.id]) {
-                        profile.bp[carac.id] = 0;
-                    }
-                    if (!profile.bm[carac.id]) {
-                        profile.bm[carac.id] = 0;
-                    }
-                });
-            };
-
-            $scope.checkBonus = function () {
-                $scope._checkBonus($scope.profile);
-            };
-
-            $scope._checkCaracMin = function (profile) {
-                if (angular.isUndefined(profile.caracs)) {
-                    profile.caracs = {};
-                }
-                angular.forEach(base.caracs, function (carac) {
-                    if (angular.isUndefined(profile.caracs[carac.id])) {
-                        if (carac.id == 'TOUR') {
-                            profile.caracs[carac.id] = carac.max;
-                        } else {
-                            profile.caracs[carac.id] = $scope._min(profile.race, carac);
-                        }
-                    } else {
-                        if (carac.id == 'TOUR') {
-                            profile.caracs[carac.id] = Math.min(profile.caracs[carac.id], carac.max);
-                        } else {
-                            profile.caracs[carac.id] = Math.max(profile.caracs[carac.id], $scope._min(profile.race, carac));
-                        }
-                    }
-                });
-            };
-
-            $scope._checkMouches = function (profile) {
-                if (angular.isUndefined(profile.mouches)) {
-                    profile.mouches = {};
-                }
-                angular.forEach(base.mouches, function (mouche) {
-                    if (angular.isUndefined(profile.mouches[mouche.type])) {
-                        profile.mouches[mouche.type] = 0;
-                    }
-                });
-            };
-
-            $scope._newComputed = function () {
-                return {
-                    amelioCount: {},
-                    invested: {},
-                    nextCosts: {},
-                    piCaracts: 0,
-                    piComps: -10,
-                    totalPi: 0,
-                    percentCaracts: 0,
-                    percentComps: 0,
-                    percentInvested: {},
-                    level: 1
-                };
-            };
-
-            $scope._min = function (race, carac) {
-                if (angular.isDefined(carac['min' + race])) {
-                    return carac['min' + race];
-                } else {
-                    return carac.min;
-                }
-            };
-
-            $scope._cost = function (race, carac) {
-                if (angular.isDefined(carac['cost' + race])) {
-                    return carac['cost' + race];
-                } else {
-                    return carac.cost;
-                }
-            };
-
-            $scope._computeAmelioCount = function (profile, carac) {
-                var current = profile.caracs[carac.id];
-                var result = 0;
-                if (carac.id == 'TOUR') {
-                    for (var i = carac.max; i > current;) {
-                        result++;
-                        i -= Math.max(30 - 3 * (result - 1), 2.5);
-                    }
-                } else {
-                    var min = $scope._min(profile.race, carac);
-                    result = current - min;
-                    if (carac.id == 'PV') {
-                        result = Math.floor(result / 10);
-                    }
-                }
-                return result;
-            };
-
-            $scope._computeInvested = function (profile, carac) {
-                var cost = $scope._cost(profile.race, carac);
-                var amelioCount = $scope._computeAmelioCount(profile, carac);
-                var result = 0;
-                for (var i = 0; i <= amelioCount; i++) {
-                    result += i * cost;
-                }
-                return result;
-            };
-
-            $scope._computeNextCost = function (profile, carac) {
-                var cost = $scope._cost(profile.race, carac);
-                var count = $scope._computeAmelioCount(profile, carac) + 1;
-                var result = count * cost;
-                return result;
-            };
-
-            $scope._refreshComputed = function () {
-                var newComputed = $scope._newComputed();
-                angular.forEach(base.caracs, function (carac) {
-                    newComputed.amelioCount[carac.id] = $scope._computeAmelioCount($scope.profile, carac);
-                    newComputed.invested[carac.id] = $scope._computeInvested($scope.profile, carac);
-                    newComputed.piCaracts += newComputed.invested[carac.id];
-                    newComputed.nextCosts[carac.id] = $scope._computeNextCost($scope.profile, carac);
-                });
-                newComputed.currentTour = $scope.profile.caracs['TOUR'];
-                if ($scope.profile.comps) {
-                    angular.forEach(Object.keys($scope.profile.comps), function (compId) {
-                        if ($scope.profile.comps[compId] === true) {
-                            newComputed.piComps += base.compsMap[compId].cost;
-                        }
-                    });
-                }
-                newComputed.totalPi = newComputed.piCaracts + newComputed.piComps;
-                if (newComputed.totalPi >= base.config.maxPi) {
-                    newComputed.level = 60;
-                } else if (newComputed.totalPi < 20) {
-                    newComputed.level = 1;
-                } else {
-                    for (var i = 2; i < 60; i++) {
-                        if (newComputed.totalPi >= base.levels['n' + i]) {
-                            newComputed.level = i;
-                        } else {
-                            break;
-                        }
-                    }
-                }
-                angular.forEach(base.caracs, function (carac) {
-                    newComputed.percentInvested[carac.id] = 100 * newComputed.invested[carac.id] / newComputed.piCaracts;
-                });
-                newComputed.percentCaracts = 100 * newComputed.piCaracts / newComputed.totalPi;
-                newComputed.percentComps = 100 * newComputed.piComps / newComputed.totalPi;
-                $scope.computed = newComputed;
-
-                $scope._startRefreshFightCapabilities();
-            };
-
-
             /* ********************************************* */
             /* **           Profiles management           ** */
             /* ********************************************* */
 
             $scope.selectProfile = function (profile) {
-                $scope._reset();
-                $scope._checkCaracMin(profile);
-                $scope._checkMouches(profile);
-                $scope.profile = profile;
-                $scope.originalProfile = angular.copy($scope.profile);
-                $scope.checkBonus();
-                $scope._refreshComputed();
+                $scope._selectPanel("profiling");
+                $scope.selectedProfile = profile;
+                $scope.$broadcast('onProfileSelected', profile);
             };
 
             $scope._randomId = function () {
@@ -495,8 +316,12 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             };
 
             $scope.addProfile = function () {
-                $scope._reset();
-                var newProfile = {comps: {cdm1: true}, sorts: {idt: true}, id: $scope._randomId(), type: "local"};
+                var newProfile = {
+                    comps: { cdm1: true },
+                    sorts: { idt: true },
+                    id: $scope._randomId(),
+                    type: "local"
+                };
                 $scope.profiles.push(newProfile);
                 $scope.selectProfile(newProfile);
             };
@@ -509,17 +334,6 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 delete newProfile['_id']; // in case profile is already persisted remotely
                 $scope.profiles.push(newProfile);
                 $scope._save(newProfile);
-            };
-
-            $scope._onProfileSaved = function (profile) {
-                if (!profile || profile == $scope.profile) {
-                    $scope.originalProfile = angular.copy($scope.profile);
-                }
-            };
-
-            $scope.saveProfile = function () {
-                $scope._save($scope.profile);
-                $scope._onProfileSaved();
             };
 
             $scope.deleteProfile = function (profile) {
@@ -536,40 +350,30 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 }
             };
 
-            $scope.startImport = function () {
+            $scope._reset = function () {
+
+                if ($scope.display.panel == "profiling") {
+                    $scope.$broadcast("onLeaveProfiling");
+                    delete $scope.selectedProfile;
+                }
+
+            };
+
+            $scope._selectPanel = function(panel) {
                 $scope._reset();
-                $scope.importContext.show = true;
+                $scope.display.panel = panel;
+            };
+
+            $scope.startImport = function () {
+                $scope._selectPanel("import");
             };
 
             $scope.startScheduler = function () {
-                $scope._reset();
-                $scope.schedulerContext.show = true;
+                $scope._selectPanel("scheduler");
             };
 
             $scope.startLevels = function () {
-                $scope._reset();
-                $scope.levelsContext.show = true;
-            };
-
-            $scope._reset = function () {
-
-                if (angular.isDefined($scope.profile) && $scope.hasModification()) {
-                    var message = "Vous avez des modifications sur le profil " + $filter('prettyName')($scope.profile) + ", voulez-vous les enregistrer ?";
-                    if ($window.confirm(message)) {
-                        $scope.saveProfile();
-                    } else {
-                        $scope.cancelModifications();
-                    }
-                }
-
-                delete $scope.profile;
-                delete $scope.originalProfile;
-                delete $scope.computed;
-
-                $scope.importContext.show = false;
-                $scope.compareContext.show = false;
-                $scope.schedulerContext.show = false;
-                $scope.levelsContext.show = false;
+                $scope._selectPanel("levels");
             };
 
             $scope.getCompareIds = function () {
@@ -580,26 +384,6 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                     }
                 });
                 return result;
-            };
-
-            $scope._withoutInternal = function(o) {
-                var result = o;
-                if (result['_internal']) {
-                    result = angular.copy(result);
-                    delete result['_internal'];
-                }
-                return result;
-            };
-
-            $scope.hasModification = function () {
-                var o1 = $scope._withoutInternal($scope.profile);
-                var o2 = $scope._withoutInternal($scope.originalProfile);
-                return !angular.equals(o1, o2);
-            };
-
-            $scope.cancelModifications = function () {
-                angular.copy($scope.originalProfile, $scope.profile);
-                $scope._refreshComputed();
             };
 
             /* ********************************************* */
