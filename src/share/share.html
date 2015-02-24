@@ -1,7 +1,7 @@
 <div class="shares" ng-controller="ShareController">
-    <span ng-if="sharable.type=='remote' && !shareContext.show">
+    <span ng-if="sharable && !shareContext.show">
 
-        <span ng-if="!isOwner(sharable)">
+        <span ng-if="sharable._internal.owner">
             <span class="title">Propriétaire :</span>
             <button type="button" class="btn btn-xs btn-default">
                 <span class="glyphicon glyphicon-user"></span> {{usersIndex[sharable._internal.owner['$id']].login}}
@@ -31,7 +31,7 @@
         <span class="glyphicon glyphicon-share"></span> Partager
     </button>
     </span>
-    <div class="form-inline" ng-if="sharable.type=='remote' && shareContext.show" role="form">
+    <div class="form-inline" ng-if="sharable && shareContext.show" role="form">
         <div class="form-group">
             <input class="form-control" type="text" id="share-user" ng-model="shareContext.user"
                    placeholder="Nom d'utilisateur"/>

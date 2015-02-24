@@ -499,6 +499,10 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 return sharing.isOwner(sharable, $scope.user ? $scope.user.remoteId : undefined);
             };
 
+            $scope.canDeleteProfile = function (profile) {
+                return profile.type == "local" || $scope.isOwner(profile);
+            };
+
             /* ********************************************* */
             /* **                 Startup                 ** */
             /* ********************************************* */

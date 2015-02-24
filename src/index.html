@@ -76,7 +76,7 @@
                                         </button>
 
                                         <button type="button" class="btn btn-xs btn-danger" ng-click="deleteProfile(p)"
-                                                title="Supprimer" ng-disabled="p.type!='local' && !isOwner(p)">
+                                                title="Supprimer" ng-disabled="!canDeleteProfile(p)">
                                             <span class="glyphicon glyphicon-trash"></span>
                                         </button>
                                     </td>

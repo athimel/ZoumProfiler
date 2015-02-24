@@ -210,7 +210,9 @@ angular.module('ZoumProfiler')
             $scope._checkCaracMin(profile);
             $scope._checkMouches(profile);
             $scope.profile = profile;
-            $scope.sharable = $scope.profile;
+            if ($scope.profile.type == "remote") {
+                $scope.sharable = $scope.profile;
+            }
             $scope.originalProfile = angular.copy($scope.profile);
             $scope.checkBonus();
             $scope._refreshComputed();

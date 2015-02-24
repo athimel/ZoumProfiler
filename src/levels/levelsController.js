@@ -12,6 +12,7 @@ angular.module('ZoumProfiler')
         /* ********************************************* */
 
         $scope.selectedView;
+        $scope.sharableType = "view";
         $scope.views = [];
         $scope.levelContext = { minLevel:10, maxLevel:99, includeGowap:false, includeZombi:false, maxDistance: 20 };
 
@@ -47,6 +48,7 @@ angular.module('ZoumProfiler')
                 }
                 delete $scope._viewGrid;
                 $scope.selectedView = view;
+                $scope.sharable = $scope.selectedView;
             }
         };
 
@@ -316,6 +318,11 @@ angular.module('ZoumProfiler')
                 });
         };
 
+        $scope.canDeleteView = function(view) {
+            //!v['_id']['$id']
+            return (!view._internal.owner || $scope.isOwner(view));
+        };
+
         $scope.deleteView = function(view) {
             var data = "viewId=" + view['_id']['$id'];
             $http.post('rest/views/delete.php', data)
@@ -324,6 +331,7 @@ angular.module('ZoumProfiler')
                     $scope.views.splice(index, 1);
                     if (angular.equals(view, $scope.selectedView)) {
                         delete $scope.selectedView;
+                        delete $scope.sharable;
                     }
                 })
                 .error(function(error) {

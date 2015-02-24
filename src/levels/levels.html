@@ -2,7 +2,6 @@
 
     <form class="form-horizontal" role="form">
 
-
         <div class="row">
             <div class="col-md-6" ng-if="views.length > 0">
                 <h3>Vues</h3>
@@ -13,7 +12,7 @@
                         </button>
 
                         <button type="button" class="btn btn-xs btn-danger" ng-click="deleteView(v)"
-                                title="Supprimer" ng-disabled="!v['_id']['$id']">
+                                title="Supprimer" ng-disabled="!canDeleteView(v)">
                             <span class="glyphicon glyphicon-trash"></span>
                         </button>
                     </li>
@@ -203,9 +202,11 @@
                 <tr ng-if="levelContext.filteredMonstersCount == 0" class="empty"><td colspan="8">Aucun monstre ne correspond à vos filtres</td></tr>
                 </tbody>
             </table>
-            <!--<ul>-->
-                <!--<li ng-repeat="m in selectedView.monsters">{{m}}</li>-->
-            <!--</ul>-->
+
+            <div class="row actionbar">
+                <share></share>
+            </div>
+
         </div>
 
     </form>

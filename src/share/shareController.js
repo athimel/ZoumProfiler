@@ -7,10 +7,6 @@ angular.module('ZoumProfiler')
     })
     .controller('ShareController', ['$scope', 'sharing', function ($scope, sharing) {
 
-        //$scope.controllerId = $scope._randomId();
-        //console.log("New controller: " + $scope.controllerId);
-        //console.log("$scope.sharableType=" + $scope.sharableType);
-
         /* ********************************************* */
         /* **             Contextual data             ** */
         /* ********************************************* */
@@ -27,6 +23,15 @@ angular.module('ZoumProfiler')
             delete $scope.shareContext.group;
         };
 
+        $scope._checkInternal = function(sharable) {
+            if (!sharable._internal) {
+                sharable._internal = { };
+            }
+            if (!sharable._internal.shares) {
+                sharable._internal.shares = [];
+            }
+        };
+
         $scope.submitShare = function () {
             sharing.share($scope.sharable, $scope.sharableType, $scope.shareContext.user, $scope.shareContext.group).then(function (result) {
                 if (result.data.result == "SHARED") {
@@ -39,6 +44,7 @@ angular.module('ZoumProfiler')
                     if ($scope.shareContext.group && $scope.shareContext.group.length > 0) {
                         share.group = $scope.shareContext.group;
                     }
+                    $scope._checkInternal($scope.sharable);
                     $scope.sharable._internal.shares.push(share);
                     $scope.cancelShare();
                     $scope._addSuccessMessage("Partage enregistré");
@@ -55,6 +61,7 @@ angular.module('ZoumProfiler')
         $scope.unshare = function (share) {
             sharing.unshare($scope.sharable, $scope.sharableType, share.user, share.group).then(function (result) {
                 if (result.data.result == "UNSHARED") {
+                    $scope._checkInternal($scope.sharable);
                     $scope.sharable._internal.shares.splice($scope.sharable._internal.shares.indexOf(share), 1);
                     $scope._addSuccessMessage("Partage supprimé");
                 } else {
