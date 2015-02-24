@@ -1,18 +1,18 @@
 <div class="shares" ng-controller="ShareController">
-    <span ng-if="profile.type=='remote' && !shareContext.show">
+    <span ng-if="sharable.type=='remote' && !shareContext.show">
 
-        <span ng-if="!isOwner(profile)">
+        <span ng-if="!isOwner(sharable)">
             <span class="title">Propriétaire :</span>
             <button type="button" class="btn btn-xs btn-default">
-                <span class="glyphicon glyphicon-user"></span> {{usersIndex[profile._internal.owner['$id']].login}}
+                <span class="glyphicon glyphicon-user"></span> {{usersIndex[sharable._internal.owner['$id']].login}}
             </button>
             |
         </span>
 
-        <span class="title" ng-if="!profile._internal.shares || profile._internal.shares.length == 0">Non partagé</span>
+        <span class="title" ng-if="!sharable._internal.shares || sharable._internal.shares.length == 0">Non partagé</span>
 
-        <span class="title" ng-if="profile._internal.shares && profile._internal.shares.length > 0">Partages :</span>
-        <span ng-repeat="share in profile._internal.shares">
+        <span class="title" ng-if="sharable._internal.shares && sharable._internal.shares.length > 0">Partages :</span>
+        <span ng-repeat="share in sharable._internal.shares">
             <button type="button" class="btn btn-xs btn-default" ng-if="share.group && share.group == 'public'"
                     ng-click="unshare(share)" title="Cliquez pour annuler ce partage">
                 <span class="glyphicon glyphicon-globe"></span> Public
@@ -27,11 +27,11 @@
         </span>
 
         | <button type="button" class="btn btn-sm btn-primary" ng-click="startSharing()"
-                  ng-disabled="!isOwner(profile)">
+                  ng-disabled="!isOwner(sharable)">
         <span class="glyphicon glyphicon-share"></span> Partager
     </button>
     </span>
-    <div class="form-inline" ng-if="profile.type=='remote' && shareContext.show" role="form">
+    <div class="form-inline" ng-if="sharable.type=='remote' && shareContext.show" role="form">
         <div class="form-group">
             <input class="form-control" type="text" id="share-user" ng-model="shareContext.user"
                    placeholder="Nom d'utilisateur"/>

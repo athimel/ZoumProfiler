@@ -7,6 +7,10 @@ angular.module('ZoumProfiler')
     })
     .controller('ShareController', ['$scope', 'sharing', function ($scope, sharing) {
 
+        //$scope.controllerId = $scope._randomId();
+        //console.log("New controller: " + $scope.controllerId);
+        //console.log("$scope.sharableType=" + $scope.sharableType);
+
         /* ********************************************* */
         /* **             Contextual data             ** */
         /* ********************************************* */
@@ -24,7 +28,7 @@ angular.module('ZoumProfiler')
         };
 
         $scope.submitShare = function () {
-            sharing.share($scope.profile, $scope.shareContext.user, $scope.shareContext.group).then(function (result) {
+            sharing.share($scope.sharable, $scope.sharableType, $scope.shareContext.user, $scope.shareContext.group).then(function (result) {
                 if (result.data.result == "SHARED") {
                     var share = {};
                     if ($scope.shareContext.user && $scope.shareContext.user.length > 0) {
@@ -35,8 +39,9 @@ angular.module('ZoumProfiler')
                     if ($scope.shareContext.group && $scope.shareContext.group.length > 0) {
                         share.group = $scope.shareContext.group;
                     }
-                    $scope.profile._internal.shares.push(share);
+                    $scope.sharable._internal.shares.push(share);
                     $scope.cancelShare();
+                    $scope._addSuccessMessage("Partage enregistré");
                 } else {
                     $scope._addErrorMessage("Échec : " + result.data.result);
                 }
@@ -48,9 +53,10 @@ angular.module('ZoumProfiler')
         };
 
         $scope.unshare = function (share) {
-            sharing.unshare($scope.profile, share.user, share.group).then(function (result) {
+            sharing.unshare($scope.sharable, $scope.sharableType, share.user, share.group).then(function (result) {
                 if (result.data.result == "UNSHARED") {
-                    $scope.profile._internal.shares.splice($scope.profile._internal.shares.indexOf(share), 1);
+                    $scope.sharable._internal.shares.splice($scope.sharable._internal.shares.indexOf(share), 1);
+                    $scope._addSuccessMessage("Partage supprimé");
                 } else {
                     $scope._addErrorMessage("Échec : " + result.data.result);
                 }

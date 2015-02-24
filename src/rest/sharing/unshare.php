@@ -11,14 +11,18 @@ if ($userId) {
 
     $shareUser = $_REQUEST["userId"];
     $shareGroup = $_REQUEST["group"];
-    $profileId = $_REQUEST["profileId"];
+    $sharableId = $_REQUEST["sharableId"];
 
-    $profilesColl = $db->profiles;
+    if ($_REQUEST["sharableType"] == "view") {
+        $sharableColl = $db->views;
+    } else {
+        $sharableColl = $db->profiles;
+    }
 
-    if ($profileId) {
-        $existingProfile = $profilesColl->findOne(array('_id' => new MongoId($profileId)));
-        if ($existingProfile) {
-            $internal = $existingProfile['_internal'];
+    if ($sharableId) {
+        $existingSharable = $sharableColl->findOne(array('_id' => new MongoId($sharableId)));
+        if ($existingSharable) {
+            $internal = $existingSharable['_internal'];
             if ($internal['owner'] == $userId) {
                 if ($internal['shares']) {
                     $newShares = array();
@@ -30,8 +34,8 @@ if ($userId) {
                             array_push($newShares, $share);
                         }
                     }
-                    $existingProfile['_internal']['shares'] = $newShares;
-                    $profilesColl->update(array('_id' => new MongoId($profileId)), $existingProfile);
+                    $existingSharable['_internal']['shares'] = $newShares;
+                    $sharableColl->update(array('_id' => new MongoId($sharableId)), $existingSharable);
                 }
                 echo '"UNSHARED"';
             } else {

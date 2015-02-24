@@ -495,8 +495,8 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                     && angular.isDefined($scope.user.login);
             };
 
-            $scope.isOwner = function (profile) {
-                return sharing.isOwner(profile, $scope.user ? $scope.user.remoteId : undefined);
+            $scope.isOwner = function (sharable) {
+                return sharing.isOwner(sharable, $scope.user ? $scope.user.remoteId : undefined);
             };
 
             /* ********************************************* */

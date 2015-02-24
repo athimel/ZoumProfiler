@@ -14,6 +14,8 @@ angular.module('ZoumProfiler')
         $scope.races = base.races;
         $scope.config = base.config;
 
+        $scope.sharableType = "profile";
+
         $scope._onProfileSaved = function (profile) {
             if (!profile || profile == $scope.profile) {
                 $scope.originalProfile = angular.copy($scope.profile);
@@ -208,6 +210,7 @@ angular.module('ZoumProfiler')
             $scope._checkCaracMin(profile);
             $scope._checkMouches(profile);
             $scope.profile = profile;
+            $scope.sharable = $scope.profile;
             $scope.originalProfile = angular.copy($scope.profile);
             $scope.checkBonus();
             $scope._refreshComputed();
@@ -228,6 +231,7 @@ angular.module('ZoumProfiler')
             $scope._checkSavedProfile();
 
             delete $scope.profile;
+            delete $scope.sharable;
             delete $scope.originalProfile;
             delete $scope.computed;
         };

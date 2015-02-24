@@ -2,26 +2,26 @@ angular.module('ZoumProfiler')
     .factory('sharing', ['$http', function ($http) {
         var sharing = {};
 
-        sharing.share = function(profile, login, group) {
-            var data = "profileId=" + profile['_id']['$id'];
+        sharing.share = function(sharable, type, login, group) {
+            var data = "sharableType=" + type + "&sharableId=" + sharable['_id']['$id'];
             if (login && login.length > 0) {
                 data += "&login=" + login;
             }
             if (group && group.length > 0) {
                 data += "&group=" + group;
             }
-            return $http.post('rest/profiles/share.php', data);
+            return $http.post('rest/sharing/share.php', data);
         };
 
-        sharing.unshare = function(profile, userId, group) {
-            var data = "profileId=" + profile['_id']['$id'];
+        sharing.unshare = function(sharable, type, userId, group) {
+            var data = "sharableType=" + type + "&sharableId=" + sharable['_id']['$id'];
             if (userId) {
                 data += "&userId=" + userId['$id'];
             }
             if (group && group.length > 0) {
                 data += "&group=" + group;
             }
-            return $http.post('rest/profiles/unshare.php', data);
+            return $http.post('rest/sharing/unshare.php', data);
         };
 
         sharing.isOwner = function(sharable, remoteUserId) {
