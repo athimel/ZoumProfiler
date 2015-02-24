@@ -85,6 +85,5 @@ TODO Outil tactique
 TODO Recherche de monstres
 --------------------------
 
-- Partage des vues (mise en commun avec le code existant pour les profils) ;
 - Permettre la mise à jour d'une vue ;
 - ...
