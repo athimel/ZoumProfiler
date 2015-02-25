@@ -29,27 +29,37 @@ Architecture du code
 
 Le code est organisé en modules. Chaque module représente une directive qui est inclue dans le layout (index.html).
 
-Les modules/directives utilisées sur un profil sont :
+Il y a 5 modules/directives principaux :
+
+- profiling ;
+- import ;
+- compare (comparaison de 2+ profils) ;
+- scheduler (outil tactique pour la chasse) ;
+- monstrofinder (outil de recherche de monstre).
+
+
+Chaque module peut inclure d'autre modules parmi :
 
 - header (infos générales d'un profil) ;
 - fight (aptitudes au combat) ;
 - caracteristiques ;
 - competences ;
-- sortileges (TBD) ;
+- sortileges ;
 - mouches (TBD) ;
 - equipement (TBD) ;
-- export (résumé/json/url de partage).
-
-Il y a également 2 modules/directives transverses :
-
-- import ;
-- compare (comparaison de 2+ profils).
+- export (résumé/json/url de partage) ;
+- share (partage de profil/vue).
 
 Dans src/common, on retrouve :
 
 - directives ;
 - filtres ;
-- le service de base qui contient les données statiques nécessaires au bon lancement de l'application.
+- les différents services :
+  - base : contient les données statiques nécessaires au bon lancement de l'application ;
+  - fight : permet le calcul des capacités au combat à partir des caractéristiques du troll ;
+  - monsters : référentiel avec les noms, niveaux et templates des monstres ;
+  - sharing : dédié aux fonctionnalités de partage (profils & vues) ;
+  - users : gère le login/logout/whoami/list des utilisateurs.
 
 Déploiement
 -----------
@@ -61,6 +71,7 @@ Un simple serveur Apache suffit pour déployer le projet.
 Attention : pour pouvoir utiliser la fonction d'import depuis MountyHall, il faut que le serveur supporte le PHP.
 Le PHP sert à exposer un proxy permettant de contourner les problèmes de CORS.
 
+Le stockage des utilisateurs, profils et vues sur le serveur nécessite d'avoir une instance installée et démarrée de MongoDB.
 
 TODO ZoumProfiler
 -----------------
