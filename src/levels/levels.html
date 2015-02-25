@@ -39,14 +39,14 @@
 
                     <div class="col-md-3">
                         <input type="number" ng-model="levelContext.spTrollId" class="form-control" name="spTrollId"
-                               placeholder="Numéro de Trõll"/>
+                               placeholder="Numéro de Trõll" required/>
                     </div>
                     <div class="col-md-4">
                         <input type="password" ng-model="levelContext.spTrollPassword" class="form-control"
-                               name="spTrollPassword" placeholder="Mot de passe spécifique"/>
+                               name="spTrollPassword" placeholder="Mot de passe spécifique" required/>
                     </div>
 
-                    <button type="button" class="btn btn-sm btn-success" ng-click="downloadViewFromSp()"
+                    <button type="submit" class="btn btn-sm btn-success" ng-click="downloadViewFromSp()"
                             ng-disabled="!levelContext.spTrollId || !levelContext.spTrollPassword">
                         <span class="glyphicon glyphicon-import"></span> Télécharger la vue depuis MountyHall
                     </button>
