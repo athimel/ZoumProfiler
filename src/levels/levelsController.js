@@ -249,9 +249,13 @@ angular.module('ZoumProfiler')
 
         $scope.downloadViewFromSp = function() {
 
+            $scope.isDownloading = true;
+
             var urlProfile = "proxy/sp.php?script=SP_Vue2.php&trollId=" + $scope.levelContext.spTrollId + "&trollPassword=" + $scope.levelContext.spTrollPassword;
             $http.get(urlProfile).
                 success(function (data) {
+
+                    $scope.isDownloading = false;
 
                     if (data.substring(0, 6) == "Erreur") {
                         $scope._addErrorMessage(data);
@@ -259,12 +263,14 @@ angular.module('ZoumProfiler')
                         //console.log(data);
                         var view = $scope._parseView($scope.levelContext.spTrollId, data);
                         $scope.views.push(view);
-                        $scope.selectView(view);
                         $scope._saveViewToServer(view);
+                        $scope.selectView(view);
                     }
 
                 }).
                 error(function (data) {
+                    $scope.isDownloading = false;
+
                     $scope._addErrorMessage("Import impossible: " + data);
                 });
 
@@ -309,20 +315,28 @@ angular.module('ZoumProfiler')
 
         $scope._saveViewToServer = function(view) {
             var data = "view=" + JSON.stringify(view);
+            $scope.isSaving = true;
             $http.post('rest/views/save.php', data)
                 .success(function(data) {
-                    if (data.result != "CREATED") {
+                    $scope.isSaving = false;
+                    if (data.result == "CREATED") {
+                        $scope._addSuccessMessage("Vue enregistrée sur le serveur.");
+                        // Some information are useful in UI, copy them to the local view
+                        view.date = data.view.date;
+                        view._internal = data.view._internal;
+                        view._id = data.view._id;
+                    } else {
                         $scope._addErrorMessage("Impossible d'enregistrer la vue : " + data.result);
                     }
                 })
                 .error(function(error) {
+                    $scope.isSaving = false;
                     $scope._addErrorMessage("Impossible d'enregistrer la vue : " + error);
                 });
         };
 
         $scope.canDeleteView = function(view) {
-            //!v['_id']['$id']
-            return (!view._internal.owner || $scope.isOwner(view));
+            return (!view._internal || !view._internal.owner || $scope.isOwner(view));
         };
 
         $scope.deleteView = function(view) {

@@ -38,12 +38,12 @@
                 <div class="form-group">
 
                     <div class="col-md-3">
-                        <input type="number" ng-model="levelContext.spTrollId" class="form-control"
+                        <input type="number" ng-model="levelContext.spTrollId" class="form-control" name="spTrollId"
                                placeholder="Numéro de Trõll"/>
                     </div>
                     <div class="col-md-4">
-                        <input type="text" ng-model="levelContext.spTrollPassword" class="form-control"
-                               placeholder="Mot de passe spécifique"/>
+                        <input type="password" ng-model="levelContext.spTrollPassword" class="form-control"
+                               name="spTrollPassword" placeholder="Mot de passe spécifique"/>
                     </div>
 
                     <button type="button" class="btn btn-sm btn-success" ng-click="downloadViewFromSp()"
@@ -52,6 +52,14 @@
                     </button>
                 </div>
             </div>
+        </div>
+
+        <div class="alert alert-warning" ng-if="isDownloading">
+            Téléchargement de la vue en cours...
+        </div>
+
+        <div class="alert alert-warning" ng-if="isSaving">
+            Vue en cours de sauvegarde sur le serveur, ne quittez pas la fenêtre...
         </div>
 
         <div class="row" ng-if="selectedView">

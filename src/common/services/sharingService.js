@@ -25,7 +25,7 @@ angular.module('ZoumProfiler')
         };
 
         sharing.isOwner = function(sharable, remoteUserId) {
-            if (angular.isUndefined(sharable._internal.owner)) {
+            if (angular.isUndefined(sharable._internal) || angular.isUndefined(sharable._internal.owner)) {
                 return false;
             }
             return angular.isDefined(remoteUserId) && (remoteUserId == sharable._internal.owner['$id']);
