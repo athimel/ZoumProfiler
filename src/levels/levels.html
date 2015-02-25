@@ -5,9 +5,10 @@
         <div class="row">
             <div class="col-md-6" ng-if="views.length > 0">
                 <h3>Vues</h3>
-                <ul>
+                <ul class="viewsList">
                     <li ng-repeat="v in views|orderBy:'date'">
-                        <button type="button" class="btn btn-xs btn-link" ng-click="selectView(v)">
+                        <button type="button" class="btn btn-xs btn-link" ng-click="selectView(v)"
+                                ng-class="{true:'active', false:''}[selectedView == v]">
                             {{v.trollId}} ({{v.date|date:'dd/MM/yyyy à HH:mm:ss'}})
                         </button>
 
@@ -112,13 +113,18 @@
                             <span class="details-category">Monstres :</span>
                             <ul>
                                 <li ng-repeat="m in highlightedCav.monsters">
-                                    <a href="http://games.mountyhall.com/mountyhall/View/MonsterView.php?ai_IDPJ={{m.id}}" target="_blank">{{m.id}}</a> - {{m.name}} {{m.nival}}</li>
+                                    <a href="http://games.mountyhall.com/mountyhall/View/MonsterView.php?ai_IDPJ={{m.id}}"
+                                       target="_blank">{{m.id}}</a> - {{m.name}} {{m.nival}}
+                                </li>
                             </ul>
                         </div>
                         <div ng-if="highlightedCav.trolls.length > 0">
                             <span class="details-category">Trõlls :</span>
                             <ul >
-                                <li ng-repeat="t in highlightedCav.trolls"><a href="http://games.mountyhall.com/mountyhall/View/PJView.php?ai_IDPJ={{t.id}}" target="_blank">{{t.id}}</a></li>
+                                <li ng-repeat="t in highlightedCav.trolls">
+                                    <a href="http://games.mountyhall.com/mountyhall/View/PJView.php?ai_IDPJ={{t.id}}"
+                                       target="_blank">{{t.id}}</a>
+                                </li>
 
                             </ul>
                         </div>
@@ -179,7 +185,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="m in selectedView.monsters|filterMonster:levelContext|orderBy:'distance'" class="{{m.nival >= 50 ? 'best':''}}">
+                <tr ng-repeat="m in selectedView.monsters|filterMonster:levelContext|orderBy:'distance'"
+                    class="{{m.nival >= 50 ? 'best':''}}" ng-show="!selectedView.isFetching">
                     <td ng-if="selectedView.origin">{{m.distance}}</td>
                     <td>{{m.id}}</td>
                     <td>
@@ -194,12 +201,18 @@
                     <td>{{m.age}} ({{m.ageBonus|addSign}})</td>
                     <td>
                         {{m.nival|orDash}}
-                        <button type="button" class="btn btn-xs btn-warning" ng-if="m.id < 4000000" title="Le niveau de ce monstre est approximatif car le monstre est antérieur à la réforme">
+                        <button type="button" class="btn btn-xs btn-warning" ng-if="m.id < 4000000"
+                                title="Le niveau de ce monstre est approximatif car le monstre est antérieur à la réforme">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                         </button>
                     </td>
                 </tr>
-                <tr ng-if="levelContext.filteredMonstersCount == 0" class="empty"><td colspan="8">Aucun monstre ne correspond à vos filtres</td></tr>
+                <tr ng-if="levelContext.filteredMonstersCount == 0 && !selectedView.isFetching" class="empty">
+                    <td colspan="8">Aucun monstre ne correspond à vos filtres</td>
+                </tr>
+                <tr ng-if="selectedView.isFetching" class="empty">
+                    <td colspan="8">Chargement en cours</td>
+                </tr>
                 </tbody>
             </table>
 

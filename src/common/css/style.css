@@ -216,7 +216,8 @@ body {
 .nav-sidebar .active,
 .nav-sidebar .active a,
 .nav-sidebar .active a:hover,
-.nav-sidebar .active a:focus {
+.nav-sidebar .active a:focus,
+#levels ul.viewsList li button.active {
     color: #fff;
     background-color: #428bca;
 }

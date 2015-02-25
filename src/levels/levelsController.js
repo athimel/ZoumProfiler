@@ -40,6 +40,8 @@ angular.module('ZoumProfiler')
         };
 
         $scope.selectView = function(view) {
+            $scope.selectedView = view;
+            $scope.sharable = $scope.selectedView;
             if (!view.fetched) {
                 $scope._fetchViewFromServer(view);
             } else {
@@ -47,8 +49,6 @@ angular.module('ZoumProfiler')
                     $scope._refreshView(view);
                 }
                 delete $scope._viewGrid;
-                $scope.selectedView = view;
-                $scope.sharable = $scope.selectedView;
             }
         };
 
@@ -289,6 +289,7 @@ angular.module('ZoumProfiler')
         };
 
         $scope._fetchViewFromServer = function(view) {
+            view.isFetching = true;
             var viewId = view["_id"]["$id"];
             $http.get('rest/views/get.php?viewId=' + viewId)
                 .success(function(data) {
@@ -296,6 +297,7 @@ angular.module('ZoumProfiler')
                     angular.copy(data, view);
 
                     view.fetched = true;
+                    view.isFetching = false;
                     view.refreshed = false;
 
                     $scope.selectView(view);
