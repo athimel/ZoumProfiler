@@ -14,7 +14,7 @@
 
                         <button type="button" class="btn btn-xs btn-danger" ng-click="deleteView(v)"
                                 title="Supprimer" ng-disabled="!canDeleteView(v)">
-                            <span class="glyphicon glyphicon-trash"></span>
+                            <i class="fa fa-trash"></i>
                         </button>
                     </li>
                 </ul>
@@ -48,7 +48,7 @@
 
                     <button type="submit" class="btn btn-sm btn-success" ng-click="downloadViewFromSp()"
                             ng-disabled="!spContext.trollId || !spContext.trollPassword">
-                        <span class="glyphicon glyphicon-import"></span> Télécharger la vue depuis MountyHall
+                        <i class="fa fa-cloud-download"></i> Télécharger la vue depuis MountyHall
                     </button>
                 </div>
             </div>
@@ -200,7 +200,7 @@
                     <td>
                         {{m.name}}
                         <button type="button" class="btn btn-xs btn-link" ng-click="viewAroundMonster(m)" title="Voir les alentours">
-                            <span class="glyphicon glyphicon-eye-open"></span>
+                            <i class="fa fa-eye"></i>
                         </button>
                     </td>
                     <td>X={{m.posX}}|Y={{m.posY}}|N={{m.posN}}</td>
@@ -211,7 +211,7 @@
                         {{m.nival|orDash}}
                         <button type="button" class="btn btn-xs btn-warning" ng-if="m.id < 4000000"
                                 title="Le niveau de ce monstre est approximatif car le monstre est antérieur à la réforme">
-                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            <i class="fa fa-exclamation-triangle"></i>
                         </button>
                     </td>
                 </tr>

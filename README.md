@@ -77,7 +77,6 @@ Le stockage des utilisateurs, profils et vues sur le serveur nécessite d'avoir 
 TODO
 ----
 
-- Utiliser Font Awesome ;
 - Continuer de remonter du code de base dans le "baseService" ;
 - Rejoindre/quitter un groupe ;
 - ...

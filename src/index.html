@@ -17,6 +17,7 @@
         <script src="libs/ui-bootstrap-tpls.min.js"></script>
 
         <link href="styles/zoumProfiler.min.css" rel="stylesheet">
+        <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">-->
         <script src="scripts/zoumProfiler.js"></script>
 
         <title>ZoumProfiler v0.2-SN</title>
@@ -51,7 +52,7 @@
 
                         <span ng-if="profileType=='local'" class="profile-category">Profils stockés uniquement sur votre machine</span>
                         <span ng-if="profileType=='remote'" class="profile-category">Profils stockés sur le serveur <button type="button" class="btn btn-sm btn-link" ng-click="refreshRemote()">
-                            <span class="glyphicon glyphicon-refresh"></span> refresh
+                            <i class="fa fa-refresh"></i> refresh
                         </button></span>
 
                         <table class="profiles">
@@ -72,12 +73,12 @@
                                     <td class="buttons">
                                         <button type="button" class="btn btn-xs btn-primary" ng-click="copyProfile(p)"
                                                 title="Dupliquer">
-                                            <span class="glyphicon glyphicon-share"></span>
+                                            <i class="fa fa-files-o"></i>
                                         </button>
 
                                         <button type="button" class="btn btn-xs btn-danger" ng-click="deleteProfile(p)"
                                                 title="Supprimer" ng-disabled="!canDeleteProfile(p)">
-                                            <span class="glyphicon glyphicon-trash"></span>
+                                            <i class="fa fa-trash"></i>
                                         </button>
                                     </td>
 
@@ -94,13 +95,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <button type="button" class="btn btn-sm btn-primary col-md-12" ng-click="addProfile()">
-                                <span class="glyphicon glyphicon-plus"></span> Ajouter un profil
+                                <i class="fa fa-plus"></i> Ajouter un profil
                             </button>
                         </div>
 
                         <div class="col-md-6">
                             <button type="button" class="btn btn-sm btn-primary col-md-12" ng-click="startImport()">
-                                <span class="glyphicon glyphicon-import"></span> Importer un profil
+                                <i class="fa fa-cloud-download"></i> Importer un profil
                             </button>
                         </div>
                     </div>
@@ -109,13 +110,13 @@
                         <div class="col-md-6">
                             <button type="button" class="btn btn-sm btn-default col-md-12" ng-click="startScheduler()"
                                     ng-disabled="profiles.length == 0">
-                                <span class="glyphicon glyphicon-cog"></span> Outil tactique (ßeta)
+                                <i class="fa fa-cogs"></i> Outil tactique (ßeta)
                             </button>
                         </div>
 
                         <div class="col-md-6">
                             <button type="button" class="btn btn-sm btn-default col-md-12" ng-click="startMonstrofinder()">
-                                <span class="glyphicon glyphicon-search"></span> Monstr'Ô finder
+                                <i class="fa fa-search"></i> Monstr'Ô finder
                             </button>
                         </div>
                     </div>
@@ -123,15 +124,15 @@
                     <div class="row authentication-bar" ng-if="user && !authenticationContext.show">
                         <span ng-if="!user.remoteId" class="auth-status col-md-8">Pas connecté</span>
                         <button type="button" class="btn btn-xs btn-primary" ng-click="startLogin()" ng-if="!user.remoteId" title="Connexion">
-                            <span class="glyphicon glyphicon-log-in"></span>
+                            <i class="fa fa-sign-in"></i>
                         </button>
                         <button type="button" class="btn btn-xs btn-default" ng-click="startRegistration()" ng-if="!user.remoteId" title="Créer un compte">
-                            <span class="glyphicon glyphicon-user"></span>
+                            <i class="fa fa-user-plus"></i>
                         </button>
 
                         <span ng-if="user.remoteId" class="auth-status col-md-8"><b><abbr title="Groupes : {{user.groups|commaList}}">{{user.login}}</abbr></b></span>
                         <button type="button" class="btn btn-xs btn-danger" ng-click="logout()" ng-if="user.remoteId" title="Déconnexion">
-                            <span class="glyphicon glyphicon-log-out"></span>
+                            <i class="fa fa-sign-out"></i>
                         </button>
                     </div>
                     <form class="row authentication-form" ng-if="authenticationContext.show" role="form">
@@ -145,11 +146,13 @@
                         <div class="form-group">
                             <button type="submit" class="btn btn-sm btn-success" ng-click="submitAuthentication()"
                                     ng-disabled="!authenticationContext.login || !authenticationContext.password">
-                                <span class="glyphicon glyphicon-save"></span> {{authenticationContext.type == "register" ? "Créer un compte" : "Connexion"}}
+                                <i class="fa fa-user-plus" ng-if='authenticationContext.type == "register"'></i>
+                                <i class="fa fa-sign-in" ng-if='authenticationContext.type != "register"'></i>
+                                {{authenticationContext.type == "register" ? "Créer un compte" : "Connexion"}}
                             </button>
 
                             <button type="button" class="btn btn-sm btn-default" ng-click="cancelAuthentication()">
-                                <span class="glyphicon glyphicon-ban-cicle"></span> Annuler
+                                <i class="fa fa-ban"></i> Annuler
                             </button>
                         </div>
                     </form>
