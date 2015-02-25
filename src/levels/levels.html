@@ -150,7 +150,7 @@
                                 class="{{((x==targetMonster.posX && y==targetMonster.posY) ? 'center':((x<limits.lowerX || x>limits.upperX || y<limits.lowerY || y>limits.upperY) ? 'out-of-scope':''))}}">
                                 <ul>
                                     <li ng-repeat="(n, cav) in aroundMonstersGrid[y][x]" >
-                                        <a class="{{(x==targetMonster.posX && y==targetMonster.posY && n==targetMonster.posN) ? 'target-level':''}}"
+                                        <a ng-class="{'target':'target-level', 'monsters':'monsters-only', 'trolls':'trolls-only', 'mixed':'monsters-and-trolls'}[cav.situation]"
                                            href="#" ng-click="centerView(x,y,n)" ng-mouseenter="showCavDetails(cav)">{{n}}:<span
                                                 ng-if="cav.monsters.length > 0 && cav.trolls.length > 0">{{cav.monsters.length}}/{{cav.trolls.length}}</span><span
                                                 ng-if="cav.monsters.length > 0 && cav.trolls.length == 0">{{cav.monsters.length}}M</span><span

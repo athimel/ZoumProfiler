@@ -385,6 +385,15 @@ table.around-monster tbody tr td ul li {
 table.around-monster tbody tr td ul li a.target-level {
     color: #2e7f26;
 }
+table.around-monster tbody tr td ul li a.monsters-and-trolls {
+    color: #EF8602;
+}
+table.around-monster tbody tr td ul li a.monsters-only {
+    color: #428bca;
+}
+table.around-monster tbody tr td ul li a.trolls-only {
+    color: #b50017;
+}
 
 .profiles {
     width: 100%;

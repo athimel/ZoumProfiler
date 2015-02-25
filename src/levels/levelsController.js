@@ -513,6 +513,32 @@ angular.module('ZoumProfiler')
             $scope.minN = posN + nSize;
             $scope.maxN = posN - nSize;
 
+
+            for (var y = posY - size; y <= posY + size; y++) {
+                if ($scope.aroundMonstersGrid[y]) {
+                    for (var x = posX - size; x <= posX + size; x++) {
+                        if ($scope.aroundMonstersGrid[y][x]) {
+                            for (var n = posN - size; n <= posN + nSize; n++) {
+                                var cav = $scope.aroundMonstersGrid[y][x][n];
+                                if (cav) {
+                                    if (cav.posX==$scope.targetMonster.posX && cav.posY==$scope.targetMonster.posY && cav.posN==$scope.targetMonster.posN) {
+                                        cav.situation='target';
+                                    } else if (cav.monsters.length > 0 && cav.trolls.length > 0) {
+                                        cav.situation='mixed';
+                                    } else if (cav.monsters.length > 0 && cav.trolls.length == 0) {
+                                        cav.situation='monsters';
+                                    } else if (cav.monsters.length == 0 && cav.trolls.length > 0) {
+                                        cav.situation='trolls';
+                                    } else {
+                                        cav.situation='empty';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         };
 
 
