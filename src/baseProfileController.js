@@ -372,8 +372,8 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 $scope._selectPanel("scheduler");
             };
 
-            $scope.startLevels = function () {
-                $scope._selectPanel("levels");
+            $scope.startMonstrofinder = function () {
+                $scope._selectPanel("monstrofinder");
             };
 
             $scope.getCompareIds = function () {

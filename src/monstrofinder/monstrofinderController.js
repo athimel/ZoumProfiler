@@ -1,11 +1,11 @@
 angular.module('ZoumProfiler')
-    .directive('levels', function() {
+    .directive('monstrofinder', function() {
         return {
             restrict: 'E',
-            templateUrl: 'levels/levels.html'
+            templateUrl: 'monstrofinder/monstrofinder.html'
         };
     })
-    .controller('LevelsController', ['$scope', '$http', '$modal', 'monsters', function ($scope, $http, $modal, monsters) {
+    .controller('MonstrofinderController', ['$scope', '$http', '$modal', 'monsters', function ($scope, $http, $modal, monsters) {
 
         /* ********************************************* */
         /* **             Contextual data             ** */
@@ -14,21 +14,22 @@ angular.module('ZoumProfiler')
         $scope.selectedView;
         $scope.sharableType = "view";
         $scope.views = [];
-        $scope.levelContext = { minLevel:10, maxLevel:99, includeGowap:false, includeZombi:false, maxDistance: 20 };
+        $scope.spContext = { };
+        $scope.filter = { minLevel:10, maxLevel:99, includeGowap:false, includeZombi:false, maxDistance: 20 };
 
         /* ********************************************* */
         /* **          Controller's methods           ** */
         /* ********************************************* */
 
         $scope.minLevelChanged = function() {
-            if ($scope.levelContext.minLevel > $scope.levelContext.maxLevel) {
-                $scope.levelContext.maxLevel = $scope.levelContext.minLevel;
+            if ($scope.filter.minLevel > $scope.filter.maxLevel) {
+                $scope.filter.maxLevel = $scope.filter.minLevel;
             }
         };
 
         $scope.maxLevelChanged = function() {
-            if ($scope.levelContext.maxLevel < $scope.levelContext.minLevel) {
-                $scope.levelContext.minLevel = $scope.levelContext.maxLevel;
+            if ($scope.filter.maxLevel < $scope.filter.minLevel) {
+                $scope.filter.minLevel = $scope.filter.maxLevel;
             }
         };
 
@@ -251,7 +252,7 @@ angular.module('ZoumProfiler')
 
             $scope.isDownloading = true;
 
-            var urlProfile = "proxy/sp.php?script=SP_Vue2.php&trollId=" + $scope.levelContext.spTrollId + "&trollPassword=" + $scope.levelContext.spTrollPassword;
+            var urlProfile = "proxy/sp.php?script=SP_Vue2.php&trollId=" + $scope.spContext.trollId + "&trollPassword=" + $scope.spContext.trollPassword;
             $http.get(urlProfile).
                 success(function (data) {
 
@@ -261,7 +262,7 @@ angular.module('ZoumProfiler')
                         $scope._addErrorMessage(data);
                     } else {
                         //console.log(data);
-                        var view = $scope._parseView($scope.levelContext.spTrollId, data);
+                        var view = $scope._parseView($scope.spContext.trollId, data);
                         $scope.views.push(view);
                         $scope._saveViewToServer(view);
                         $scope.selectView(view);

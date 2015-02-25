@@ -1,12 +1,12 @@
 angular.module('ZoumProfiler')
     .filter('filterMonster', function() {
-        return function(monsters, levelContext) {
+        return function(monsters, filter) {
             var result = [];
-            var includeGowap = levelContext.includeGowap;
-            var includeZombi = levelContext.includeZombi;
-            var lvlMin = levelContext.minLevel;
-            var lvlMax = levelContext.maxLevel;
-            var maxDistance = levelContext.maxDistance;
+            var includeGowap = filter.includeGowap;
+            var includeZombi = filter.includeZombi;
+            var lvlMin = filter.minLevel;
+            var lvlMax = filter.maxLevel;
+            var maxDistance = filter.maxDistance;
             angular.forEach(monsters, function(monster) {
                 if (!monster.distance || monster.distance <= maxDistance) {
                     if (angular.isUndefined(monster.nival) || ((angular.isUndefined(lvlMin) || monster.nival >= lvlMin) && (angular.isUndefined(lvlMax) || monster.nival <= lvlMax))) {
@@ -20,7 +20,7 @@ angular.module('ZoumProfiler')
                     }
                 }
             });
-            levelContext.filteredMonstersCount = result.length;
+            filter.filteredMonstersCount = result.length;
             return result;
         };
     });

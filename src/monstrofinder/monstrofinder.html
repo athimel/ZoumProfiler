@@ -1,4 +1,4 @@
-<div ng-controller="LevelsController" id="levels">
+<div ng-controller="MonstrofinderController" id="monstrofinder">
 
     <form class="form-horizontal" role="form">
 
@@ -38,16 +38,16 @@
                 <div class="form-group">
 
                     <div class="col-md-3">
-                        <input type="number" ng-model="levelContext.spTrollId" class="form-control" name="spTrollId"
+                        <input type="number" ng-model="spContext.trollId" class="form-control" name="spTrollId"
                                placeholder="Numéro de Trõll" required/>
                     </div>
                     <div class="col-md-4">
-                        <input type="password" ng-model="levelContext.spTrollPassword" class="form-control"
+                        <input type="password" ng-model="spContext.trollPassword" class="form-control"
                                name="spTrollPassword" placeholder="Mot de passe spécifique" required/>
                     </div>
 
                     <button type="submit" class="btn btn-sm btn-success" ng-click="downloadViewFromSp()"
-                            ng-disabled="!levelContext.spTrollId || !levelContext.spTrollPassword">
+                            ng-disabled="!spContext.trollId || !spContext.trollPassword">
                         <span class="glyphicon glyphicon-import"></span> Télécharger la vue depuis MountyHall
                     </button>
                 </div>
@@ -68,35 +68,35 @@
             <div class="alert alert-info">
                 Vue centrée en <b>X={{selectedView.origin.x}} | Y={{selectedView.origin.y}} | N={{selectedView.origin.n}}</b>
                 avec une portée de <b>{{selectedView.scope ? selectedView.scope : selectedView.distance}}</b> cavernes.
-                <b>{{levelContext.filteredMonstersCount}}</b> monstres affichés sur <b>{{selectedView.monsters.length}}</b>.
+                <b>{{filter.filteredMonstersCount}}</b> monstres affichés sur <b>{{selectedView.monsters.length}}</b>.
             </div>
 
             <div class="form-group">
 
                 <label for="maxDistance" class="col-sm-1 control-label">Distance max.</label>
                 <div class="col-xs-1">
-                    <input type="number" id="maxDistance" ng-model="levelContext.maxDistance" class="carac" min="0"/>
+                    <input type="number" id="maxDistance" ng-model="filter.maxDistance" class="carac" min="0"/>
                 </div>
 
                 <label for="includeGowap" class="col-sm-1 control-label">Gowap ?</label>
                 <div class="col-xs-1">
-                    <input type="checkbox" id="includeGowap" ng-model="levelContext.includeGowap"/>
+                    <input type="checkbox" id="includeGowap" ng-model="filter.includeGowap"/>
                 </div>
 
                 <label for="includeZombi" class="col-sm-1 control-label">Zombi ?</label>
                 <div class="col-xs-1">
-                    <input type="checkbox" id="includeZombi" ng-model="levelContext.includeZombi"/>
+                    <input type="checkbox" id="includeZombi" ng-model="filter.includeZombi"/>
                 </div>
 
                 <label for="minLevel" class="col-sm-1 control-label">Nival min.</label>
                 <div class="col-xs-1">
-                    <input type="number" id="minLevel" ng-model="levelContext.minLevel" class="carac" min="0" max="99"
+                    <input type="number" id="minLevel" ng-model="filter.minLevel" class="carac" min="0" max="99"
                            ng-change="minLevelChanged()"/>
                 </div>
 
                 <label for="maxLevel" class="col-sm-1 control-label">Nival max.</label>
                 <div class="col-xs-1">
-                    <input type="number" id="maxLevel" ng-model="levelContext.maxLevel" class="carac" min="0" max="99"
+                    <input type="number" id="maxLevel" ng-model="filter.maxLevel" class="carac" min="0" max="99"
                            ng-change="maxLevelChanged()"/>
                 </div>
 
@@ -193,7 +193,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="m in selectedView.monsters|filterMonster:levelContext|orderBy:'distance'"
+                <tr ng-repeat="m in selectedView.monsters|filterMonster:filter|orderBy:'distance'"
                     class="{{m.nival >= 50 ? 'best':''}}" ng-show="!selectedView.isFetching">
                     <td ng-if="selectedView.origin">{{m.distance}}</td>
                     <td>{{m.id}}</td>
@@ -215,7 +215,7 @@
                         </button>
                     </td>
                 </tr>
-                <tr ng-if="levelContext.filteredMonstersCount == 0 && !selectedView.isFetching" class="empty">
+                <tr ng-if="filter.filteredMonstersCount == 0 && !selectedView.isFetching" class="empty">
                     <td colspan="8">Aucun monstre ne correspond à vos filtres</td>
                 </tr>
                 <tr ng-if="selectedView.isFetching" class="empty">
