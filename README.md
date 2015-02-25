@@ -29,7 +29,7 @@ Architecture du code
 
 Le code est organisé en modules. Chaque module représente une directive qui est inclue dans le layout (index.html).
 
-Il y a 5 modules/directives principaux :
+Il y a 5 modules principaux :
 
 - profiling ;
 - import ;
@@ -73,13 +73,20 @@ Le PHP sert à exposer un proxy permettant de contourner les problèmes de CORS.
 
 Le stockage des utilisateurs, profils et vues sur le serveur nécessite d'avoir une instance installée et démarrée de MongoDB.
 
+
+TODO
+----
+
+- Utiliser Font Awesome ;
+- Continuer de remonter du code de base dans le "baseService" ;
+- Rejoindre/quitter un groupe ;
+- ...
+
 TODO ZoumProfiler
 -----------------
 
 - Sticky bloc *propre* pour les aptitudes au combat ;
 - Implémentation des modules/directives manquants ;
-- Continuer de remonter du code de base dans le "baseService" ;
-- Rejoindre/quitter un groupe ;
 - Conserver les infos fournies à l'import depuis les SP pour mise à jour (id+MDP spécifique) ;
 - Format plus court pour le partage par URL ;
 - ...
@@ -97,4 +104,7 @@ TODO Recherche de monstres
 --------------------------
 
 - Permettre la mise à jour d'une vue ;
+- Améliorer les filtres sur la vue (performance, ...) ;
+- Afficher des noms des trolls ;
+- Afficher l'évaluation du troll (MK/TK/ATK) ;
 - ...
