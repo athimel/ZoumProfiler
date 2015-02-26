@@ -28,7 +28,7 @@
 
         | <button type="button" class="btn btn-sm btn-primary" ng-click="startSharing()"
                   ng-disabled="!isOwner(sharable)">
-        <i class="fa fa-share"></i> Partager
+        <i class="fa fa-lg fa-share"></i> Partager
     </button>
     </span>
     <div class="form-inline" ng-if="sharable && shareContext.show" role="form">
@@ -39,10 +39,10 @@
                    placeholder='Nom du groupe ou "public"'/>
 
             <button type="button" class="btn btn-sm btn-success" ng-click="submitShare()">
-                <i class="fa fa-share"></i> Partager
+                <i class="fa fa-lg fa-share"></i> Partager
             </button>
             <button type="button" class="btn btn-sm btn-default" ng-click="cancelShare()">
-                <i class="fa fa-ban"></i> Annuler
+                <i class="fa fa-lg fa-ban"></i> Annuler
             </button>
         </div>
     </div>

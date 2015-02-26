@@ -95,13 +95,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <button type="button" class="btn btn-sm btn-primary col-md-12" ng-click="addProfile()">
-                                <i class="fa fa-plus"></i> Ajouter un profil
+                                <i class="fa fa-lg fa-plus"></i> Ajouter un profil
                             </button>
                         </div>
 
                         <div class="col-md-6">
                             <button type="button" class="btn btn-sm btn-primary col-md-12" ng-click="startImport()">
-                                <i class="fa fa-cloud-download"></i> Importer un profil
+                                <i class="fa fa-lg fa-cloud-download"></i> Importer un profil
                             </button>
                         </div>
                     </div>
@@ -110,13 +110,13 @@
                         <div class="col-md-6">
                             <button type="button" class="btn btn-sm btn-default col-md-12" ng-click="startScheduler()"
                                     ng-disabled="profiles.length == 0">
-                                <i class="fa fa-cogs"></i> Outil tactique (ßeta)
+                                <i class="fa fa-lg fa-cogs"></i> Outil tactique (ßeta)
                             </button>
                         </div>
 
                         <div class="col-md-6">
                             <button type="button" class="btn btn-sm btn-default col-md-12" ng-click="startMonstrofinder()">
-                                <i class="fa fa-search"></i> Monstr'Ô finder
+                                <i class="fa fa-lg fa-search"></i> Monstr'Ô finder
                             </button>
                         </div>
                     </div>
@@ -146,13 +146,13 @@
                         <div class="form-group">
                             <button type="submit" class="btn btn-sm btn-success" ng-click="submitAuthentication()"
                                     ng-disabled="!authenticationContext.login || !authenticationContext.password">
-                                <i class="fa fa-user-plus" ng-if='authenticationContext.type == "register"'></i>
-                                <i class="fa fa-sign-in" ng-if='authenticationContext.type != "register"'></i>
+                                <i class="fa fa-lg fa-user-plus" ng-if='authenticationContext.type == "register"'></i>
+                                <i class="fa fa-lg fa-sign-in" ng-if='authenticationContext.type != "register"'></i>
                                 {{authenticationContext.type == "register" ? "Créer un compte" : "Connexion"}}
                             </button>
 
                             <button type="button" class="btn btn-sm btn-default" ng-click="cancelAuthentication()">
-                                <i class="fa fa-ban"></i> Annuler
+                                <i class="fa fa-lg fa-ban"></i> Annuler
                             </button>
                         </div>
                     </form>
