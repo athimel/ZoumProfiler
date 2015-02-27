@@ -73,12 +73,17 @@ Le PHP sert à exposer un proxy permettant de contourner les problèmes de CORS.
 
 Le stockage des utilisateurs, profils et vues sur le serveur nécessite d'avoir une instance installée et démarrée de MongoDB.
 
+TODO v0.2
+---------
 
-TODO
-----
+- Rejoindre/quitter un groupe.
+
+
+TODO >= 0.3
+-----------
 
 - Continuer de remonter du code de base dans le "baseService" ;
-- Rejoindre/quitter un groupe ;
+- Trouver un nouveau nom ;
 - ...
 
 TODO ZoumProfiler
