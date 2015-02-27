@@ -448,3 +448,10 @@ div.modal-body div.details {
 div.modal-body div.details-right {
     right: 15px;
 }
+div.groups {
+    text-align: center;
+    padding:5px;
+}
+div.groups button {
+    margin-left: 5px;
+}

@@ -17,7 +17,6 @@
         <script src="libs/ui-bootstrap-tpls.min.js"></script>
 
         <link href="styles/zoumProfiler.min.css" rel="stylesheet">
-        <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">-->
         <script src="scripts/zoumProfiler.js"></script>
 
         <title>ZoumProfiler v0.2-SN</title>
@@ -134,6 +133,13 @@
                         <button type="button" class="btn btn-xs btn-danger" ng-click="logout()" ng-if="user.remoteId" title="Déconnexion">
                             <i class="fa fa-sign-out"></i>
                         </button>
+                        <div class="col-md-12 groups" ng-if="user.groups && user.groups.length > 0">
+                            Groupes :
+                            <button type="button" class="btn btn-xs btn-default" ng-repeat="group in user.groups"
+                                    ng-click="leaveGroup(group)" title="Cliquez pour quitter ce groupe">
+                                <i class="fa fa-users"></i> {{group}}
+                            </button>
+                        </div>
                     </div>
                     <form class="row authentication-form" ng-if="authenticationContext.show" role="form">
                         <div class="form-group">
