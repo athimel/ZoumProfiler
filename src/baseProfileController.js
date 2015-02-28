@@ -411,6 +411,14 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 });
             };
 
+            $scope.joinGroup = function() {
+                users.joinGroup($scope.authenticationContext.group).then(function () {
+                    $scope._whoAmI();
+                    $scope._authenticatedUserHasChanged();
+                    delete $scope.authenticationContext.group;
+                });
+            };
+
             $scope.logout = function () {
                 users.logout().then(function () {
                     delete $scope.user.remoteId;

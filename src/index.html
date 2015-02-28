@@ -114,7 +114,8 @@
                         </div>
 
                         <div class="col-md-6">
-                            <button type="button" class="btn btn-sm btn-default col-md-12" ng-click="startMonstrofinder()">
+                            <button type="button" class="btn btn-sm btn-default col-md-12"
+                                    ng-click="startMonstrofinder()">
                                 <i class="fa fa-lg fa-search"></i> Monstr'Ô finder
                             </button>
                         </div>
@@ -122,10 +123,12 @@
 
                     <div class="row authentication-bar" ng-if="user && !authenticationContext.show">
                         <span ng-if="!user.remoteId" class="auth-status col-md-8">Pas connecté</span>
-                        <button type="button" class="btn btn-xs btn-primary" ng-click="startLogin()" ng-if="!user.remoteId" title="Connexion">
+                        <button type="button" class="btn btn-xs btn-primary" ng-click="startLogin()"
+                                ng-if="!user.remoteId" title="Connexion">
                             <i class="fa fa-sign-in"></i>
                         </button>
-                        <button type="button" class="btn btn-xs btn-default" ng-click="startRegistration()" ng-if="!user.remoteId" title="Créer un compte">
+                        <button type="button" class="btn btn-xs btn-default" ng-click="startRegistration()"
+                                ng-if="!user.remoteId" title="Créer un compte">
                             <i class="fa fa-user-plus"></i>
                         </button>
 
@@ -140,6 +143,14 @@
                                 <i class="fa fa-users"></i> {{group}}
                             </button>
                         </div>
+                        <form class="form-inline" ng-if="user.remoteId">
+                            <input class="form-control col-md-8" type="text" placeholder="Nom du groupe" name="group"
+                                   ng-model="authenticationContext.group" required/>
+                            <button type="submit" class="btn btn-sm btn-primary col-md-4" ng-click="joinGroup()"
+                                    title="Rejoindre ce groupe">
+                                <i class="fa fa-lg fa-plus"></i> Rejoindre
+                            </button>
+                        </form>
                     </div>
                     <form class="row authentication-form" ng-if="authenticationContext.show" role="form">
                         <div class="form-group">

@@ -76,7 +76,7 @@ Le stockage des utilisateurs, profils et vues sur le serveur nécessite d'avoir 
 TODO v0.2
 ---------
 
-- Rejoindre/quitter un groupe.
+- nothing ? :D
 
 
 TODO >= 0.3
