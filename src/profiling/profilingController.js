@@ -5,7 +5,8 @@ angular.module('ZoumProfiler')
             templateUrl: 'profiling/profiling.html'
         };
     })
-    .controller('ProfilingController', ['$scope', '$filter', '$window', 'base', function ($scope, $filter, $window, base) {
+    .controller('ProfilingController', ['$scope', '$filter', '$window', 'base', 'profiling',
+        function ($scope, $filter, $window, base, profiling) {
 
         /* ********************************************* */
         /* **           Base stuff exposed            ** */
@@ -47,27 +48,6 @@ angular.module('ZoumProfiler')
             return !angular.equals(o1, o2);
         };
 
-        $scope._checkCaracMin = function (profile) {
-            if (angular.isUndefined(profile.caracs)) {
-                profile.caracs = {};
-            }
-            angular.forEach(base.caracs, function (carac) {
-                if (angular.isUndefined(profile.caracs[carac.id])) {
-                    if (carac.id == 'TOUR') {
-                        profile.caracs[carac.id] = carac.max;
-                    } else {
-                        profile.caracs[carac.id] = $scope._min(profile.race, carac);
-                    }
-                } else {
-                    if (carac.id == 'TOUR') {
-                        profile.caracs[carac.id] = Math.min(profile.caracs[carac.id], carac.max);
-                    } else {
-                        profile.caracs[carac.id] = Math.max(profile.caracs[carac.id], $scope._min(profile.race, carac));
-                    }
-                }
-            });
-        };
-
         $scope._checkMouches = function (profile) {
             if (angular.isUndefined(profile.mouches)) {
                 profile.mouches = {};
@@ -79,25 +59,8 @@ angular.module('ZoumProfiler')
             });
         };
 
-        $scope._checkBonus = function (profile) {
-            angular.forEach(base.caracs, function (carac) {
-                if (!profile.bp) {
-                    profile.bp = {};
-                }
-                if (!profile.bm) {
-                    profile.bm = {};
-                }
-                if (!profile.bp[carac.id]) {
-                    profile.bp[carac.id] = 0;
-                }
-                if (!profile.bm[carac.id]) {
-                    profile.bm[carac.id] = 0;
-                }
-            });
-        };
-
         $scope.checkBonus = function () {
-            $scope._checkBonus($scope.profile);
+            profiling._checkBonus($scope.profile);
         };
 
         $scope._refreshComputed = function () {
@@ -155,14 +118,6 @@ angular.module('ZoumProfiler')
             };
         };
 
-        $scope._min = function (race, carac) {
-            if (angular.isDefined(carac['min' + race])) {
-                return carac['min' + race];
-            } else {
-                return carac.min;
-            }
-        };
-
         $scope._cost = function (race, carac) {
             if (angular.isDefined(carac['cost' + race])) {
                 return carac['cost' + race];
@@ -180,7 +135,7 @@ angular.module('ZoumProfiler')
                     i -= Math.max(30 - 3 * (result - 1), 2.5);
                 }
             } else {
-                var min = $scope._min(profile.race, carac);
+                var min = profiling._min(profile.race, carac);
                 result = current - min;
                 if (carac.id == 'PV') {
                     result = Math.floor(result / 10);
@@ -206,8 +161,10 @@ angular.module('ZoumProfiler')
             return result;
         };
 
+        $scope._checkCaracMin = profiling._checkCaracMin;
+
         $scope._onProfileSelected = function (profile) {
-            $scope._checkCaracMin(profile);
+            profiling._checkCaracMin(profile);
             $scope._checkMouches(profile);
             $scope.profile = profile;
             if ($scope.profile.type == "remote") {

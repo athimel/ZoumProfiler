@@ -5,7 +5,7 @@ angular.module('ZoumProfiler')
             templateUrl: 'import/import.html'
         };
     })
-    .controller('ImportController', ['$scope', '$filter', '$http', 'base', function ($scope, $filter, $http, base) {
+    .controller('ImportController', ['$scope', '$filter', '$http', 'base', 'profiling', function ($scope, $filter, $http, base, profiling) {
 
         /* ********************************************* */
         /* **             Contextual data             ** */
@@ -116,7 +116,9 @@ angular.module('ZoumProfiler')
             if (profileAlreadyExists) {
                 $scope._addWarningMessage("Un profil identique existe déjà dans votre liste de profils");
             } else {
-                if (angular.isUndefined(newProfile.type)) {
+                if ($scope.isAuthenticated()) {
+                    newProfile.type = "remote";
+                } else {
                     newProfile.type = "local";
                 }
                 $scope.profiles.push(newProfile);
@@ -128,6 +130,8 @@ angular.module('ZoumProfiler')
 
         $scope._importProfileFromJson = function(profileJson) {
             var newProfile = angular.fromJson(profileJson);
+            delete newProfile['_id'];
+            delete newProfile['_internal'];
             $scope._importProfile(newProfile);
         };
 
@@ -142,8 +146,8 @@ angular.module('ZoumProfiler')
         $scope.importProfileFromSp = function() {
 
             var newProfile = { comps : {cdm1 : true}, sorts : {idt : true}, id : $scope._randomId() };
-            $scope._checkCaracMin(newProfile);
-            $scope._checkBonus(newProfile);
+            profiling._checkCaracMin(newProfile);
+            profiling._checkBonus(newProfile);
 
             var importDuringLast24h = false;
 

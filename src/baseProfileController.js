@@ -222,6 +222,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                         if (data.result == "CREATED" || data.result == "UPDATED") {
                             profile['_id'] = data.profile['_id'];
                             profile['_internal'] = data.profile['_internal'];
+                            $scope.sharable = profile;
 
                             $scope._checkProfilesIntegrity(profile);
 

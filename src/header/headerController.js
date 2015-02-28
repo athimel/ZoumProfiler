@@ -5,7 +5,7 @@ angular.module('ZoumProfiler')
             templateUrl: 'header/header.html'
         };
     })
-    .controller('HeaderController', ['$scope', 'base', function ($scope, base) {
+    .controller('HeaderController', ['$scope', function ($scope) {
 
         $scope.raceChanged = function() {
             $scope._checkCaracMin($scope.profile);
