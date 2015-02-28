@@ -90,6 +90,14 @@ angular.module('ZoumProfiler')
         /* **          Controller's methods           ** */
         /* ********************************************* */
 
+        $scope._toComparable = function(profile) {
+            var result = angular.copy(profile);
+            delete result['_id'];
+            delete result['_internal'];
+            delete result['type'];
+            return result;
+        };
+
         $scope._importProfile = function(newProfile) {
             if (newProfile.comps) {
                 angular.forEach(base.comps, function (comp) {
@@ -107,7 +115,7 @@ angular.module('ZoumProfiler')
 
             var profileAlreadyExists = false;
             angular.forEach($scope.profiles, function(profile) {
-                var areEquals = angular.equals(profile, newProfile);
+                var areEquals = angular.equals($scope._toComparable(profile), $scope._toComparable(newProfile));
                 if (!areEquals && profile.id == newProfile.id) {
                     newProfile.id = $scope._randomId();
                 }
