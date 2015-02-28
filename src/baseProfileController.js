@@ -320,9 +320,13 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 var newProfile = {
                     comps: { cdm1: true },
                     sorts: { idt: true },
-                    id: $scope._randomId(),
-                    type: "local"
+                    id: $scope._randomId()
                 };
+                if ($scope.isAuthenticated()) {
+                    newProfile.type = "remote";
+                } else {
+                    newProfile.type = "local";
+                }
                 $scope.profiles.push(newProfile);
                 $scope.selectProfile(newProfile);
             };
