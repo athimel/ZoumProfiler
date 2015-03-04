@@ -154,8 +154,8 @@ angular.module('ZoumProfiler')
         $scope.importProfileFromSp = function() {
 
             var newProfile = { comps : {cdm1 : true}, sorts : {idt : true}, id : $scope._randomId() };
-            profiling._checkCaracMin(newProfile);
-            profiling._checkBonus(newProfile);
+            profiling.checkCaracMin(newProfile);
+            profiling.checkBonus(newProfile);
 
             var importDuringLast24h = false;
 

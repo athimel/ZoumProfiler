@@ -10,7 +10,7 @@ angular.module('ZoumProfiler')
             }
         };
 
-        profiling._checkCaracMin = function (profile) {
+        profiling.checkCaracMin = function (profile) {
             if (angular.isUndefined(profile.caracs)) {
                 profile.caracs = {};
             }
@@ -31,7 +31,7 @@ angular.module('ZoumProfiler')
             });
         };
 
-        profiling._checkBonus = function (profile) {
+        profiling.checkBonus = function (profile) {
             angular.forEach(base.caracs, function (carac) {
                 if (!profile.bp) {
                     profile.bp = {};
@@ -46,6 +46,37 @@ angular.module('ZoumProfiler')
                     profile.bm[carac.id] = 0;
                 }
             });
+        };
+
+        profiling.checkMouches = function (profile) {
+            if (angular.isUndefined(profile.mouches)) {
+                profile.mouches = {};
+            }
+            angular.forEach(base.mouches, function (mouche) {
+                if (angular.isUndefined(profile.mouches[mouche.type])) {
+                    profile.mouches[mouche.type] = 0;
+                }
+            });
+        };
+
+        profiling.checkComps = function (profile) {
+            if (angular.isUndefined(profile.comps)) {
+                profile.comps = {};
+            }
+        };
+
+        profiling.checkSorts = function (profile) {
+            if (angular.isUndefined(profile.sorts)) {
+                profile.sorts = {};
+            }
+        };
+
+        profiling.checkProfile = function(profile) {
+            profiling.checkCaracMin(profile);
+            profiling.checkMouches(profile);
+            profiling.checkBonus(profile);
+            profiling.checkComps(profile);
+            profiling.checkSorts(profile);
         };
 
         return profiling;

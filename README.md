@@ -76,7 +76,6 @@ Le stockage des utilisateurs, profils et vues sur le serveur nécessite d'avoir 
 TODO v0.2
 ---------
 
-- Bug : on ne peut pas supprimer un profil ajouté et pas encore sauvegardé ;
 - ...
 
 

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
-    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', '$http', '$interval', 'base', 'users', 'sharing',
-        function ($scope, $window, $location, $timeout, $filter, $http, $interval, base, users, sharing) {
+    .controller('BaseProfileController', ['$scope', '$window', '$location', '$timeout', '$filter', '$http', '$interval', 'base', 'users', 'sharing', 'profiling',
+        function ($scope, $window, $location, $timeout, $filter, $http, $interval, base, users, sharing, profiling) {
 
             $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
@@ -245,17 +245,18 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             };
 
             $scope._deleteProfileOnServer = function (profile) {
-
-                var data = "profileId=" + profile['_id']['$id'];
-                $http.post('rest/profiles/delete.php', data)
-                    .success(function (data) {
-                        if (data.result != "DELETED") {
-                            $scope._addErrorMessage("Impossible de supprimer le profil : " + data.result);
-                        }
-                    })
-                    .error(function (error) {
-                        $scope._addErrorMessage("Impossible de supprimer le profil : " + error);
-                    });
+                if (profile['_id']) {
+                    var data = "profileId=" + profile['_id']['$id'];
+                    $http.post('rest/profiles/delete.php', data)
+                        .success(function (data) {
+                            if (data.result != "DELETED") {
+                                $scope._addErrorMessage("Impossible de supprimer le profil : " + data.result);
+                            }
+                        })
+                        .error(function (error) {
+                            $scope._addErrorMessage("Impossible de supprimer le profil : " + error);
+                        });
+                }
             };
 
             $scope._save = function (profile) {
@@ -322,6 +323,7 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                     sorts: { idt: true },
                     id: $scope._randomId()
                 };
+                profiling.checkProfile(newProfile);
                 if ($scope.isAuthenticated()) {
                     newProfile.type = "remote";
                 } else {
@@ -520,7 +522,9 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
             };
 
             $scope.canDeleteProfile = function (profile) {
-                return profile.type == "local" || $scope.isOwner(profile);
+                return profile.type == "local"
+                    || $scope.isOwner(profile)
+                    || (profile.type == "remote" && !profile["_id"]); // Au cas où le profil n'est pas encore sur le serveur.
             };
 
             /* ********************************************* */

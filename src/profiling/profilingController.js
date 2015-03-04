@@ -48,19 +48,10 @@ angular.module('ZoumProfiler')
             return !angular.equals(o1, o2);
         };
 
-        $scope._checkMouches = function (profile) {
-            if (angular.isUndefined(profile.mouches)) {
-                profile.mouches = {};
-            }
-            angular.forEach(base.mouches, function (mouche) {
-                if (angular.isUndefined(profile.mouches[mouche.type])) {
-                    profile.mouches[mouche.type] = 0;
-                }
-            });
-        };
+        $scope._checkMouches = profiling.checkMouches;
 
         $scope.checkBonus = function () {
-            profiling._checkBonus($scope.profile);
+            profiling.checkBonus($scope.profile);
         };
 
         $scope._refreshComputed = function () {
@@ -161,17 +152,15 @@ angular.module('ZoumProfiler')
             return result;
         };
 
-        $scope._checkCaracMin = profiling._checkCaracMin;
+        $scope._checkCaracMin = profiling.checkCaracMin;
 
         $scope._onProfileSelected = function (profile) {
-            profiling._checkCaracMin(profile);
-            $scope._checkMouches(profile);
+            profiling.checkProfile(profile);
             $scope.profile = profile;
             if ($scope.profile.type == "remote") {
                 $scope.sharable = $scope.profile;
             }
             $scope.originalProfile = angular.copy($scope.profile);
-            $scope.checkBonus();
             $scope._refreshComputed();
         };
 
