@@ -76,7 +76,8 @@ Le stockage des utilisateurs, profils et vues sur le serveur nécessite d'avoir 
 TODO v0.2
 ---------
 
-- nothing ? :D
+- Bug : on ne peut pas supprimer un profil ajouté et pas encore sauvegardé ;
+- ...
 
 
 TODO >= 0.3
@@ -84,6 +85,9 @@ TODO >= 0.3
 
 - Continuer de remonter du code de base dans le "baseService" ;
 - Trouver un nouveau nom ;
+- Visualiser les membres d'un groupe ;
+- Mieux séparer les outils (boutons montrofinder et outils tactique -> bouton profiling) ;
+- Fonctionnalité de "partage" trop peu visible / mal intégrée ;
 - ...
 
 TODO ZoumProfiler
@@ -111,4 +115,7 @@ TODO Recherche de monstres
 - Améliorer les filtres sur la vue (performance, ...) ;
 - Afficher des noms des trolls ;
 - Afficher l'évaluation du troll (MK/TK/ATK) ;
+- Filtre nival par slider double curseur ;
+- Filtres par famille/nom de base/... ;
+- Tri sur colonnes ;
 - ...
