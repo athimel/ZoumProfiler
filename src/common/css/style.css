@@ -1,0 +1,461 @@
+/*!
+ * ZoumProfiler's CSS
+ */
+
+.profile {
+    font-style: italic;
+}
+
+.export {
+    color: #555555;
+    background-color: #eeeeee;
+    font-family: monospace;
+    border: 1px solid #222222;
+    padding: 5px;
+}
+
+textarea.export {
+    font-size: 12px;
+    width: 100%;
+}
+
+textarea.export-large {
+    height: 250px;
+}
+
+textarea.export-medium {
+    height: 125px;
+}
+
+textarea.export-small {
+    height: 30px;
+}
+
+.export:focus {
+    border-color: #66AFE9;
+    outline: 0px none;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(102, 175, 233, 0.6);
+}
+
+
+input.carac {
+    width: 50px;
+}
+td.best, tr.best td {
+    font-weight: bold;
+}
+th.compare-title {
+    font-style: italic;
+    color: #428bca;
+}
+
+thead tr td {
+    font-weight: bold;
+}
+
+.error {
+    color: red;
+}
+
+.banner {
+    background-color: #A00;
+    font-size: 17px;
+    overflow: hidden;
+    position: fixed;
+    right: -3em;
+    top: 2.3em;
+    width: 200px;
+    transform: rotate(45deg);
+    box-shadow: 0 0 5px 2px #888;
+    z-index: 99999;
+}
+
+.banner a {
+    border: 1px solid #FAA;
+    color: #FFF;
+    display: block;
+    font-size: 0.8em;
+    font-weight: bold;
+    padding: 0.5em;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 1px 1px 10px #000;
+}
+
+.sidebar .row div {
+    margin-top: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+div.sidebar button.compare {
+    padding-left: 0;
+    padding-top: 0;
+    margin-left: -10px;
+    margin-top: -10px;
+}
+
+
+div.alternative-tools-bar,
+div.authentication-bar,
+form.authentication-form {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(202, 204, 210, 0.4);
+}
+
+div.authentication-bar form button.btn-primary {
+    margin-left: 5px;
+    margin-top: 2px;
+}
+.select-profile {
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.buttons {
+    float: right;
+    margin-right: 3px;
+}
+.buttons > a {
+    float:left;
+}
+
+.actionbar {
+    padding: 8px 15px;
+    position: fixed;
+    bottom: 0;
+    height: 46px;
+    background-color: white;
+    width: 80%;
+    border-top: 1px solid #269abc;
+}
+
+.piRemaining {
+    font-weight: normal;
+}
+
+.comp-box > div > label,
+.sort-box > div > label {
+    padding-top: 10px;
+}
+
+th.compare-category {
+    text-align: center;
+    background-color: #87CEEB;
+}
+
+table.compare tr td:first-child {
+    width: 100px;
+}
+
+
+
+/*
+ * Base structure
+ */
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+    padding-top: 50px;
+}
+
+
+/*
+ * Global add-ons
+ */
+
+.sub-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+.navbar-fixed-top {
+    border: 0;
+}
+
+/*
+ * Sidebar
+ */
+
+/* Hide for mobile, show later */
+.sidebar {
+    display: none;
+    font-size: 12px;
+}
+@media (min-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 51px;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        display: block;
+        padding: 20px;
+        overflow-x: hidden;
+        overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+        background-color: #f5f5f5;
+        border-right: 1px solid #eee;
+    }
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+    margin-right: -21px; /* 20px padding + 1px border */
+    margin-bottom: 20px;
+    margin-left: -20px;
+}
+.nav-sidebar > li {
+    padding: 5px 2px 5px 10px;
+}
+.nav-sidebar > li > a {
+    padding : 5px 60px 5px 5px;
+    display: inline;
+}
+.nav-sidebar .active,
+.nav-sidebar .active a,
+.nav-sidebar .active a:hover,
+.nav-sidebar .active a:focus,
+#monstrofinder ul.viewsList li button.active {
+    color: #fff;
+    background-color: #428bca;
+}
+
+/*
+ * Main content
+ */
+.tab-content {
+    padding-bottom: 55px;
+}
+
+.main {
+    padding: 20px;
+    font-size: 0.9em;
+}
+@media (min-width: 768px) {
+    .main {
+        padding-right: 40px;
+        padding-left: 40px;
+    }
+}
+.main .page-header {
+    margin-top: 0;
+}
+
+
+/*
+ * Placeholder dashboard ideas
+ */
+
+.placeholders {
+    margin-bottom: 30px;
+    text-align: center;
+}
+.placeholders h4 {
+    margin-bottom: 0;
+}
+.placeholder {
+    margin-bottom: 20px;
+}
+.placeholder img {
+    display: inline-block;
+    border-radius: 50%;
+}
+
+.sticky {
+    position: fixed;
+    width: 100%;
+    top: 50px;
+    z-index: 2000;
+    border-top: 0;
+    border-bottom: 1px solid darkgrey;
+    background: white;
+    font-size: 0.7em;
+}
+
+.empty {
+    color: #adadad;
+    font-style: italic;
+}
+
+
+input.target {
+    width: 50px;
+    padding: 1px;
+}
+
+.import .form-horizontal {
+    margin-top: 20px;
+}
+
+td:nth-child(4).versus {
+    border-left: 1px dashed gray;
+}
+td.versus:last-child {
+    border-right: 1px dashed gray;
+}
+tr:last-child td.versus {
+    border-bottom: 1px dashed gray;
+}
+div.fight-box table.table thead tr td.versus {
+    border-top: 1px dashed gray;
+}
+
+span.profile-category {
+    color: dimgray;
+    font-style: italic;
+    margin-left: 5px;
+}
+
+/*.authentication-bar {*/
+    /*padding: 8px 15px;*/
+    /*position: fixed;*/
+    /*bottom: 0;*/
+    /*height: 46px;*/
+/*}*/
+
+.authentication-bar span.auth-status {
+    font-style: italic;
+    color: dimgray;
+    text-align: center;
+}
+
+/*.authentication-form {*/
+    /*padding: 8px 15px;*/
+    /*position: fixed;*/
+    /*bottom: 0;*/
+/*}*/
+.shares {
+    float: right;
+}
+.shares .title {
+    font-style: italic;
+}
+
+.around-monster-title {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.around-monster-position {
+    font-style: italic;
+    color: #7f7f7f;
+}
+
+table.around-monster tbody tr td {
+    font-size: 10px;
+    width: 29px;
+    padding: 2px;
+}
+
+table.around-monster {
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+}
+
+table.around-monster tfoot tr td {
+    font-size: 11px;
+    font-style: italic;
+    color: #7f7f7f;
+    text-align: center;
+    border: 0;
+}
+
+table.around-monster tbody tr td.center {
+    background-color: #dddddd;
+}
+
+table.around-monster tbody tr td.out-of-scope {
+    background-color: #fbd1ce;
+}
+
+table.around-monster tbody tr td ul {
+    padding-left: 0;
+    width: 23px;
+    margin: 0;
+}
+
+table.around-monster tbody tr td ul li {
+    list-style-type: none;
+    width: 23px;
+}
+
+table.around-monster tbody tr td ul li a.target-level {
+    color: #2e7f26;
+}
+table.around-monster tbody tr td ul li a.monsters-and-trolls {
+    color: #EF8602;
+}
+table.around-monster tbody tr td ul li a.monsters-only {
+    color: #428bca;
+}
+table.around-monster tbody tr td ul li a.trolls-only {
+    color: #b50017;
+}
+
+.profiles {
+    width: 100%;
+}
+
+table.profiles tbody tr td:first-child {
+    padding-left: 8px;
+    width: 26px;
+}
+table.profiles tbody tr td:nth-child(2) {
+    cursor: pointer;
+}
+
+span.out-of-scope {
+    font-weight: bold;
+}
+
+div.modal-body div.details,
+div.modal-body div.details-right {
+    margin: 5px;
+    padding: 7px;
+    z-index: 999;
+    position: absolute;
+    background-color: #EFE6D4;
+    font-size: 0.75em;
+    border: #66AFE9;
+    outline: 0px none;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 16px rgba(102, 175, 233, 0.8);
+    border-radius: 2%;
+}
+
+div.modal-body div.details ul,
+div.modal-body div.details-right ul {
+    padding-left: 20px;
+}
+
+div.modal-body div.details div span.details-category,
+div.modal-body div.details-right div span.details-category {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+div.modal-body div.details span.position,
+div.modal-body div.details-right span.position {
+    font-style: italic;
+    padding-left: 35px;
+}
+
+div.modal-body div.details {
+    /*left: 20px;*/
+}
+
+div.modal-body div.details-right {
+    right: 15px;
+}
+div.groups {
+    text-align: center;
+    padding:5px;
+}
+div.groups button {
+    margin-left: 5px;
+}

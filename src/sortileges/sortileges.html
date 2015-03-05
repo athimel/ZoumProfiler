@@ -1,0 +1,39 @@
+<div class="form-group sort-box" ng-controller="SortilegesController">
+
+    <div class="col-sm-3">
+        <label>Combat</label>
+
+        <div class="checkbox" ng-repeat="sort in sortsByType['Combat']|orderBy:'name'">
+            <label>
+                <input type="checkbox" value="" ng-model="profile.sorts[sort.id]"
+                       ng-change="checkSortLevel(sort)"/>
+                {{sort.name}}
+            </label>
+        </div>
+    </div>
+    <div class="col-sm-4">
+
+        <label>Augmentation</label>
+        <div class="checkbox" ng-repeat="sort in sortsByType['Augmentation']|orderBy:'name'">
+            <label>
+                <input type="checkbox" value="" ng-model="profile.sorts[sort.id]"
+                       ng-change="checkSortLevel(sort)"/>
+                {{sort.name}}
+            </label>
+        </div>
+
+    </div>
+    <div class="col-sm-3">
+
+        <label>Utile</label>
+        <div class="checkbox" ng-repeat="sort in sortsByType['Utile']|orderBy:'name'">
+            <label>
+                <input type="checkbox" value="" ng-model="profile.sorts[sort.id]"
+                       ng-change="checkSortLevel(sort)"/>
+                {{sort.name}}
+            </label>
+        </div>
+
+    </div>
+
+</div>

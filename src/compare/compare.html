@@ -1,0 +1,44 @@
+<div ng-controller="CompareController">
+
+    <form class="form-horizontal" role="form">
+
+        <table class="table table-striped table-hover table-condensed compare">
+            <tbody>
+                <tr>
+                    <th colspan="{{compareProfiles.length + 1}}" class="compare-category">Caractéristiques</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <th ng-repeat="p in compareProfiles | orderBy:['name','profile']" class="compare-title select-profile" ng-click="selectProfile(p)">{{p|prettyName}}</th>
+                </tr>
+                <tr ng-repeat="carac in caracs">
+                    <td>{{carac.id}}</td>
+                    <td ng-repeat="p in compareProfiles | orderBy:['name','profile']" ng-class="{true:'best'}[isBest(carac.id, p.id)]"> {{ p.caracs[carac.id] }}
+                        <span ng-if="carac.type == 'D3' || carac.type == 'D6'">{{carac.type}}</span>
+                        <span ng-if="p.bp[carac.id] >= 0">+</span>{{p.bp[carac.id]}}
+                        <span ng-if="p.bm[carac.id] >= 0">+</span>{{p.bm[carac.id]}}
+                        (
+                        <span ng-if="carac.type == 'T'">{{p.caracs[carac.id] | duration}}</span>
+                        <span ng-if="carac.type != 'T'">{{getCaracAverage(p, carac)}}<span ng-if="carac.id == 'DEG'">/{{degCritiqueComp(p, p.caracs['DEG'])}}</span></span>
+                        )
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="{{compareProfiles.length + 1}}" class="compare-category">Compétences</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <th ng-repeat="p in compareProfiles | orderBy:['name','profile']" class="compare-title select-profile" ng-click="selectProfile(p)">{{p|prettyName}}</th>
+                </tr>
+                <tr ng-repeat="comp in compareComps | orderBy:'name'">
+                    <td></td>
+                    <td ng-repeat="p in compareProfiles | orderBy:['name','profile']" ng-class="{true:'best'}[isBest(comp.id, p.id)]">
+                        <span ng-if="p.comps[comp.id] === true">{{ comp.name }}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </form>
+
+</div>

@@ -28,11 +28,12 @@ var bases = {
 
 var paths = {
     html    : ['**/*.html'],
+    php     : ['**/*.php'],
     scripts : ['**/*.js'],
     styles  : ['**/*.css'],
     images  : ['**/*.png'],
-    fonts   : ['commun/fonts/*'],
-    libs    : ['angular/angular.min.js', 'angular-sanitize/angular-sanitize.min.js',
+    fonts   : ['common/fonts/*'],
+    libs    : ['angular/angular.min.js', 'angular-sanitize/angular-sanitize.min.js', 'angular-i18n/angular-locale_fr-fr.js',
         'angular-ui-bootstrap-bower/ui-bootstrap.min.js', 'angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js',
         'bootstrap/dist/js/bootstrap.min.js', 'jquery/dist/jquery.min.js', 'underscore/underscore.js']
 };
@@ -60,6 +61,12 @@ gulp.task('scripts', function() {
         .pipe(uglify())
         .pipe(gulp.dest(bases.dist));
 //        .pipe(notify({ message : 'Scripts task complete' }));
+});
+
+// PHP
+gulp.task('php', function() {
+    return gulp.src(paths.php, {cwd: bases.src})
+        .pipe(gulp.dest(bases.dist));
 });
 
 // Styles
@@ -102,7 +109,7 @@ gulp.task('resources', function() {
 
 // Default task
 gulp.task('default', ['clean'], function() {
-    gulp.start('scripts', 'styles', 'images', 'resources');
+    gulp.start('scripts', 'styles', 'images', 'resources', 'php');
 });
 
 // Watch

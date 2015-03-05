@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="zoumProfilerApp" lang="fr">
+<html ng-app="ZoumProfiler" lang="fr">
 
     <head>
         <meta charset="utf-8">
@@ -10,6 +10,7 @@
 
         <script src="libs/angular.min.js"></script>
         <script src="libs/angular-sanitize.min.js"></script>
+        <script src="libs/angular-locale_fr-fr.js"></script>
 
         <script src="libs/bootstrap.min.js"></script>
         <script src="libs/ui-bootstrap.min.js"></script>
@@ -18,7 +19,7 @@
         <link href="styles/zoumProfiler.min.css" rel="stylesheet">
         <script src="scripts/zoumProfiler.min.js"></script>
 
-        <title>ZoumProfiler v0.1</title>
+        <title>ZoumProfiler v0.2</title>
     </head>
 
 
@@ -34,99 +35,162 @@
                             data-target=".navbar-collapse">
                         <span class="sr-only">Toggle navigation</span>
                     </button>
-                    <a class="navbar-brand" href="#">ZoumProfiler v0.1</a>
+                    <a class="navbar-brand" href="#">ZoumProfiler v0.2</a>
                 </div>
             </div>
         </div>
 
-        <div class="container-fluid" ng-controller="ZoumProfilerController">
+        <div class="container-fluid" ng-controller="BaseProfileController">
             <div class="row">
                 <div class="col-sm-3 col-md-2 sidebar">
-                    <div class="alert alert-warning">Attention, les profils que vous allez créer ne seront sauvegardés
-                        que quand vous cliquerez sur "Enregistrer le profil" ou quand vous sélectionnez un autre profil.
-                        <br>D'autre part, ils sont stockés (pour l'instant) dans votre navigateur uniquement, ce qui
-                        signifie que vous ne les retrouverez pas si vous utilisez un autre navigateur.
-                    </div>
                     <div class="alert alert-danger" ng-repeat="message in messages.errors" ng-bind-html="message" ng-click="removeMessage(message)"></div>
                     <div class="alert alert-warning" ng-repeat="message in messages.warnings" ng-bind-html="message" ng-click="removeMessage(message)"></div>
                     <div class="alert alert-success" ng-repeat="message in messages.success" ng-bind-html="message" ng-click="removeMessage(message)"></div>
 
-                    <ul class="nav nav-sidebar">
-                        <li ng-repeat="p in profiles | orderBy:['name','profile']"
-                            ng-class="{true:'active', false:''}[profile == p]">
+                    <ul class="nav nav-sidebar" ng-repeat="profileType in profileTypes">
 
-                            <input type="checkbox" value="" ng-model="compare.map[p.id]"/>
+                        <span ng-if="profileType=='local'" class="profile-category">Profils stockés uniquement sur votre machine</span>
+                        <span ng-if="profileType=='remote'" class="profile-category">Profils stockés sur le serveur <button type="button" class="btn btn-sm btn-link" ng-click="refreshRemote()">
+                            <i class="fa fa-refresh"></i> refresh
+                        </button></span>
 
-                            <a ng-click="selectProfile(p)" class="select-profile">
-                                {{p.name}} <span ng-if="p.profile" class="profile">({{p.profile}})</span>
-                            </a>
+                        <table class="profiles">
+                            <tbody>
+                                <tr ng-repeat="p in profiles | filter:{'type':profileType} | orderBy:['name','profile']"
+                                    ng-class="{true:'active', false:''}[selectedProfile == p]">
 
-                            <div class="buttons">
-                                <button type="button" class="btn btn-xs btn-primary" ng-click="copyProfile(p)"
-                                        title="Dupliquer">
-                                    <span class="glyphicon glyphicon-share"></span>
-                                </button>
+                                    <td>
+                                        <input type="checkbox" value="" ng-model="compareContext.map[p.id]"/>
+                                    </td>
 
-                                <button type="button" class="btn btn-xs btn-danger" ng-click="deleteProfile(p)"
-                                        title="Supprimer">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </button>
-                            </div>
+                                    <td ng-click="selectProfile(p)">
+                                        <a class="select-profile">
+                                            {{p.name}} <span ng-if="p.profile" class="profile">({{p.profile}})</span>
+                                        </a>
+                                    </td>
 
-                        </li>
+                                    <td class="buttons">
+                                        <button type="button" class="btn btn-xs btn-primary" ng-click="copyProfile(p)"
+                                                title="Dupliquer">
+                                            <i class="fa fa-files-o"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-xs btn-danger" ng-click="deleteProfile(p)"
+                                                title="Supprimer" ng-disabled="!canDeleteProfile(p)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
                     </ul>
 
-                    <button type="button" class="btn btn-sm btn-primary" ng-disabled="getCompareIds().length < 2"
-                            ng-click="compareProfiles()">
-                        <span class="glyphicon glyphicon-stats"></span> Comparer les profils
+                    <button type="button" class="btn btn-sm btn-link compare" ng-disabled="getCompareIds().length < 2"
+                            ng-click="startCompareUseCase()" ng-if="profiles.length >= 2">
+                        ↳ Comparer les profils
                     </button>
 
-                    <br/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-sm btn-primary col-md-12" ng-click="addProfile()">
+                                <i class="fa fa-lg fa-plus"></i> Ajouter un profil
+                            </button>
+                        </div>
 
-                    <button type="button" class="btn btn-sm btn-primary" ng-click="addProfile()">
-                        <span class="glyphicon glyphicon-plus"></span> Ajouter un profil
-                    </button>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-sm btn-primary col-md-12" ng-click="startImport()">
+                                <i class="fa fa-lg fa-cloud-download"></i> Importer un profil
+                            </button>
+                        </div>
+                    </div>
 
-                    <button type="button" class="btn btn-sm btn-primary" ng-click="startImport()">
-                        <span class="glyphicon glyphicon-import"></span> Importer un profil
-                    </button>
+                    <div class="row alternative-tools-bar">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-sm btn-default col-md-12" ng-click="startScheduler()"
+                                    ng-disabled="profiles.length == 0">
+                                <i class="fa fa-lg fa-cogs"></i> Outil tactique (ßeta)
+                            </button>
+                        </div>
 
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-sm btn-default col-md-12"
+                                    ng-click="startMonstrofinder()">
+                                <i class="fa fa-lg fa-search"></i> Monstr'Ô finder
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row authentication-bar" ng-if="user && !authenticationContext.show">
+                        <span ng-if="!user.remoteId" class="auth-status col-md-8">Pas connecté</span>
+                        <button type="button" class="btn btn-xs btn-primary" ng-click="startLogin()"
+                                ng-if="!user.remoteId" title="Connexion">
+                            <i class="fa fa-sign-in"></i>
+                        </button>
+                        <button type="button" class="btn btn-xs btn-default" ng-click="startRegistration()"
+                                ng-if="!user.remoteId" title="Créer un compte">
+                            <i class="fa fa-user-plus"></i>
+                        </button>
+
+                        <span ng-if="user.remoteId" class="auth-status col-md-8"><b><abbr title="Groupes : {{user.groups|commaList}}">{{user.login}}</abbr></b></span>
+                        <button type="button" class="btn btn-xs btn-danger" ng-click="logout()" ng-if="user.remoteId" title="Déconnexion">
+                            <i class="fa fa-sign-out"></i>
+                        </button>
+                        <div class="col-md-12 groups" ng-if="user.groups && user.groups.length > 0">
+                            Groupes :
+                            <button type="button" class="btn btn-xs btn-default" ng-repeat="group in user.groups"
+                                    ng-click="leaveGroup(group)" title="Cliquez pour quitter ce groupe">
+                                <i class="fa fa-users"></i> {{group}}
+                            </button>
+                        </div>
+                        <form class="form-inline" ng-if="user.remoteId">
+                            <input class="form-control col-md-8" type="text" placeholder="Nom du groupe" name="group"
+                                   ng-model="authenticationContext.group" required/>
+                            <button type="submit" class="btn btn-sm btn-primary col-md-4" ng-click="joinGroup()"
+                                    title="Rejoindre ce groupe">
+                                <i class="fa fa-lg fa-plus"></i> Rejoindre
+                            </button>
+                        </form>
+                    </div>
+                    <form class="row authentication-form" ng-if="authenticationContext.show" role="form">
+                        <div class="form-group">
+                            <input class="form-control" type="text" placeholder="Login" name="login"
+                                   ng-model="authenticationContext.login" required/>
+                            <input class="form-control" type="password" placeholder="Mot de passe" name="password"
+                                   ng-model="authenticationContext.password" required/>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-sm btn-success" ng-click="submitAuthentication()"
+                                    ng-disabled="!authenticationContext.login || !authenticationContext.password">
+                                <i class="fa fa-lg fa-user-plus" ng-if='authenticationContext.type == "register"'></i>
+                                <i class="fa fa-lg fa-sign-in" ng-if='authenticationContext.type != "register"'></i>
+                                {{authenticationContext.type == "register" ? "Créer un compte" : "Connexion"}}
+                            </button>
+
+                            <button type="button" class="btn btn-sm btn-default" ng-click="cancelAuthentication()">
+                                <i class="fa fa-lg fa-ban"></i> Annuler
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                    <tabset ng-if="profile">
-                        <tab heading="Pehiksage">
-                            <pehiksage></pehiksage>
-                        </tab>
-                        <tab heading="Mouchage">
-                            <mouchage></mouchage>
-                        </tab>
-                        <tab heading="Equipmentage">
-                            <equipmentage></equipmentage>
-                        </tab>
-                        <tab heading="Exportage">
-                            <exportage></exportage>
-                        </tab>
-                    </tabset>
 
-                    <importage></importage>
+                    <profiling ng-show="display.panel == 'profiling'"></profiling>
 
-                    <comparaisage></comparaisage>
+                    <import ng-show="display.panel == 'import'"></import>
 
-                    <div class="row actionbar" ng-if="profile">
-                        <button type="button" class="btn btn-sm btn-success" ng-disabled="!hasModification()" ng-click="saveProfile()">
-                            <span class="glyphicon glyphicon-save"></span> Enregistrer le profil
-                        </button>
+                    <compare ng-show="display.panel == 'compare'"></compare>
 
-                        <button type="button" class="btn btn-sm btn-default" ng-disabled="!hasModification()" ng-click="cancelModifications()">
-                            <span class="glyphicon glyphicon-ban-circle"></span> Annuler les modifications
-                        </button>
-                    </div>
+                    <scheduler ng-show="display.panel == 'scheduler'"></scheduler>
+
+                    <monstrofinder ng-show="display.panel == 'monstrofinder'"></monstrofinder>
 
                 </div>
 
             </div>
-        </div>
+        </div> <!-- end of BaseProfileController -->
 
     </body>
 
