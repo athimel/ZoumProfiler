@@ -91,6 +91,7 @@ TODO ZoumProfiler
 - Implémentation des modules/directives manquants ;
 - Conserver les infos fournies à l'import depuis les SP pour mise à jour (id+MDP spécifique) ;
 - Format plus court pour le partage par URL ;
+- Supprimer la cascade d'appels XHR toute moche à l'import via les SP ;
 - ...
 
 TODO Outil tactique
