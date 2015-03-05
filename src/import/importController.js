@@ -164,10 +164,11 @@ angular.module('ZoumProfiler')
                 var lastImport = parseInt(lastImportTxt);
                 var now = new Date().getTime();
                 importDuringLast24h = (now - lastImport < 86400000);
-                $scope._addErrorMessage("Vous avez déjà fait un import de ce profil dans les dernières 24h.");
             }
 
-            if (!importDuringLast24h) {
+            if (importDuringLast24h) {
+                $scope._addErrorMessage("Vous avez déjà fait un import de ce profil dans les dernières 24h.");
+            } else {
                 // FIXME AThimel 13/12/2014 This XHR success cascade is ugly, find a better way
 
                 var urlCaract = "proxy/sp.php?script=SP_Caract.php&trollId=" + $scope.import.spTrollId + "&trollPassword=" + $scope.import.spTrollPassword;
