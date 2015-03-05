@@ -383,6 +383,10 @@ angular.module('ZoumProfiler', ['ui.bootstrap', 'ngSanitize'])
                 $scope._selectPanel("monstrofinder");
             };
 
+            $scope.startSharing = function () {
+                $scope.$broadcast("onStartSharing");
+            };
+
             $scope.getCompareIds = function () {
                 var result = [];
                 angular.forEach(Object.keys($scope.compareContext.map), function (id) {

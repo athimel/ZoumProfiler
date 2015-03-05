@@ -17,10 +17,12 @@ angular.module('ZoumProfiler')
         /* **          Controller's methods           ** */
         /* ********************************************* */
 
-        $scope.startSharing = function () {
-            $scope.shareContext.show = true;
-            delete $scope.shareContext.user;
-            delete $scope.shareContext.group;
+        $scope._onStartSharing = function () {
+            if ($scope.sharable) {
+                $scope.shareContext.show = true;
+                delete $scope.shareContext.user;
+                delete $scope.shareContext.group;
+            }
         };
 
         $scope._checkInternal = function(sharable) {
@@ -70,6 +72,9 @@ angular.module('ZoumProfiler')
             });
         };
 
+        $scope.$on("onStartSharing", function() {
+            $scope._onStartSharing();
+        });
     }]);
 
 

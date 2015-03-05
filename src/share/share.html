@@ -1,6 +1,5 @@
 <div class="shares" ng-controller="ShareController">
     <span ng-if="sharable && !shareContext.show">
-
         <span ng-if="sharable._internal.owner">
             <span class="title">Propriétaire :</span>
             <button type="button" class="btn btn-xs btn-default">
@@ -25,11 +24,6 @@
                 <i class="fa fa-user"></i> {{usersIndex[share.user['$id']].login}}
             </button>
         </span>
-
-        | <button type="button" class="btn btn-sm btn-primary" ng-click="startSharing()"
-                  ng-disabled="!isOwner(sharable)">
-        <i class="fa fa-lg fa-share"></i> Partager
-    </button>
     </span>
     <div class="form-inline" ng-if="sharable && shareContext.show" role="form">
         <div class="form-group">

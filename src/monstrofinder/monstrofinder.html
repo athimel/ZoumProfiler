@@ -225,6 +225,12 @@
             </table>
 
             <div class="row actionbar">
+
+                <button type="button" class="btn btn-sm btn-primary" ng-click="startSharing()"
+                        ng-disabled="!isOwner(sharable)" ng-if="sharable">
+                    <i class="fa fa-lg fa-share"></i> Partager
+                </button>
+
                 <share></share>
             </div>
 

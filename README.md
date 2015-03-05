@@ -81,7 +81,7 @@ TODO >= 0.3
 - Trouver un nouveau nom ;
 - Visualiser les membres d'un groupe ;
 - Mieux séparer les outils (boutons montrofinder et outils tactique -> bouton profiling) ;
-- Fonctionnalité de "partage" trop peu visible / mal intégrée ;
+- HTML offline ;
 - ...
 
 TODO ZoumProfiler
