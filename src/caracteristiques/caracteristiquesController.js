@@ -77,6 +77,7 @@ angular.module('ZoumProfiler')
                 $scope.profile.bm[carac.id] = 0;
                 $scope.profile.bp[carac.id] = 0;
             });
+            $scope._startRefreshFightCapabilities();
         };
 
     }]);
