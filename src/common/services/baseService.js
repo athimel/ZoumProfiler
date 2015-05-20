@@ -33,7 +33,7 @@ angular.module('ZoumProfiler')
             { id: 'dressage', levels: 1, cost: 20, name: "Dressage", type: "Utile" },
             { id: 'parer', levels: 2, cost: 20, name: "Parer", type: "Combat" },
             { id: 'interposer', levels: 2, cost: 20, name: "S'interposer", type: "Combat" },
-            { id: 'he', levels: 1, cost: 20, name: "Hurlement Effrayan", type: "Combat", short: "HE" },
+            { id: 'he', levels: 1, cost: 20, name: "Hurlement Effrayant", type: "Combat", short: "HE" },
             { id: 'lancer', levels: 1, cost: 30, name: "Lancer de potions", type: "Combat" },
             { id: 'marquage', levels: 1, cost: 30, name: "Marquage", type: "Utile" },
             { id: 'reparation', levels: 1, cost: 30, name: "Réparation", type: "Artisanat" },
