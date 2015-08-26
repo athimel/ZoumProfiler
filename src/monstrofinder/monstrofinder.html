@@ -198,7 +198,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="m in selectedView.monsters|filterMonster:filter|orderBy:'distance'"
+                <tr ng-repeat="m in filteredMonsters"
                     class="{{m.nival >= 50 ? 'best':''}}" ng-show="!selectedView.isFetching">
                     <td ng-if="selectedView.origin">{{m.distance}}</td>
                     <td>{{m.id}}</td>

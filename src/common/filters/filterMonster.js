@@ -36,7 +36,7 @@ angular.module('ZoumProfiler')
             if (angular.isDefined(searchPattern)) {
                 searchPattern = searchPattern.toLowerCase();
                 predicates.push(function(monster) {
-                    return monster.baseName.toLowerCase().indexOf(searchPattern) > -1;
+                    return monster.name.toLowerCase().indexOf(searchPattern) > -1;
                 });
             }
 
@@ -46,7 +46,6 @@ angular.module('ZoumProfiler')
                 for (var i = 0; i < predicatesLength; i++) {
                     var predicate = predicates[i];
                     if (!predicate(monster)) {
-                        console.log("break at " + i);
                         return;
                     }
                 }

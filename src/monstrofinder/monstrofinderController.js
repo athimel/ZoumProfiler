@@ -5,7 +5,8 @@ angular.module('ZoumProfiler')
             templateUrl: 'monstrofinder/monstrofinder.html'
         };
     })
-    .controller('MonstrofinderController', ['$scope', '$http', '$modal', 'monsters', function ($scope, $http, $modal, monsters) {
+    .controller('MonstrofinderController', ['$scope', '$http', '$modal', '$timeout', '$filter', 'monsters',
+        function ($scope, $http, $modal, $timeout, $filter, monsters) {
 
         /* ********************************************* */
         /* **             Contextual data             ** */
@@ -16,6 +17,7 @@ angular.module('ZoumProfiler')
         $scope.views = [];
         $scope.spContext = { };
         $scope.filter = { minLevel:10, maxLevel:99, includeGowap:false, includeZombi:false, maxDistance: 20 };
+        $scope.filteredMonsters = [];
 
         /* ********************************************* */
         /* **          Controller's methods           ** */
@@ -33,10 +35,38 @@ angular.module('ZoumProfiler')
             }
         };
 
+        $scope._filterMonsters = function() {
+            $scope.filteredMonsters = [];
+
+            if (angular.isDefined($scope.selectedView) && angular.isDefined($scope.selectedView.monsters)) {
+                $scope.filteredMonsters = $filter('filterMonster')($scope.selectedView.monsters, $scope.filter);
+            }
+        };
+
+        // watch with timer
+        var timer = false;
+        $scope.$watch('[filter.minLevel, filter.maxLevel, filter.maxDistance, filter.searchPattern]',
+            function() {
+                if (timer) {
+                    $timeout.cancel(timer);
+                }
+                timer = $timeout(function(){
+                    $scope._filterMonsters();
+                }, 350);
+            }, true
+        );
+
+        // watch without timer
+        $scope.$watch('[filter.includeGowap, filter.includeZombi]', $scope._filterMonsters, true);
+
         $scope._refreshView = function(view) {
             angular.forEach(view.monsters, function (monster) {
                 $scope._computeMonsterDetails(view.origin, monster);
             });
+
+            // La vue est chargée et rafraîchie (les distances sont calculées) donc on tri une bonne fois pour toutes
+            view.monsters = $filter('orderBy')(view.monsters, 'distance');
+
             view.refreshed = true;
         };
 
@@ -50,6 +80,9 @@ angular.module('ZoumProfiler')
                     $scope._refreshView(view);
                 }
                 delete $scope._viewGrid;
+
+                // La vue est chargée, on applique une première fois les filtres
+                $scope._filterMonsters();
             }
         };
 
