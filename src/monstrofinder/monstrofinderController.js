@@ -23,13 +23,13 @@ angular.module('ZoumProfiler')
         /* **          Controller's methods           ** */
         /* ********************************************* */
 
-        $scope.minLevelChanged = function() {
+        $scope._minLevelChanged = function() {
             if ($scope.filter.minLevel > $scope.filter.maxLevel) {
                 $scope.filter.maxLevel = $scope.filter.minLevel;
             }
         };
 
-        $scope.maxLevelChanged = function() {
+        $scope._maxLevelChanged = function() {
             if ($scope.filter.maxLevel < $scope.filter.minLevel) {
                 $scope.filter.minLevel = $scope.filter.maxLevel;
             }
@@ -44,13 +44,39 @@ angular.module('ZoumProfiler')
         };
 
         // watch with timer
-        var timer = false;
-        $scope.$watch('[filter.minLevel, filter.maxLevel, filter.maxDistance, filter.searchPattern]',
+        var minLevelTimer = false;
+        $scope.$watch('[filter.minLevel]',
             function() {
-                if (timer) {
-                    $timeout.cancel(timer);
+                if (minLevelTimer) {
+                    $timeout.cancel(minLevelTimer);
                 }
-                timer = $timeout(function(){
+                minLevelTimer = $timeout(function(){
+                    $scope._minLevelChanged();
+                    $scope._filterMonsters();
+                }, 350);
+            }, true
+        );
+
+        var maxLevelTimer = false;
+        $scope.$watch('[filter.maxLevel]',
+            function() {
+                if (maxLevelTimer) {
+                    $timeout.cancel(maxLevelTimer);
+                }
+                maxLevelTimer = $timeout(function(){
+                    $scope._maxLevelChanged();
+                    $scope._filterMonsters();
+                }, 350);
+            }, true
+        );
+
+        var otherTimer = false;
+        $scope.$watch('[filter.maxDistance, filter.searchPattern]',
+            function() {
+                if (otherTimer) {
+                    $timeout.cancel(otherTimer);
+                }
+                otherTimer = $timeout(function(){
                     $scope._filterMonsters();
                 }, 350);
             }, true
