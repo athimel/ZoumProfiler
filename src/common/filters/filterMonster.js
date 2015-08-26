@@ -7,7 +7,6 @@ angular.module('ZoumProfiler')
             var lvlMin = filter.minLevel;
             var lvlMax = filter.maxLevel;
             var maxDistance = filter.maxDistance;
-            var searchPattern = filter.searchPattern;
 
             var predicates = [];
 
@@ -30,13 +29,6 @@ angular.module('ZoumProfiler')
                 predicates.push(function(monster) {
                     var isAZombi = monster.baseName.substr(0, 9) == "Zombi de ";
                     return !isAZombi;
-                });
-            }
-
-            if (angular.isDefined(searchPattern)) {
-                searchPattern = searchPattern.toLowerCase();
-                predicates.push(function(monster) {
-                    return monster.baseName.toLowerCase().indexOf(searchPattern) > -1;
                 });
             }
 
