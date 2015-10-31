@@ -111,6 +111,7 @@ TODO Recherche de monstres
 - Afficher des noms des trolls ;
 - Afficher l'évaluation du troll (MK/TK/ATK) ;
 - Filtre nival par slider double curseur ;
-- Filtres par famille/nom de base/... ;
+- Filtres par famille/... ;
 - Tri sur colonnes ;
+- Zone permettant de saisir le nom complet d'un monstre et qui affiche son nival avec le détail
 - ...
