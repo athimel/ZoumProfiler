@@ -4,8 +4,9 @@
 session_start();
 $userId = $_SESSION['authenticatedUserId'];
 
-$m = new MongoClient();
-$db = $m->zoumprofiler;
+include '../../config.php';
+
+$m = new MongoClient($mongoUrl);$db = $m->zoumprofiler;
 
 $profilesColl = $db->profiles;
 

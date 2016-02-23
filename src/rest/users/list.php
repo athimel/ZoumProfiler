@@ -1,7 +1,9 @@
 <?php header('Content-Type: application/json'); ?>
 {"users":<?php
 
-    $m = new MongoClient();
+    include '../../config.php';
+
+    $m = new MongoClient($mongoUrl);
     $db = $m->zoumprofiler;
 
     $usersColl = $db->users;

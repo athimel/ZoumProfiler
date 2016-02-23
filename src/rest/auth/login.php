@@ -3,7 +3,9 @@
 $login = $_REQUEST["login"];
 $password = $_REQUEST["password"];
 
-$m = new MongoClient();
+include '../../config.php';
+
+$m = new MongoClient($mongoUrl);
 $db = $m->zoumprofiler;
 
 $usersColl = $db->users;

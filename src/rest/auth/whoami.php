@@ -6,7 +6,9 @@ $userId = $_SESSION['authenticatedUserId'];
 if ($userId) {
     echo "true";
 
-    $m = new MongoClient();
+    include '../../config.php';
+
+    $m = new MongoClient($mongoUrl);
     $db = $m->zoumprofiler;
 
     $usersColl = $db->users;
