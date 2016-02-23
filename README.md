@@ -7,8 +7,7 @@ Outil de profiling pour MountyHall
 Démo
 ----
 
-- http://zoumbox.org/mh/ZoumProfiler/ - version stable (master)
-- http://zoumbox.org/mh/ZoumProfiler-develop/ - version en développement (develop)
+- http://profiler.zoumbox.org/ - version en développement (develop)
 
 
 Construction via Gulp
