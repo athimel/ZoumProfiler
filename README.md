@@ -72,6 +72,11 @@ Attention : pour pouvoir utiliser la fonction d'import depuis MountyHall, il fau
 Le PHP sert à exposer un proxy permettant de contourner les problèmes de CORS.
 
 Le stockage des utilisateurs, profils et vues sur le serveur nécessite d'avoir une instance installée et démarrée de MongoDB.
+Il est nécessaire d'avoir à la racine du site déployé un fichier config.php, tel que :
+
+    <?php
+    $mongoUrl = "mongodb://your-mongo-host:27017";
+    ?>
 
 
 TODO >= 0.3
