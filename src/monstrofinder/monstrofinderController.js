@@ -154,6 +154,12 @@ angular.module('ZoumProfiler')
                             monster.template = "Grand Frondeur";
                             monster.baseName = name.substr(14).trim();
                         }
+
+                        // Cas particulier de la Frondeuse vs Grande Frondeuse
+                        if (monster.template == "Frondeuse" && monster.baseName.substr(0, 6) == "Grande") {
+                            monster.template = "Grande Frondeuse";
+                            monster.baseName = name.substr(16).trim();
+                        }
                         break;
                     }
                 }
